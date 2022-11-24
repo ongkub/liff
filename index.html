@@ -54,19 +54,34 @@
     }
 
     function closed() {
+      liff.closeWindow()
     }
 
     async function scanCode() {
+      const result = await liff.scanCode()
+      document.getElementById("scanCode").append(result.value)
     }
 
     function openWindow() {
+      liff.openWindow({
+        url: "https://line.me",
+        external:true
+      })
     }
 
     async function getFriendship() {
+      const friend = await liff.getFriendship()
+      document.getElementById("friendship").append(friend.friendFlag)
+      if (!friend.friendFlag){
+        if (confirm("คุณยังไม่ได้เพิ่ม Bot เป็นเพื่อน จะเพิืิ่มเลยไหม?")) {
+          window.location = "https://line.me/r/ti/@946yjzwp"
+        }
+
+      }
     }
 
     async function sendMsg() {
-            if (liff.getContext().type !== "none"){
+      if (liff.getContext().type !== "none"){
         await liff.sendMessages([
           {
             "type" : "sticker",
@@ -113,11 +128,16 @@
 
     async function main() {
       await liff.init({ liffId: "1657677472-y0LADGlq" })
+      document.getElementById("isLoggedIn").append(liff.isLoggedIn())
+      if(liff.isLoggedIn()) {
       getEnvironment()
       getUserProfile()
       getContext()
-      // getFriendship()
+      getFriendship()
       // createUniversalLink()
+      } else {
+        liff.login()
+      }
     }
     main()
   </script>
