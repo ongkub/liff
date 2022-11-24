@@ -23,14 +23,6 @@
 
   <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"> </script>
   <script>
-      async function getUserProfile() {
-      const profile = await liff.getProfile()
-      document.getElementById("pictureUrl").src = profile.pictureUrl
-      document.getElementById("userId").append(profile.userId)
-      document.getElementById("statusMessage").append(profile.statusMessage)
-      document.getElementById("displayName").append(profile.displayName)
-      document.getElementById("decodedIDToken").append(liff.getDecodedIDToken().email)
-    }
     async function main(){
        await liff.init({ liffId: "1657677472-y0LADGlq" })
        if(liff.isLoggedIn()) {
@@ -38,7 +30,15 @@
           } else {
             liff.login({redirectUri: "https://ongkub.github.io/liff/path"})
           }
-    `` }
+       }
+    async function getUserProfile() {
+      const profile = await liff.getProfile()
+      document.getElementById("pictureUrl").src = profile.pictureUrl
+      document.getElementById("userId").append(profile.userId)
+      document.getElementById("statusMessage").append(profile.statusMessage)
+      document.getElementById("displayName").append(profile.displayName)
+      document.getElementById("decodedIDToken").append(liff.getDecodedIDToken().email)
+    }
   </script>
 </body>
 </html>
