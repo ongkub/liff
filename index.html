@@ -98,10 +98,11 @@
     async function sendMsg() {
       if (liff.getContext().type !== "none"){
         await liff.sendMessages([
-                                    {
-        "type": "text",
-        "text" : "อ๋องส่งข้อความของคุณผ่าน Share Target Picker"
-      }
+            {
+            "type": "sticker",
+            "stickerId": 1,
+            "packageId": 1
+            }
           ])
         alert("Message Sent")
       }
