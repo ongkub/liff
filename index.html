@@ -98,10 +98,11 @@
     async function sendMsg() {
       if (liff.getContext().type !== "none"){
         await liff.sendMessages([
-            {
+           {
   type: "flex",
   altText: "Hello LINE Beacon!",
-  contents: {
+  contents: 
+{
     "type": "bubble",
     "body": {
       "type": "box",
