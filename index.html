@@ -35,8 +35,6 @@
   <button id="btnScanCode" onclick="scanCode()">Scan Code</button>
   <button id="btnLogOut" onclick="logOut()">Log Out</button>
   <button id="btnClose" onclick="closed()">Close</button>
-   <label>รหัสUID:</label><input type="text" id="UID"><br><br>
-    <input type="text" id="search"style="width: 40%;">
 
 <script src="js/vconsole.min.js"></script> 
   <script>
@@ -157,19 +155,5 @@
     }
     main()
   </script>
-<script>
-    document.getElementById("UID").addEventListener("input", findCode);
-    function findCode() {
-    var code = document.getElementById("UID").value; 
-    if(code .length === 5){
-    google.script.run.withSuccessHandler(updateData).getCode(code );
-    }
-}
-function updateData(data) {
-    document.getElementById("search").value = data;
-    M.updateTexfields();
-}
-</script> 
-  
 </body>
 </html>
