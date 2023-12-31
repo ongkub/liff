@@ -55,12 +55,29 @@
 
     async function shareMsg() {
       await liff.shareTargetPicker([
-      {
-        "type": "text",
-        "text" : "อ๋องส่งข้อความของคุณผ่าน Share Target Picker"
+    {
+      "type": "flex",
+      "altText": "This is a Flex Message",
+      "contents": {
+        "type": "bubble",
+        "body": {
+          "type": "box",
+          "layout": "horizontal",
+          "contents": [
+            {
+              "type": "text",
+              "text": "Hello,"
+            },
+            {
+              "type": "text",
+              "text": "World!"
+            }
+          ]
+        }
       }
-
-        ])
+    }
+  ]
+)
     }
 
     function logOut() {
