@@ -57,24 +57,126 @@
       await liff.shareTargetPicker([
     {
       "type": "flex",
-      "altText": "This is a Flex Message",
+      "altText": "สุขสันต์วันปีใหม่ 2024 นะครับ จากอ๋อง",
       "contents": {
-        "type": "bubble",
-        "body": {
-          "type": "box",
-          "layout": "horizontal",
-          "contents": [
-            {
-              "type": "text",
-              "text": "Hello,"
-            },
-            {
-              "type": "text",
-              "text": "World!"
-            }
-          ]
-        }
+  "type": "bubble",
+  "size": "giga",
+  "hero": {
+    "type": "video",
+    "altContent": {
+      "type": "image",
+      "size": "full",
+      "aspectRatio": "1.5:1",
+      "aspectMode": "cover",
+      "url": "https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg"
+    },
+    "url": "https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.mp4",
+    "previewUrl": "https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg",
+    "aspectRatio": "1.5:1"
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "Happy New Year",
+        "weight": "bold",
+        "size": "xl",
+        "align": "center"
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "margin": "md",
+        "contents": [
+          {
+            "type": "icon",
+            "size": "sm",
+            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+          },
+          {
+            "type": "text",
+            "text": "2024 ",
+            "size": "sm",
+            "color": "#999999",
+            "margin": "md",
+            "flex": 0,
+            "align": "center"
+          },
+          {
+            "type": "icon",
+            "size": "sm",
+            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+          }
+        ],
+        "spacing": "md",
+        "justifyContent": "center"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "margin": "lg",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "wrap": true,
+                "color": "#666666",
+                "size": "sm",
+                "flex": 5,
+                "text": "ขอให้มีความสุขและรอยยิ้มตลอดปี 2024 นะครับ \nประสบความสำเร็จทางด้านการงาน\nเงินทองไหลมาเทมา ร่ำรวยยิ่งๆขึ้นไปครับ\nหวังสิ่งใดก็สมปรารถนา​ ร่างกายแข็งแรงนะครับ",
+                "align": "center"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "โดย",
+                "color": "#aaaaaa",
+                "size": "sm",
+                "flex": 1
+              },
+              {
+                "type": "text",
+                "text": "อ๋อง",
+                "wrap": true,
+                "color": "#666666",
+                "size": "sm",
+                "flex": 5
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "image",
+                "url": "https://sparkth.io/wp-content/uploads/2023/12/2021-1.png",
+                "animated": false,
+                "offsetTop": "lg",
+                "size": "lg"
+              }
+            ],
+            "cornerRadius": "lg"
+          }
+        ]
       }
+    ],
+    "alignItems": "center"
+  }
+}
     }
   ]
 )
