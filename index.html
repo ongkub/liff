@@ -30,8 +30,8 @@
   <p><a href="https://ongkub.github.io/liff/path/?param=9">Link to Path</a></p>
 
   <button id="btnMsg" onclick="sendMsg()">Send Message</button>
-  <button id="btnShare" onclick="shareMsg()">Share Target Picker for Ong</button>
-  <button id="btnShare" onclick="shareMsg2()">Share Target Picker for ant</button>
+  <button id="btnShareNEWYEAR2024" onclick="shareMsg()">Share Target Picker for Ong</button>
+  <button id="btnShareThaiNewYear" onclick="shareMsg2()">Share Target Picker for ant</button>
   <button onclick="openWindow()">Open Window</button>
   <button id="btnScanCode" onclick="scanCode()">Scan Code</button>
   <button id="btnLogOut" onclick="logOut()">Log Out</button>
@@ -182,19 +182,16 @@
       "altText": "สุขสันต์วันปีใหม่ 2024 นะคะ จากแอ้นท์",
       "contents": {
   "type": "bubble",
-  "size": "giga",
   "hero": {
-    "type": "video",
-    "altContent": {
-      "type": "image",
-      "size": "full",
-      "aspectRatio": "1.5:1",
-      "aspectMode": "cover",
-      "url": "https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg"
-    },
-    "url": "https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.mp4",
-    "previewUrl": "https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg",
-    "aspectRatio": "1.5:1"
+    "type": "image",
+    "url": "https://sparkth.io/wp-content/uploads/2024/04/Thai-New-Year.jpeg",
+    "size": "full",
+    "aspectRatio": "5:2",
+    "aspectMode": "cover",
+    "action": {
+      "type": "uri",
+      "uri": "http://linecorp.com/"
+    }
   },
   "body": {
     "type": "box",
@@ -202,52 +199,31 @@
     "contents": [
       {
         "type": "text",
-        "text": "Happy New Year",
+        "text": "สุขสันต์วันสงกรานต์ครับ!",
         "weight": "bold",
         "size": "xl",
-        "align": "center"
-      },
-      {
-        "type": "box",
-        "layout": "baseline",
-        "margin": "md",
-        "contents": [
-          {
-            "type": "icon",
-            "size": "sm",
-            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-          },
-          {
-            "type": "text",
-            "text": "2024 ",
-            "size": "sm",
-            "color": "#999999",
-            "margin": "md",
-            "flex": 0,
-            "align": "center"
-          },
-          {
-            "type": "icon",
-            "size": "sm",
-            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-          }
-        ],
-        "spacing": "md",
-        "justifyContent": "center"
+        "color": "#D45521"
       },
       {
         "type": "box",
         "layout": "vertical",
         "margin": "lg",
+        "spacing": "md",
         "contents": [
           {
-            "type": "text",
-            "wrap": true,
-            "color": "#666666",
-            "size": "sm",
-            "flex": 5,
-            "text": "Happy New Year na ka 🥳🥳\nสวัสดีปีใหม่ 2024🎁\nขอให้สุขภาพร่างกายแข็งแรงทั้งกายและใจ\nร่ำรวยๆเฮงๆตลอดไป\nมีความสุข สมหวังตลอดทั้งปี 🎉🎉",
-            "align": "center"
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ขออำนาจคุณพระศรีรัตนตรัย \nดลบันดาลให้ท่านและครอบครัว",
+                "wrap": true,
+                "color": "#D45521",
+                "size": "sm",
+                "flex": 5
+              }
+            ]
           },
           {
             "type": "box",
@@ -256,39 +232,47 @@
             "contents": [
               {
                 "type": "text",
-                "text": "โดย",
-                "color": "#aaaaaa",
-                "size": "sm",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "แอ้นท์",
+                "text": "มีสุขภาพแข็งแรง ปลอดภัยจากโรคภัยไข้เจ็บ\nงานราบรื่น มีแต่รอยยิ้ม\nประสบความสำเร็จ \nเงินทองไหลมาเทมา \nร่ำรวย มั่งคั่ง \nมีความสุขสมหวัง \nคิดสิ่งใดก็ได้ดังใจปรารถนา",
                 "wrap": true,
-                "color": "#666666",
+                "color": "#A23d27",
                 "size": "sm",
                 "flex": 5
               }
             ]
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "image",
-                "url": "https://feeldee.co/wp-content/uploads/2024/01/Ant-scaled.jpg",
-                "animated": false,
-                "offsetTop": "lg",
-                "size": "lg"
-              }
-            ],
-            "cornerRadius": "lg"
           }
         ]
       }
     ],
-    "alignItems": "center"
+    "background": {
+      "type": "linearGradient",
+      "angle": "0deg",
+      "startColor": "#fee05f",
+      "endColor": "#fbfbd5"
+    }
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "จาก อ๋อง",
+        "color": "#D45521",
+        "align": "end",
+        "weight": "regular",
+        "margin": "md",
+        "size": "lg",
+        "decoration": "underline"
+      }
+    ],
+    "background": {
+      "type": "linearGradient",
+      "angle": "0deg",
+      "startColor": "#f6b759",
+      "endColor": "#fee05f"
+    },
+    "spacing": "md",
+    "margin": "md"
   }
 }
     }
