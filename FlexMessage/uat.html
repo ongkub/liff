@@ -3,35 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-  <title>My LIFF app</title>
-  <link rel="stylesheet" href="style.css"> 
+  <title>LIFF For Sending Flex Message</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* เพิ่ม CSS เพื่อจัดรูปแบบ radio button */
+    .image-choice {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  </style>
 </head>
 
 <body>
   <h2>กำหนดข้อความอวยพร</h2>
-  <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)"></textarea>
+  <p>ไม่เกิน200 ตัวอักษร</p>
+  <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)">สวัสดีปีใหม่ 2568  ขอให้ปีนี้เป็นปีที่สดใส
+เต็มไปด้วยความสุข สมหวังในทุกสิ่ง
+และประสบความสำเร็จในทุกๆ ด้าน</textarea> 
 
   <h2>เลือกรูปภาพ</h2>
-  <div class="image-container">
-    <label class="image-choice">
-      <input type="radio" id="pic1" name="picture" value="https://via.placeholder.com/150" checked>
-      <img src="https://via.placeholder.com/150" alt="Pic 1">
-    </label>
 
+  <div>
     <label class="image-choice">
-      <input type="radio" id="pic2" name="picture" value="https://via.placeholder.com/150/0000FF/808080">
-      <img src="https://via.placeholder.com/150/0000FF/808080" alt="Pic 2">
+      <input type="radio" id="useDefaultImage" name="imageSource" value="default" checked> ใช้รูปภาพจากเว็บ
     </label>
+    <label class="image-choice">
+      <input type="radio" id="useCustomURL" name="imageSource" value="custom"> ใส่ URL รูปภาพเอง
+    </label>
+  </div>
 
-    <label class="image-choice">
-      <input type="radio" id="pic3" name="picture" value="https://via.placeholder.com/150/FF0000/FFFFFF">
-      <img src="https://via.placeholder.com/150/FF0000/FFFFFF" alt="Pic 3">
-    </label>
+  <div id="defaultImageContainer">
+    <div class="image-container">
+      <label class="image-choice">
+        <input type="radio" id="pic1" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" checked>
+        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 1">
+      </label>
 
-    <label class="image-choice">
-      <input type="radio" id="pic4" name="picture" value="https://via.placeholder.com/150/FFFF00/000000">
-      <img src="https://via.placeholder.com/150/FFFF00/000000" alt="Pic 4">
-    </label>
+      <label class="image-choice">
+        <input type="radio" id="pic2" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
+        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 2">
+      </label>
+
+      <label class="image-choice">
+        <input type="radio" id="pic3" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
+        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 3">
+      </label>
+
+      <label class="image-choice">
+        <input type="radio" id="pic4" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
+        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 4">
+      </label>
+    </div>
+  </div>
+
+  <div id="customURLContainer" style="display: none;">
+    <h2>ใส่ URL รูปภาพ</h2>
+    <input type="url" id="urlPic" value="https://example.com/image.jpg">
   </div>
 
   <button id="shareButton">แชร์</button>
@@ -40,13 +67,35 @@
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
   <script>
+    // ฟังก์ชันสำหรับแสดง/ซ่อน input URL ตาม radio button ที่เลือก
+    function toggleImageSource() {
+      const useDefaultImage = document.getElementById('useDefaultImage').checked;
+      document.getElementById('defaultImageContainer').style.display = useDefaultImage ? 'block' : 'none';
+      document.getElementById('customURLContainer').style.display = useDefaultImage ? 'none' : 'block';
+    }
+
+    // เรียกใช้ฟังก์ชัน toggleImageSource() ตอนเริ่มต้น
+    toggleImageSource();
+
+    // เพิ่ม event listener ให้กับ radio button เพื่อเรียกใช้ toggleImageSource()
+    const imageSourceRadios = document.querySelectorAll('input[name="imageSource"]');
+    imageSourceRadios.forEach(radio => {
+      radio.addEventListener('change', toggleImageSource);
+    });
+
     async function shareMsg() {
       // ดึงข้อความจาก textarea
+      console.log("shareMsg");
       const freeText = document.getElementById("freeText").value;
 
-      // ดึง URL รูปภาพจาก radio button ที่เลือก
-      const selectedImage = document.querySelector('input[name="picture"]:checked');
-      const imageUrl = selectedImage.value; 
+      // ดึง URL รูปภาพ
+      let imageUrl;
+      if (document.getElementById('useDefaultImage').checked) {
+        const selectedImage = document.querySelector('#defaultImageContainer input[name="picture"]:checked');
+        imageUrl = selectedImage ? selectedImage.value : 'https://via.placeholder.com/150'; // default image URL
+      } else {
+        imageUrl = document.getElementById("urlPic").value;
+      }
 
       // ดึงข้อมูล profile ของผู้ใช้
       const profile = await liff.getProfile();
@@ -184,11 +233,12 @@
 
     async function main() {
       await liff.init({
-        liffId: "1657677472-1NmOkp47" // **อย่าลืมแก้ไข liffId ให้ถูกต้อง**
+        liffId: "1657677472-y0LADGlq" // **อย่าลืมแก้ไข liffId ให้ถูกต้อง**
       })
       document.getElementById("isLoggedIn").append(liff.isLoggedIn())
       if (liff.isLoggedIn()) {
-        getUserProfile()
+        console.log("Success");
+        getUserProfile();
       } else {
         liff.login()
       }
