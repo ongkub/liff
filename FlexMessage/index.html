@@ -2,28 +2,61 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
   <title>My LIFF app</title>
-  <link rel="stylesheet" href="css/style.css" media="all">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* เพิ่ม CSS เพื่อจัดรูปแบบ radio button */
+    .image-choice {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  </style>
 </head>
+
 <body>
-  <textarea id="freeText" maxlength="200"></textarea>
+  <h2>กำหนดข้อความอวยพร</h2>
+  <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)"></textarea>
 
   <h2>เลือกรูปภาพ</h2>
-  <input type="radio" id="pic1" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
-  <label for="pic1"><img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 1"></label><br>
 
-  <input type="radio" id="pic2" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
-  <label for="pic2"><img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 2"></label><br>
+  <div>
+    <label class="image-choice">
+      <input type="radio" id="useDefaultImage" name="imageSource" value="default" checked> ใช้รูปภาพจากเว็บ
+    </label>
+    <label class="image-choice">
+      <input type="radio" id="useCustomURL" name="imageSource" value="custom"> ใส่ URL รูปภาพเอง
+    </label>
+  </div>
 
-  <input type="radio" id="pic3" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
-  <label for="pic3"><img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 3"></label><br>
+  <div id="defaultImageContainer">
+    <div class="image-container">
+      <label class="image-choice">
+        <input type="radio" id="pic1" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" checked>
+        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 1">
+      </label>
 
-  <input type="radio" id="pic4" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
-  <label for="pic4"><img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 4"></label><br>
+      <label class="image-choice">
+        <input type="radio" id="pic2" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
+        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 2">
+      </label>
 
-  <h2>หรือใส่ URL รูปภาพขนาด 1.5:1</h2>
-  <input type="url" id="urlPic" value="https://example.com/image.jpg">
+      <label class="image-choice">
+        <input type="radio" id="pic3" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
+        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 3">
+      </label>
+
+      <label class="image-choice">
+        <input type="radio" id="pic4" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
+        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 4">
+      </label>
+    </div>
+  </div>
+
+  <div id="customURLContainer" style="display: none;">
+    <h2>ใส่ URL รูปภาพ</h2>
+    <input type="url" id="urlPic" value="https://example.com/image.jpg">
+  </div>
 
   <button id="shareButton">แชร์</button>
   <pre id="flexMessageJson"></pre>
@@ -31,17 +64,32 @@
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
   <script>
+    // ฟังก์ชันสำหรับแสดง/ซ่อน input URL ตาม radio button ที่เลือก
+    function toggleImageSource() {
+      const useDefaultImage = document.getElementById('useDefaultImage').checked;
+      document.getElementById('defaultImageContainer').style.display = useDefaultImage ? 'block' : 'none';
+      document.getElementById('customURLContainer').style.display = useDefaultImage ? 'none' : 'block';
+    }
+
+    // เรียกใช้ฟังก์ชัน toggleImageSource() ตอนเริ่มต้น
+    toggleImageSource();
+
+    // เพิ่ม event listener ให้กับ radio button เพื่อเรียกใช้ toggleImageSource()
+    const imageSourceRadios = document.querySelectorAll('input[name="imageSource"]');
+    imageSourceRadios.forEach(radio => {
+      radio.addEventListener('change', toggleImageSource);
+    });
+
     async function shareMsg() {
       // ดึงข้อความจาก textarea
       const freeText = document.getElementById("freeText").value;
 
-      // ดึง URL รูปภาพจาก radio button
+      // ดึง URL รูปภาพ
       let imageUrl;
-      const selectedImage = document.querySelector('input[name="picture"]:checked');
-      if (selectedImage) {
-        imageUrl = selectedImage.value;
+      if (document.getElementById('useDefaultImage').checked) {
+        const selectedImage = document.querySelector('#defaultImageContainer input[name="picture"]:checked');
+        imageUrl = selectedImage ? selectedImage.value : 'https://via.placeholder.com/150'; // default image URL
       } else {
-        // ถ้าไม่ได้เลือกรูปภาพจาก radio button ให้ใช้ URL จาก input type="url"
         imageUrl = document.getElementById("urlPic").value;
       }
 
@@ -57,7 +105,7 @@
           "size": "giga",
           "hero": {
             "type": "image",
-            "url": imageUrl,
+            "url": imageUrl, // ใช้ imageUrl ที่ดึงมาจาก input
             "aspectRatio": "1.5:1",
             "aspectMode": "cover",
             "size": "full"
@@ -112,7 +160,7 @@
                     "color": "#666666",
                     "size": "sm",
                     "flex": 5,
-                    "text": freeText,
+                    "text": freeText, // ใช้ freeText ที่ดึงมาจาก textarea
                     "align": "center"
                   },
                   {
@@ -129,7 +177,7 @@
                       },
                       {
                         "type": "text",
-                        "text": profile.displayName,
+                        "text": profile.displayName, // ใช้ displayName จาก profile
                         "wrap": true,
                         "color": "#666666",
                         "size": "sm",
@@ -143,7 +191,7 @@
                     "contents": [
                       {
                         "type": "image",
-                        "url": profile.pictureUrl,
+                        "url": profile.pictureUrl, // ใช้ pictureUrl จาก profile
                         "animated": false,
                         "offsetTop": "lg",
                         "size": "lg"
