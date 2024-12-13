@@ -18,7 +18,7 @@
   <h2>กำหนดข้อความอวยพร</h2>
   <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)"></textarea>
 
-    <h2>เลือกรูปภาพ</h2>
+  <h2>เลือกรูปภาพ</h2>
 
   <div>
     <label class="image-choice">
@@ -32,23 +32,23 @@
   <div id="defaultImageContainer">
     <div class="image-container">
       <label class="image-choice">
-        <input type="radio" id="pic1" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" checked>
-        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 1">
+        <input type="radio" id="pic1" name="picture" value="https://via.placeholder.com/150" checked>
+        <img src="https://via.placeholder.com/150" alt="Pic 1">
       </label>
 
       <label class="image-choice">
-        <input type="radio" id="pic2" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
-        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 2">
+        <input type="radio" id="pic2" name="picture" value="https://via.placeholder.com/150/0000FF/808080">
+        <img src="https://via.placeholder.com/150/0000FF/808080" alt="Pic 2">
       </label>
 
       <label class="image-choice">
-        <input type="radio" id="pic3" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
-        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 3">
+        <input type="radio" id="pic3" name="picture" value="https://via.placeholder.com/150/FF0000/FFFFFF">
+        <img src="https://via.placeholder.com/150/FF0000/FFFFFF" alt="Pic 3">
       </label>
 
       <label class="image-choice">
-        <input type="radio" id="pic4" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
-        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 4">
+        <input type="radio" id="pic4" name="picture" value="https://via.placeholder.com/150/FFFF00/000000">
+        <img src="https://via.placeholder.com/150/FFFF00/000000" alt="Pic 4">
       </label>
     </div>
   </div>
@@ -97,142 +97,115 @@
       const profile = await liff.getProfile();
 
       // สร้าง Flex Message
-      {
-  "type": "flex",
-  "altText": `สุขสันต์วันปีใหม่ 2025 นะ โดย ${profile.displayName}`,
-  "contents": {
-    "type": "bubble",
-    "size": "giga",
-    "hero": {
-      "type": "image",
-      "url": imageUrl,
-      "aspectRatio": "1.5:1",
-      "aspectMode": "cover",
-      "size": "full"
-    },
-    "body": {
-      "type": "box",
-      "layout": "vertical",
-      "contents": [
-        {
-          "type": "text",
-          "text": "Happy New Year",
-          "weight": "bold",
-          "size": "xl",
-          "align": "center"
-        },
-        {
-          "type": "box",
-          "layout": "baseline",
-          "margin": "md",
-          "contents": [
-            {
-              "type": "icon",
-              "size": "sm",
-              "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-            },
-            {
-              "type": "text",
-              "text": "2024 ",
-              "size": "sm",
-              "color": "#999999",
-              "margin": "md",
-              "flex": 0,
-              "align": "center"
-            },
-            {
-              "type": "icon",
-              "size": "sm",
-              "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-            }
-          ],
-          "spacing": "md",
-          "justifyContent": "center"
-        },
-        {
-          "type": "box",
-          "layout": "vertical",
-          "margin": "lg",
-          "contents": [
-            {
-              "type": "text",
-              "wrap": true,
-              "color": "#666666",
-              "size": "sm",
-              "flex": 5,
-              "text": freeText,
-              "align": "center"
-            },
-            {
-              "type": "box",
-              "layout": "baseline",
-              "spacing": "sm",
-              "contents": [
-                {
-                  "type": "text",
-                  "text": "โดย",
-                  "color": "#aaaaaa",
-                  "size": "sm",
-                  "flex": 1
-                },
-                {
-                  "type": "text",
-                  "text": profile.displayName,
-                  "wrap": true,
-                  "color": "#666666",
-                  "size": "sm",
-                  "flex": 5
-                }
-              ]
-            },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "contents": [
-                {
-                  "type": "image",
-                  "url": profile.pictureUrl,
-                  "animated": false,
-                  "offsetTop": "lg",
-                  "size": "lg"
-                }
-              ],
-              "cornerRadius": "lg"
-            }
-          ]
-        }
-      ],
-      "alignItems": "center"
-    },
-    "footer": { 
-      "type": "box",
-      "layout": "horizontal",
-      "contents": [
-        {
-          "type": "button",
-          "action": {
-            "type": "uri",
-            "label": "ส่งคำอวยพรให้เพื่อน",
-            "uri": "https://liff.line.me/1657677472-OYGa2ZYM" 
+      const flexMessage = {
+        type: "flex",
+        altText: `สุขสันต์วันปีใหม่ 2025 นะ โดย ${profile.displayName}`,
+        contents: {
+          "type": "bubble",
+          "size": "giga",
+          "hero": {
+            "type": "image",
+            "url": imageUrl, // ใช้ imageUrl ที่ดึงมาจาก input
+            "aspectRatio": "1.5:1",
+            "aspectMode": "cover",
+            "size": "full"
           },
-          "style": "primary",
-          "flex": 5
-        },
-        {
-          "type": "button",
-          "action": {
-            "type": "uri",
-            "label": "รู้จัก Spark Factor",
-            "uri": "https://sparkth.io"
-          },
-          "style": "primary",
-          "flex": 4
+          "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "Happy New Year",
+                "weight": "bold",
+                "size": "xl",
+                "align": "center"
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "margin": "md",
+                "contents": [
+                  {
+                    "type": "icon",
+                    "size": "sm",
+                    "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                  },
+                  {
+                    "type": "text",
+                    "text": "2024 ",
+                    "size": "sm",
+                    "color": "#999999",
+                    "margin": "md",
+                    "flex": 0,
+                    "align": "center"
+                  },
+                  {
+                    "type": "icon",
+                    "size": "sm",
+                    "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                  }
+                ],
+                "spacing": "md",
+                "justifyContent": "center"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "margin": "lg",
+                "contents": [
+                  {
+                    "type": "text",
+                    "wrap": true,
+                    "color": "#666666",
+                    "size": "sm",
+                    "flex": 5,
+                    "text": freeText, // ใช้ freeText ที่ดึงมาจาก textarea
+                    "align": "center"
+                  },
+                  {
+                    "type": "box",
+                    "layout": "baseline",
+                    "spacing": "sm",
+                    "contents": [
+                      {
+                        "type": "text",
+                        "text": "โดย",
+                        "color": "#aaaaaa",
+                        "size": "sm",
+                        "flex": 1
+                      },
+                      {
+                        "type": "text",
+                        "text": profile.displayName, // ใช้ displayName จาก profile
+                        "wrap": true,
+                        "color": "#666666",
+                        "size": "sm",
+                        "flex": 5
+                      }
+                    ]
+                  },
+                  {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "image",
+                        "url": profile.pictureUrl, // ใช้ pictureUrl จาก profile
+                        "animated": false,
+                        "offsetTop": "lg",
+                        "size": "lg"
+                      }
+                    ],
+                    "cornerRadius": "lg"
+                  }
+                ]
+              }
+            ],
+            "alignItems": "center"
+          }
         }
-      ],
-      "spacing": "sm"
-    } 
-  }
-};
+      };
 
       // แปลง Flex Message เป็น JSON string
       const flexMessageJson = JSON.stringify(flexMessage, null, 2); //  null, 2  ใช้สำหรับ format JSON ให้อ่านง่าย
@@ -246,6 +219,11 @@
 
     async function getUserProfile() {
       const profile = await liff.getProfile()
+      document.getElementById("pictureUrl").src = profile.pictureUrl
+      document.getElementById("userId").append(profile.userId)
+      document.getElementById("statusMessage").append(profile.statusMessage)
+      document.getElementById("displayName").append(profile.displayName)
+      document.getElementById("decodedIDToken").append(liff.getDecodedIDToken().email)
     }
 
 
