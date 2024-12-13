@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-  <title>LIFF For Sending New Year Flex Message</title>
+  <title>My LIFF app</title>
   <link rel="stylesheet" href="../css/style.css">
   <style>
     /* เพิ่ม CSS เพื่อจัดรูปแบบ radio button */
@@ -16,26 +16,23 @@
 
 <body>
   <h2>กำหนดข้อความอวยพร</h2>
-  <p>ไม่เกิน200 ตัวอักษร</p>
-  <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)">สวัสดีปีใหม่ 2568  ขอให้ปีนี้เป็นปีที่สดใส
-เต็มไปด้วยความสุข สมหวังในทุกสิ่ง
-และประสบความสำเร็จในทุกๆ ด้าน</textarea> 
+  <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)"></textarea>
 
-  <h2>เลือกรูปภาพ</h2>
+   <h2>เลือกรูปภาพ</h2>
 
-  <div id="defaultImageContainer"> 
-    <div>
-      <label class="image-choice">
-        <input type="radio" id="useDefaultImage" name="imageSource" value="default" checked> ใช้รูปภาพจากเว็บ
-      </label>
-      <label class="image-choice">
-        <input type="radio" id="useCustomURL" name="imageSource" value="custom"> ใส่ URL รูปภาพเอง
-      </label>
-    </div>
+  <div>
+    <label class="image-choice">
+      <input type="radio" id="useDefaultImage" name="imageSource" value="default" checked> ใช้รูปภาพจากเว็บ
+    </label>
+    <label class="image-choice">
+      <input type="radio" id="useCustomURL" name="imageSource" value="custom"> ใส่ URL รูปภาพเอง
+    </label>
+  </div>
 
+  <div id="defaultImageContainer">
     <div class="image-container">
       <label class="image-choice">
-        <input type="radio" id="pic1" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" checked> 
+        <input type="radio" id="pic1" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" checked>
         <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 1">
       </label>
 
@@ -54,14 +51,14 @@
         <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 4">
       </label>
     </div>
+  </div>
 
-    <div id="customURLContainer" style="display: none;">
-      <h2>ใส่ URL รูปภาพ</h2>
-      <input type="url" id="urlPic" value="https://example.com/image.jpg">
-    </div>
-  </div> 
+  <div id="customURLContainer" style="display: none;">
+    <h2>ใส่ URL รูปภาพ</h2>
+    <input type="url" id="urlPic" value="https://example.com/image.jpg">
+  </div>
 
-  <button id="shareButton" disabled>แชร์</button> 
+  <button id="shareButton">แชร์</button>
   <pre id="flexMessageJson"></pre>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
@@ -91,7 +88,7 @@
       let imageUrl;
       if (document.getElementById('useDefaultImage').checked) {
         const selectedImage = document.querySelector('#defaultImageContainer input[name="picture"]:checked');
-        imageUrl = selectedImage ? selectedImage.value : 'https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg'; 
+        imageUrl = selectedImage ? selectedImage.value : 'https://via.placeholder.com/150'; // default image URL
       } else {
         imageUrl = document.getElementById("urlPic").value;
       }
@@ -99,7 +96,7 @@
       // ดึงข้อมูล profile ของผู้ใช้
       const profile = await liff.getProfile();
 
-     // สร้าง Flex Message
+      // สร้าง Flex Message
       const flexMessage = {
         type: "flex",
         altText: `สุขสันต์วันปีใหม่ 2025 นะ โดย ${profile.displayName}`,
@@ -214,7 +211,6 @@
       const flexMessageJson = JSON.stringify(flexMessage, null, 2); //  null, 2  ใช้สำหรับ format JSON ให้อ่านง่าย
 
       // แสดงผล JSON string ใน element ที่มี id="flexMessageJson"
-      document.getElementById("flexMessageJson").textContent = "ส่งสำเร็จ";
       document.getElementById("flexMessageJson").textContent = flexMessageJson;
 
       // แชร์ Flex Message
@@ -223,6 +219,11 @@
 
     async function getUserProfile() {
       const profile = await liff.getProfile()
+      document.getElementById("pictureUrl").src = profile.pictureUrl
+      document.getElementById("userId").append(profile.userId)
+      document.getElementById("statusMessage").append(profile.statusMessage)
+      document.getElementById("displayName").append(profile.displayName)
+      document.getElementById("decodedIDToken").append(liff.getDecodedIDToken().email)
     }
 
 
@@ -237,7 +238,7 @@
         liff.login()
       }
       // enable ปุ่ม
-      document.getElementById('shareButton').disabled = false; 
+      document.getElementById('shareButton').disabled = false;
     }
 
     main();
