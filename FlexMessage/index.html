@@ -101,14 +101,14 @@
 
       // สร้าง Flex Message
       const flexMessage = {
-        "type": "flex",
-        "altText": `สุขสันต์วันปีใหม่ 2025 นะ โดย ${profile.displayName}`,
-        "contents": {
+        type: "flex",
+        altText: `สุขสันต์วันปีใหม่ 2025 นะ โดย ${profile.displayName}`,
+        contents: {
           "type": "bubble",
           "size": "giga",
           "hero": {
             "type": "image",
-            "url": imageUrl,
+            "url": imageUrl, // ใช้ imageUrl ที่ดึงมาจาก input
             "aspectRatio": "1.5:1",
             "aspectMode": "cover",
             "size": "full"
@@ -119,15 +119,38 @@
             "contents": [
               {
                 "type": "text",
-                "text": "Happy New Year 2024",
+                "text": "Happy New Year",
                 "weight": "bold",
                 "size": "xl",
-                "align": "center",
-                "margin": "md"
+                "align": "center"
               },
               {
-                "type": "separator",
-                "margin": "md"
+                "type": "box",
+                "layout": "baseline",
+                "margin": "md",
+                "contents": [
+                  {
+                    "type": "icon",
+                    "size": "sm",
+                    "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                  },
+                  {
+                    "type": "text",
+                    "text": "2024 ",
+                    "size": "sm",
+                    "color": "#999999",
+                    "margin": "md",
+                    "flex": 0,
+                    "align": "center"
+                  },
+                  {
+                    "type": "icon",
+                    "size": "sm",
+                    "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                  }
+                ],
+                "spacing": "md",
+                "justifyContent": "center"
               },
               {
                 "type": "box",
@@ -138,11 +161,10 @@
                     "type": "text",
                     "wrap": true,
                     "color": "#666666",
-                    "size": "md",
+                    "size": "sm",
                     "flex": 5,
-                    "text": freeText,
-                    "align": "center",
-                    "margin": "sm"
+                    "text": freeText, // ใช้ freeText ที่ดึงมาจาก textarea
+                    "align": "center"
                   },
                   {
                     "type": "box",
@@ -158,7 +180,7 @@
                       },
                       {
                         "type": "text",
-                        "text": profile.displayName,
+                        "text": profile.displayName, // ใช้ displayName จาก profile
                         "wrap": true,
                         "color": "#666666",
                         "size": "sm",
@@ -172,46 +194,18 @@
                     "contents": [
                       {
                         "type": "image",
-                        "url": profile.pictureUrl,
+                        "url": profile.pictureUrl, // ใช้ pictureUrl จาก profile
                         "animated": false,
-                        "size": "lg",
-                        "aspectMode": "cover",
-                        "margin": "lg"
+                        "offsetTop": "lg",
+                        "size": "lg"
                       }
                     ],
-                    "cornerRadius": "xxl"
+                    "cornerRadius": "lg"
                   }
                 ]
               }
             ],
             "alignItems": "center"
-          },
-          "footer": {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-              {
-                "type": "button",
-                "action": {
-                  "type": "uri",
-                  "label": "ส่งคำอวยพรให้เพื่อน",
-                  "uri": "https://liff.line.me/1657677472-OYGa2ZYM"
-                },
-                "style": "primary",
-                "flex": 5
-              },
-              {
-                "type": "button",
-                "action": {
-                  "type": "uri",
-                  "label": "รู้จัก Spark Factor",
-                  "uri": "https://sparkth.io"
-                },
-                "style": "primary",
-                "flex": 4
-              }
-            ],
-            "spacing": "sm"
           }
         }
       };
