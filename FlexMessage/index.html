@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-  <title>My LIFF app</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <title>LIFF For Sending New Year Flex Message</title>
+  <link rel="stylesheet" href="css/style.css">
   <style>
     /* เพิ่ม CSS เพื่อจัดรูปแบบ radio button */
     .image-choice {
@@ -16,7 +16,7 @@
 
 <body>
   <h2>กำหนดข้อความอวยพร</h2>
-  <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)"></textarea>
+  <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)">สวัสดีปีใหม่ 2568  ขอให้ปีนี้เป็นปีที่สดใส\nเต็มไปด้วยความสุข\nสมหวังในทุกสิ่งและประสบความสำเร็จในทุกๆ ด้าน</textarea> 
 
   <h2>เลือกรูปภาพ</h2>
 
@@ -181,7 +181,7 @@
                         "wrap": true,
                         "color": "#666666",
                         "size": "sm",
-                        "flex": 5
+                        "flex": 2
                       }
                     ]
                   },
@@ -203,7 +203,35 @@
               }
             ],
             "alignItems": "center"
-          }
+          },
+          ,
+  "footer": {
+    "type": "box",
+    "layout": "horizontal",
+    "contents": [
+      {
+        "type": "button",
+        "action": {
+          "type": "uri",
+          "label": "ส่งคำอวยพรให้เพื่อน",
+          "uri": "https://liff.line.me/1657677472-OYGa2ZYM"
+        },
+        "style": "primary",
+        "flex": 5
+      },
+      {
+        "type": "button",
+        "action": {
+          "type": "uri",
+          "label": "รู้จัก Spark Factor",
+          "uri": "https://sparkth.io"
+        },
+        "style": "primary",
+        "flex": 4
+      }
+    ],
+    "spacing": "sm"
+  }
         }
       };
 
@@ -211,7 +239,7 @@
       const flexMessageJson = JSON.stringify(flexMessage, null, 2); //  null, 2  ใช้สำหรับ format JSON ให้อ่านง่าย
 
       // แสดงผล JSON string ใน element ที่มี id="flexMessageJson"
-      document.getElementById("flexMessageJson").textContent = flexMessageJson;
+      document.getElementById("flexMessageJson").textContent = "ส่งสำเร็จ";
 
       // แชร์ Flex Message
       await liff.shareTargetPicker([flexMessage]);
