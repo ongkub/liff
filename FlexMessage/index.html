@@ -22,19 +22,19 @@
 
   <h2>เลือกรูปภาพ</h2>
 
-  <div>
-    <label class="image-choice">
-      <input type="radio" id="useDefaultImage" name="imageSource" value="default" checked> ใช้รูปภาพจากเว็บ
-    </label>
-    <label class="image-choice">
-      <input type="radio" id="useCustomURL" name="imageSource" value="custom"> ใส่ URL รูปภาพเอง
-    </label>
-  </div>
+  <div id="defaultImageContainer"> 
+    <div>
+      <label class="image-choice">
+        <input type="radio" id="useDefaultImage" name="imageSource" value="default" checked> ใช้รูปภาพจากเว็บ
+      </label>
+      <label class="image-choice">
+        <input type="radio" id="useCustomURL" name="imageSource" value="custom"> ใส่ URL รูปภาพเอง
+      </label>
+    </div>
 
-  <div id="defaultImageContainer">
     <div class="image-container">
       <label class="image-choice">
-        <input type="radio" id="pic1" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" checked>
+        <input type="radio" id="pic1" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" checked> 
         <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 1">
       </label>
 
@@ -53,14 +53,14 @@
         <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 4">
       </label>
     </div>
-  </div>
 
-  <div id="customURLContainer" style="display: none;">
-    <h2>ใส่ URL รูปภาพ</h2>
-    <input type="url" id="urlPic" value="https://example.com/image.jpg">
-  </div>
+    <div id="customURLContainer" style="display: none;">
+      <h2>ใส่ URL รูปภาพ</h2>
+      <input type="url" id="urlPic" value="https://example.com/image.jpg">
+    </div>
+  </div> 
 
-  <button id="shareButton">แชร์</button>
+  <button id="shareButton" disabled>แชร์</button> 
   <pre id="flexMessageJson"></pre>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
@@ -90,7 +90,7 @@
       let imageUrl;
       if (document.getElementById('useDefaultImage').checked) {
         const selectedImage = document.querySelector('#defaultImageContainer input[name="picture"]:checked');
-        imageUrl = selectedImage ? selectedImage.value : 'https://via.placeholder.com/150'; // default image URL
+        imageUrl = selectedImage ? selectedImage.value : 'https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg'; 
       } else {
         imageUrl = document.getElementById("urlPic").value;
       }
@@ -205,35 +205,7 @@
               }
             ],
             "alignItems": "center"
-          },
-          ,
-  "footer": {
-    "type": "box",
-    "layout": "horizontal",
-    "contents": [
-      {
-        "type": "button",
-        "action": {
-          "type": "uri",
-          "label": "ส่งคำอวยพรให้เพื่อน",
-          "uri": "https://liff.line.me/1657677472-OYGa2ZYM"
-        },
-        "style": "primary",
-        "flex": 5
-      },
-      {
-        "type": "button",
-        "action": {
-          "type": "uri",
-          "label": "รู้จัก Spark Factor",
-          "uri": "https://sparkth.io"
-        },
-        "style": "primary",
-        "flex": 4
-      }
-    ],
-    "spacing": "sm"
-  }
+          }
         }
       };
 
@@ -268,7 +240,7 @@
         liff.login()
       }
       // enable ปุ่ม
-      document.getElementById('shareButton').disabled = false;
+      document.getElementById('shareButton').disabled = false; 
     }
 
     main();
