@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  <h2>กำหนดข้อความอวยพร (ไม่เกิน 200 ตัวอักษร)</h2>
+  <h2>กำหนดข้อความอวยพร \n(ไม่เกิน 200 ตัวอักษร)</h2>
   <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)">สวัสดีปีใหม่ 2568  ขอให้ปีนี้เป็นปีที่สดใส
 เต็มไปด้วยความสุข
 สมหวังในทุกสิ่งและประสบความสำเร็จในทุกๆ ด้าน</textarea> 
@@ -205,6 +205,22 @@
               }
             ],
             "alignItems": "center"
+          }
+          "footer" :{
+          "type": "box",
+            "layout": "horizontal",
+            "contents": [
+            {
+            "type": "button",
+            "action": {
+            "type": "uri",
+            "label": "ส่งคำอวยพรให้เพื่อน",
+            "uri": "https://liff.line.me/1657677472-OYGa2ZYM"
+            },
+            "style": "primary",
+            "flex": 5
+            }
+            ]
           }
         }
       };
