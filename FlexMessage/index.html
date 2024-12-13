@@ -223,18 +223,12 @@
 
     async function getUserProfile() {
       const profile = await liff.getProfile()
-      document.getElementById("pictureUrl").src = profile.pictureUrl
-      document.getElementById("userId").append(profile.userId)
-      document.getElementById("statusMessage").append(profile.statusMessage)
-      document.getElementById("displayName").append(profile.displayName)
-      document.getElementById("decodedIDToken").append(liff.getDecodedIDToken().email)
+      console.log("profile");
     }
 
 
     async function main() {
-      await liff.init({
-        liffId: "1657677472-OYGa2ZYM" // **อย่าลืมแก้ไข liffId ให้ถูกต้อง**
-      })
+      await liff.init({liffId: "1657677472-OYGa2ZYM" })
       document.getElementById("isLoggedIn").append(liff.isLoggedIn())
       if (liff.isLoggedIn()) {
         console.log("Success");
@@ -242,13 +236,11 @@
       } else {
         liff.login()
       }
-      // enable ปุ่ม
       document.getElementById('shareButton').disabled = false;
     }
 
     main();
-
-    // เพิ่ม event listener ให้กับปุ่ม
+    console.log("main");
     document.getElementById('shareButton').addEventListener('click', shareMsg);
   </script>
 </body>
