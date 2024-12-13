@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  <h2>กำหนดข้อความอวยพร \n(ไม่เกิน 200 ตัวอักษร)</h2>
+  <h2>กำหนดข้อความอวยพร (ไม่เกิน 200 ตัวอักษร)</h2>
   <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)">สวัสดีปีใหม่ 2568  ขอให้ปีนี้เป็นปีที่สดใส
 เต็มไปด้วยความสุข
 สมหวังในทุกสิ่งและประสบความสำเร็จในทุกๆ ด้าน</textarea> 
@@ -213,8 +213,8 @@
       const flexMessageJson = JSON.stringify(flexMessage, null, 2); //  null, 2  ใช้สำหรับ format JSON ให้อ่านง่าย
 
       // แสดงผล JSON string ใน element ที่มี id="flexMessageJson"
+      document.getElementById("flexMessageJson").textContent = "ส่งสำเร็จ";
       document.getElementById("flexMessageJson").textContent = flexMessageJson;
-      //document.getElementById("flexMessageJson").textContent = "ส่งสำเร็จ";
 
       // แชร์ Flex Message
       await liff.shareTargetPicker([flexMessage]);
