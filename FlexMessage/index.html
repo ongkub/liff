@@ -99,143 +99,115 @@
       // ดึงข้อมูล profile ของผู้ใช้
       const profile = await liff.getProfile();
 
-      // สร้าง Flex Message
+     // สร้าง Flex Message
       const flexMessage = {
         type: "flex",
         altText: `สุขสันต์วันปีใหม่ 2025 นะ โดย ${profile.displayName}`,
         contents: {
-  "type": "bubble",
-  "size": "giga",
-  "hero": {
-    "type": "image",
-    "url": "https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg",
-    "aspectRatio": "1.5:1",
-    "aspectMode": "cover",
-    "size": "full"
-  },
-  "body": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
-      {
-        "type": "text",
-        "text": "Happy New Year",
-        "weight": "bold",
-        "size": "xl",
-        "align": "center"
-      },
-      {
-        "type": "box",
-        "layout": "baseline",
-        "margin": "md",
-        "contents": [
-          {
-            "type": "icon",
-            "size": "sm",
-            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+          "type": "bubble",
+          "size": "giga",
+          "hero": {
+            "type": "image",
+            "url": imageUrl, // ใช้ imageUrl ที่ดึงมาจาก input
+            "aspectRatio": "1.5:1",
+            "aspectMode": "cover",
+            "size": "full"
           },
-          {
-            "type": "text",
-            "text": "2024 ",
-            "size": "sm",
-            "color": "#999999",
-            "margin": "md",
-            "flex": 0,
-            "align": "center"
-          },
-          {
-            "type": "icon",
-            "size": "sm",
-            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
-          }
-        ],
-        "spacing": "md",
-        "justifyContent": "center"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "margin": "lg",
-        "contents": [
-          {
-            "type": "text",
-            "wrap": true,
-            "color": "#666666",
-            "size": "sm",
-            "flex": 5,
-            "text": "ขอให้มั่งมีศรีสุขนะ\nกห่าหกงสากหงวา\n\nฟกหกดหกห",
-            "align": "center"
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "โดย",
-                "color": "#aaaaaa",
-                "size": "sm",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "Ong",
-                "wrap": true,
-                "color": "#666666",
-                "size": "sm",
-                "flex": 2
-              }
-            ]
-          },
-          {
+          "body": {
             "type": "box",
             "layout": "vertical",
             "contents": [
               {
-                "type": "image",
-                "url": "https://profile.line-scdn.net/0hjMZYBNdkNWJ3ICOb6q1LHQdwNghUUWxwWEB7VBYpaFVCFCJhXU5-VEMlPwYeESFnWE4qUUMjb1J7M0IEaXbJVnAQa1VOFnUyXUN8hw",
-                "animated": false,
-                "size": "lg",
-                "aspectMode": "cover"
+                "type": "text",
+                "text": "Happy New Year",
+                "weight": "bold",
+                "size": "xl",
+                "align": "center"
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "margin": "md",
+                "contents": [
+                  {
+                    "type": "icon",
+                    "size": "sm",
+                    "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                  },
+                  {
+                    "type": "text",
+                    "text": "2024 ",
+                    "size": "sm",
+                    "color": "#999999",
+                    "margin": "md",
+                    "flex": 0,
+                    "align": "center"
+                  },
+                  {
+                    "type": "icon",
+                    "size": "sm",
+                    "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+                  }
+                ],
+                "spacing": "md",
+                "justifyContent": "center"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "margin": "lg",
+                "contents": [
+                  {
+                    "type": "text",
+                    "wrap": true,
+                    "color": "#666666",
+                    "size": "sm",
+                    "flex": 5,
+                    "text": freeText, // ใช้ freeText ที่ดึงมาจาก textarea
+                    "align": "center"
+                  },
+                  {
+                    "type": "box",
+                    "layout": "baseline",
+                    "spacing": "sm",
+                    "contents": [
+                      {
+                        "type": "text",
+                        "text": "โดย",
+                        "color": "#aaaaaa",
+                        "size": "sm",
+                        "flex": 1
+                      },
+                      {
+                        "type": "text",
+                        "text": profile.displayName, // ใช้ displayName จาก profile
+                        "wrap": true,
+                        "color": "#666666",
+                        "size": "sm",
+                        "flex": 5
+                      }
+                    ]
+                  },
+                  {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "image",
+                        "url": profile.pictureUrl, // ใช้ pictureUrl จาก profile
+                        "animated": false,
+                        "offsetTop": "lg",
+                        "size": "lg"
+                      }
+                    ],
+                    "cornerRadius": "lg"
+                  }
+                ]
               }
             ],
-            "cornerRadius": "xxl",
-            "margin": "lg"
+            "alignItems": "center"
           }
-        ]
-      }
-    ],
-    "alignItems": "center"
-  },
-  "footer": {
-    "type": "box",
-    "layout": "horizontal",
-    "contents": [
-      {
-        "type": "button",
-        "action": {
-          "type": "uri",
-          "label": "ส่งคำอวยพรให้เพื่อน",
-          "uri": "https://liff.line.me/1657677472-OYGa2ZYM"
-        },
-        "style": "primary",
-        "flex": 5
-      },
-      {
-        "type": "button",
-        "action": {
-          "type": "uri",
-          "label": "รู้จัก Spark Factor",
-          "uri": "https://sparkth.io"
-        },
-        "style": "primary",
-        "flex": 4
-      }
-    ],
-    "spacing": "sm"
-  }
-}
+        }
       };
 
       // แปลง Flex Message เป็น JSON string
@@ -243,6 +215,7 @@
 
       // แสดงผล JSON string ใน element ที่มี id="flexMessageJson"
       document.getElementById("flexMessageJson").textContent = "ส่งสำเร็จ";
+      document.getElementById("flexMessageJson").textContent = flexMessageJson;
 
       // แชร์ Flex Message
       await liff.shareTargetPicker([flexMessage]);
