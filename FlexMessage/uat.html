@@ -264,6 +264,7 @@
     }
 
     async function main() {
+      console.log("main")
       await liff.init({ liffId: "1657677472-1NmOkp47" })
       document.getElementById("isLoggedIn").append(liff.isLoggedIn())
       if(liff.isLoggedIn()) {
