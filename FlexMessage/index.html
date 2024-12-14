@@ -15,6 +15,10 @@
 </head>
 
 <body>
+  <h2>กำหนดหัวข้อความอวยพร</h2>
+  <textarea id="headText" maxlength="50" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 50 ตัวอักษร)">Happy New Year</textarea> 
+
+  
   <h2>กำหนดข้อความอวยพร</h2>
   <p>ไม่เกิน200 ตัวอักษร</p>
   <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)">สวัสดีปีใหม่ 2568  ขอให้ปีนี้เป็นปีที่สดใส
@@ -35,29 +39,29 @@
   <div id="defaultImageContainer">
     <div class="image-container">
       <label class="image-choice">
-        <input type="radio" id="pic1" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" checked>
-        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 1">
+        <input type="radio" id="pic1" name="picture" value="https://sparkth.io/wp-content/uploads/2024/12/golden-figures-number-2025-and-tiny-home-on-backgr-2024-11-01-15-17-25-utc-1.jpg" checked>
+        <img src="https://sparkth.io/wp-content/uploads/2024/12/golden-figures-number-2025-and-tiny-home-on-backgr-2024-11-01-15-17-25-utc-1.jpg" alt="Pic 1">
       </label>
 
       <label class="image-choice">
-        <input type="radio" id="pic2" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
-        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 2">
+        <input type="radio" id="pic2" name="picture" value="https://sparkth.io/wp-content/uploads/2024/12/beautiful-colorful-firework-display-at-night-for-c-2024-09-17-00-05-59-utc-1-1.jpg">
+        <img src="https://sparkth.io/wp-content/uploads/2024/12/beautiful-colorful-firework-display-at-night-for-c-2024-09-17-00-05-59-utc-1-1.jpg" alt="Pic 2">
       </label>
 
       <label class="image-choice">
-        <input type="radio" id="pic3" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
-        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 3">
+        <input type="radio" id="pic3" name="picture" value="https://sparkth.io/wp-content/uploads/2024/12/group-of-young-excited-intercultural-friends-clink-2023-11-27-05-10-49-utc-1.jpg">
+        <img src="https://sparkth.io/wp-content/uploads/2024/12/group-of-young-excited-intercultural-friends-clink-2023-11-27-05-10-49-utc-1.jpg" alt="Pic 3">
       </label>
 
       <label class="image-choice">
-        <input type="radio" id="pic4" name="picture" value="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg">
-        <img src="https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg" alt="Pic 4">
+        <input type="radio" id="pic4" name="picture" value="https://sparkth.io/wp-content/uploads/2024/12/happy-multiracial-people-celebrating-new-year-2025-2023-11-27-05-03-49-utc-1.jpg">
+        <img src="https://sparkth.io/wp-content/uploads/2024/12/happy-multiracial-people-celebrating-new-year-2025-2023-11-27-05-03-49-utc-1.jpg" alt="Pic 4">
       </label>
     </div>
   </div>
 
   <div id="customURLContainer" style="display: none;">
-    <h2>ใส่ URL รูปภาพ</h2>
+    <h2>ใส่ URL รูปภาพขนาด 1.5:1 เท่านั้น</h2>
     <input type="url" id="urlPic" value="https://example.com/image.jpg">
   </div>
 
@@ -87,6 +91,7 @@
       // ดึงข้อความจาก textarea
       console.log("shareMsg");
       const freeText = document.getElementById("freeText").value;
+      const headText = document.getElementById("headText").value;
 
       // ดึง URL รูปภาพ
       let imageUrl;
@@ -120,7 +125,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "Happy New Year",
+                "text": headText,
                 "weight": "bold",
                 "size": "xl",
                 "align": "center"
@@ -137,7 +142,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "2024 ",
+                    "text": "2025 ",
                     "size": "sm",
                     "color": "#999999",
                     "margin": "md",
@@ -256,7 +261,7 @@
 
     async function main() {
       await liff.init({
-        liffId: "1657677472-OYGa2ZYM" // **อย่าลืมแก้ไข liffId ให้ถูกต้อง**
+        liffId: "1657677472-1NmOkp47" // **อย่าลืมแก้ไข liffId ให้ถูกต้อง**
       })
       document.getElementById("isLoggedIn").append(liff.isLoggedIn())
       if (liff.isLoggedIn()) {
