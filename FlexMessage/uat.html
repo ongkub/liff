@@ -263,21 +263,17 @@
       const profile = await liff.getProfile()
     }
 
-
     async function main() {
-      await liff.init({
-        liffId: "1657677472-1NmOkp47" // **อย่าลืมแก้ไข liffId ให้ถูกต้อง**
-      })
+      await liff.init({ liffId: "1657677472-1NmOkp47" })
       document.getElementById("isLoggedIn").append(liff.isLoggedIn())
-      if (liff.isLoggedIn()) {
-        console.log("Success");
-        getUserProfile();
+      if(liff.isLoggedIn()) {
+      getUserProfile()
       } else {
         liff.login()
       }
       // enable ปุ่ม
       document.getElementById('shareButton').disabled = false;
-    }
+    }    
 
     main();
 
