@@ -263,7 +263,6 @@
       await liff.init({
         liffId: "1657677472-OYGa2ZYM" // **อย่าลืมแก้ไข liffId ให้ถูกต้อง**
       })
-      document.getElementById("isLoggedIn").append(liff.isLoggedIn())
       if (liff.isLoggedIn()) {
         console.log("Success");
         getUserProfile();
