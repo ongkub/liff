@@ -68,13 +68,6 @@
   <button id="shareButton">แชร์</button>
   <pre id="flexMessageJson"></pre>
 
-  <script src="../js/vconsole.min.js"></script> 
-  <script>
-    var vConsole = new VConsole()
-    console.log("Hello World!")
-  </script> 
-  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
-
   <script>
     // ฟังก์ชันสำหรับแสดง/ซ่อน input URL ตาม radio button ที่เลือก
     function toggleImageSource() {
@@ -254,6 +247,7 @@
       // แสดงผล JSON string ใน element ที่มี id="flexMessageJson"
       //document.getElementById("flexMessageJson").textContent = flexMessageJson;
       document.getElementById("flexMessageJson").textContent = "ส่งสำเร็จ";
+      console.log(flexMessageJson);
 
       // แชร์ Flex Message
       await liff.shareTargetPicker([flexMessage]);
