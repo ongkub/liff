@@ -20,6 +20,10 @@ textarea {
   resize: vertical;
 }
 
+#freeText {
+  height: 2em; /* ความสูง 2 บรรทัด */
+}
+
 .image-container {
   display: flex;
   flex-wrap: wrap;
