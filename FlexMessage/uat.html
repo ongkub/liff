@@ -267,12 +267,12 @@
       await liff.init({ liffId: "1657677472-1NmOkp47" })
       document.getElementById("isLoggedIn").append(liff.isLoggedIn())
       if(liff.isLoggedIn()) {
-      getUserProfile()
+      getUserProfile();
+      // enable ปุ่ม
+      document.getElementById('shareButton').disabled = false;
       } else {
         liff.login()
       }
-      // enable ปุ่ม
-      document.getElementById('shareButton').disabled = false;
     }    
 
     main();
