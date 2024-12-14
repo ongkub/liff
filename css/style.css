@@ -49,7 +49,7 @@ textarea {
 #customURLContainer input[type="url"] {
   width: 100%;
   max-width: 500px;
-  height: calc(20vh - 22px); /* ปรับขนาด input url ให้เป็น 20% ของความสูง viewport */
+  height: 3em; 
   padding: 10px;
   box-sizing: border-box;
   border: 1px solid #ccc;
