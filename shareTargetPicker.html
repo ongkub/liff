@@ -108,10 +108,31 @@
       // สร้าง Flex Message
       const flexMessage = {
         type: "flex",
-        altText: `${headText} โดย ${profile.displayName}`,
+        altText: `สุขสันต์วันปีใหม่ 2025 นะ โดย ${profile.displayName}`,
         contents: {
           "type": "bubble",
           "size": "giga",
+          "header": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "Powered by Spark Factor",
+                "align": "end",
+                "size": "sm",
+                "margin": "0px",
+                "color": "#ffffff"
+              }
+            ],
+            "paddingAll": "5px",
+            "paddingEnd": "5%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://sparkth.io"
+            }
+          },
           "hero": {
             "type": "image",
             "url": imageUrl, // ใช้ imageUrl ที่ดึงมาจาก input
@@ -128,7 +149,8 @@
                 "text": headText,
                 "weight": "bold",
                 "size": "xl",
-                "align": "center"
+                "align": "center",
+                "color": "#1C64FF"
               },
               {
                 "type": "box",
@@ -161,7 +183,6 @@
               {
                 "type": "box",
                 "layout": "vertical",
-                "margin": "lg",
                 "contents": [
                   {
                     "type": "text",
@@ -171,28 +192,6 @@
                     "flex": 5,
                     "text": freeText, // ใช้ freeText ที่ดึงมาจาก textarea
                     "align": "center"
-                  },
-                  {
-                    "type": "box",
-                    "layout": "baseline",
-                    "spacing": "sm",
-                    "contents": [
-                      {
-                        "type": "text",
-                        "text": "โดย",
-                        "color": "#aaaaaa",
-                        "size": "sm",
-                        "flex": 1
-                      },
-                      {
-                        "type": "text",
-                        "text": profile.displayName, // ใช้ displayName จาก profile
-                        "wrap": true,
-                        "color": "#666666",
-                        "size": "sm",
-                        "flex": 3
-                      }
-                    ]
                   },
                   {
                     "type": "box",
@@ -206,39 +205,65 @@
                         "aspectMode": "cover"
                       }
                     ],
-                    "cornerRadius": "lg"
+                    "width": "50%",
+                    "cornerRadius": "xxl"
                   }
-                ]
+                ],
+                "margin": "lg",
+                "spacing": "lg",
+                "alignItems": "center"
               }
             ],
             "alignItems": "center"
           },
           "footer": {
             "type": "box",
-            "layout": "horizontal",
+            "layout": "vertical",
             "contents": [
               {
-                "type": "button",
-                "action": {
-                  "type": "uri",
-                  "label": "ส่งคำอวยพรให้เพื่อน",
-                  "uri": "https://liff.line.me/2006674119-0JVBpKzJ"
-                },
-                "style": "primary",
-                "flex": 5
+                "type": "text",
+                "text": "คุณสามารถส่งคำอวยพรหาเพื่อนๆของคุณได้ฟรี",
+                "color": "#666666",
+                "size": "xs"
               },
               {
-                "type": "button",
-                "action": {
-                  "type": "uri",
-                  "label": "รู้จัก Spark Factor",
-                  "uri": "https://sparkth.io"
-                },
-                "style": "primary",
-                "flex": 4
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "เพื่อเริ่มใช้งานแอปครั้งแรก เราขออนุญาตเข้าถึงโปรไฟล์ของคุณเพื่อใช้ชื่อและรูปภาพในการสร้างการ์ดอวยพรเท่านั้น \nข้อมูลของคุณจะไม่ถูกจัดเก็บ และแอปนี้มีจุดประสงค์เพื่อส่งความสุขหาเพื่อนๆ เท่านั้น! ",
+                    "color": "#999999",
+                    "size": "xxs",
+                    "wrap": true
+                  },
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "uri",
+                      "label": "เขียนการ์ดอวยพรให้เพื่อน",
+                      "uri": "https://liff.line.me/2006674119-0JVBpKzJ"
+                    },
+                    "style": "primary",
+                    "flex": 5,
+                    "color": "#1C64FF",
+                    "height": "sm"
+                  }
+                ],
+                "width": "90%",
+                "spacing": "lg"
               }
             ],
-            "spacing": "sm"
+            "spacing": "sm",
+            "alignItems": "center"
+          },
+          "styles": {
+            "header": {
+              "backgroundColor": "#1C64FF"
+            },
+            "footer": {
+              "separator": true
+            }
           }
         }
       };
