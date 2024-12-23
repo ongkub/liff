@@ -31,22 +31,6 @@
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script>
-    // ฟังก์ชันสำหรับแสดง/ซ่อน input URL ตาม radio button ที่เลือก
-    function toggleImageSource() {
-      const useDefaultImage = document.getElementById('useDefaultImage').checked;
-      document.getElementById('defaultImageContainer').style.display = useDefaultImage ? 'block' : 'none';
-      document.getElementById('customURLContainer').style.display = useDefaultImage ? 'none' : 'block';
-    }
-
-    // เรียกใช้ฟังก์ชัน toggleImageSource() ตอนเริ่มต้น
-    toggleImageSource();
-
-    // เพิ่ม event listener ให้กับ radio button เพื่อเรียกใช้ toggleImageSource()
-    const imageSourceRadios = document.querySelectorAll('input[name="imageSource"]');
-    imageSourceRadios.forEach(radio => {
-      radio.addEventListener('change', toggleImageSource);
-    });
-
     async function shareMsg() {
       // ดึงข้อความจาก textarea
       console.log("shareMsg");
