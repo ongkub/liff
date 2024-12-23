@@ -25,15 +25,10 @@
 เต็มไปด้วยความสุข สมหวังในทุกสิ่ง
 และประสบความสำเร็จในทุกๆ ด้าน</textarea> 
 
-
   <button id="shareButton">แชร์</button>
   <pre id="flexMessageJson"></pre>
 
-  <script src="../js/vconsole.min.js"></script> 
-  <script>
-    var vConsole = new VConsole()
-    console.log("Hello World!")
-  </script> 
+
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script>
     // ฟังก์ชันสำหรับแสดง/ซ่อน input URL ตาม radio button ที่เลือก
@@ -64,7 +59,7 @@
       // สร้าง Flex Message
       const flexMessage = {
         type: "flex",
-        altText: `สุขสันต์วันปีใหม่ 2025 นะ โดย ${profile.displayName}`,
+        altText: `${headText} โดย ${profile.displayName}`,
         contents: {
   "type": "bubble",
   "size": "mega",
