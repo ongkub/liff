@@ -1,3 +1,16 @@
+  header {
+    display: flex;
+    justify-content: center; /* จัด logo ให้ตรงกลาง */
+    align-items: center; /* จัด logo ให้ตรงกลางแนวตั้ง */
+    padding: 10px; 
+    background-color: #f0f0f0; /* สีพื้นหลัง header */
+  }
+
+    .logo {
+      max-width: 200px; /* กำหนดความกว้างสูงสุดของ logo */
+      height: auto; 
+    }
+
 body {
   font-family: sans-serif;
   margin: 16px;
