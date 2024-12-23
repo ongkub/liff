@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+  <title>LIFF For Sending Flex Message</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* เพิ่ม CSS เพื่อจัดรูปแบบ radio button */
+    .image-choice {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>กำหนดหัวข้ออวยพร</h2>
+  <textarea id="headText" maxlength="50" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 50 ตัวอักษร)">Happy New Year</textarea> 
+
+  
+  <h2>กำหนดข้อความอวยพร</h2>
+  <p>ไม่เกิน200 ตัวอักษร</p>
+  <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)">สวัสดีปีใหม่ 2568  ขอให้ปีนี้เป็นปีที่สดใส
+เต็มไปด้วยความสุข สมหวังในทุกสิ่ง
+และประสบความสำเร็จในทุกๆ ด้าน</textarea> 
+
+
+  <button id="shareButton">แชร์</button>
+  <pre id="flexMessageJson"></pre>
+
+  <script src="../js/vconsole.min.js"></script> 
+  <script>
+    var vConsole = new VConsole()
+    console.log("Hello World!")
+  </script> 
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script>
+    // ฟังก์ชันสำหรับแสดง/ซ่อน input URL ตาม radio button ที่เลือก
+    function toggleImageSource() {
+      const useDefaultImage = document.getElementById('useDefaultImage').checked;
+      document.getElementById('defaultImageContainer').style.display = useDefaultImage ? 'block' : 'none';
+      document.getElementById('customURLContainer').style.display = useDefaultImage ? 'none' : 'block';
+    }
+
+    // เรียกใช้ฟังก์ชัน toggleImageSource() ตอนเริ่มต้น
+    toggleImageSource();
+
+    // เพิ่ม event listener ให้กับ radio button เพื่อเรียกใช้ toggleImageSource()
+    const imageSourceRadios = document.querySelectorAll('input[name="imageSource"]');
+    imageSourceRadios.forEach(radio => {
+      radio.addEventListener('change', toggleImageSource);
+    });
+
+    async function shareMsg() {
+      // ดึงข้อความจาก textarea
+      console.log("shareMsg");
+      const freeText = document.getElementById("freeText").value;
+      const headText = document.getElementById("headText").value;
+
+      // ดึงข้อมูล profile ของผู้ใช้
+      const profile = await liff.getProfile();
+
+      // สร้าง Flex Message
+      const flexMessage = {
+        type: "flex",
+        altText: `สุขสันต์วันปีใหม่ 2025 นะ โดย ${profile.displayName}`,
+        contents: {
+  "type": "bubble",
+  "size": "mega",
+  "hero": {
+    "type": "image",
+    "aspectRatio": "2:1",
+    "aspectMode": "cover",
+    "size": "full",
+    "url": "https://scontent.fbkk29-8.fna.fbcdn.net/v/t39.30808-6/462848822_10231530399114932_71401521273636026_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeESM1_N1hHrG5CIaPLPKOvBq54VK08CnoOrnhUrTwKegyJtrzEGaf7TAPF1Un20ue0&_nc_ohc=d4hBiGi_l6MQ7kNvgFEchRn&_nc_oc=AdjY-3oDeTVpayYR9FOozv93e7Z7XCZS8Dc1vvk-qoc3085e7nO-nSD0vINtVj3ojK8lTVhoL8PBezqsvwOhunT5&_nc_zt=23&_nc_ht=scontent.fbkk29-8.fna&_nc_gid=AlFconLkWm9Rc2TOZaPOxGJ&oh=00_AYBAY377xD6JjHxPo354kFDVNn6Aj9m4toBel_UCu0Qr8g&oe=676EE867"
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": headText,
+        "weight": "bold",
+        "size": "xl",
+        "align": "center",
+        "color": "#1C64FF"
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "margin": "md",
+        "contents": [
+          {
+            "type": "icon",
+            "size": "sm",
+            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+          },
+          {
+            "type": "text",
+            "text": "2025 ",
+            "size": "sm",
+            "color": "#999999",
+            "margin": "md",
+            "flex": 0,
+            "align": "center"
+          },
+          {
+            "type": "icon",
+            "size": "sm",
+            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+          }
+        ],
+        "spacing": "md",
+        "justifyContent": "center"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "wrap": true,
+            "color": "#666666",
+            "size": "sm",
+            "flex": 5,
+            "text": freeText,
+            "align": "center"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "50%",
+            "cornerRadius": "xxl"
+          }
+        ],
+        "margin": "lg",
+        "spacing": "lg",
+        "alignItems": "center"
+      }
+    ],
+    "alignItems": "center"
+  },
+  "styles": {
+    "header": {
+      "backgroundColor": "#1C64FF"
+    },
+    "footer": {
+      "separator": true
+    }
+  }
+}
+      };
+
+      // แปลง Flex Message เป็น JSON string
+      const flexMessageJson = JSON.stringify(flexMessage, null, 2); //  null, 2  ใช้สำหรับ format JSON ให้อ่านง่าย
+
+      // แสดงผล JSON string ใน element ที่มี id="flexMessageJson"
+      //document.getElementById("flexMessageJson").textContent = flexMessageJson;
+      document.getElementById("flexMessageJson").textContent = "ส่งสำเร็จ";
+      console.log(flexMessageJson);
+
+      // แชร์ Flex Message
+      await liff.shareTargetPicker([flexMessage]);
+    }
+
+    async function getUserProfile() {
+      const profile = await liff.getProfile()
+    }
+
+    async function main() {
+      console.log("main")
+      await liff.init({ liffId: "2006674119-jWPrBJ5q" })
+      if(liff.isLoggedIn()) {
+      getUserProfile();
+      // enable ปุ่ม
+      document.getElementById('shareButton').disabled = false;
+      } else {
+        liff.login()
+      }
+    }    
+
+    main();
+
+    // เพิ่ม event listener ให้กับปุ่ม
+    document.getElementById('shareButton').addEventListener('click', shareMsg);
+  </script>
+</body>
+</html>
