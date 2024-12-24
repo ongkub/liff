@@ -327,7 +327,7 @@ _lt('send', 'pv', ['4f32ac38-1bcb-4324-b646-edb9a92c857a']);
   if (!liff.isInClient()) {
     if (isMobile()) { 
       // **แก้ไข params ให้ถูกต้อง**
-      window.location = `line://app/2006674119-0JVBpKzJ?${params}`; 
+      window.location = `line://app/2006674119-0JVBpKzJ?${}`; 
       setTimeout(() => { liff.closeWindow(); }, 3000);
       return;
     }
@@ -342,7 +342,7 @@ _lt('send', 'pv', ['4f32ac38-1bcb-4324-b646-edb9a92c857a']);
   // --- (ย้ายโค้ดนี้ไปไว้ในตำแหน่งที่เหมาะสม) ---
   // พาผู้ใช้ไปยัง LINE OA
   // **แก้ไข params ให้ถูกต้อง**
-  window.location = `line://app/2006674119-0JVBpKzJ?${params}`; 
+  window.location = `line://app/2006674119-0JVBpKzJ?$utm_source=facebook`; 
   setTimeout(() => { liff.closeWindow(); }, 3000); 
   // --- (จบโค้ดพาไป LINE OA) ---
 }
