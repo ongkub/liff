@@ -42,6 +42,10 @@ textarea {
   flex-wrap: wrap;
   justify-content: center;
 }
+ .profile-image {
+   max-width: 200px; 
+   height: auto;
+ } 
 
 .image-choice {
   display: inline-block;
