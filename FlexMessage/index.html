@@ -318,11 +318,16 @@ _lt('send', 'pv', ['4f32ac38-1bcb-4324-b646-edb9a92c857a']);
     }
 
     async function redirect(){
-      console.log("redirect"); 
-      const liffUrl = await liff.permanentLink.createUrlBy(window.location.href);
-      console.log("liffUrl:", liffUrl); 
-      window.location = liffUrl;
-    }
+  try {
+    console.log("redirect");
+    const liffUrl = await liff.permanentLink.createUrlBy(window.location.href);
+    console.log("liffUrl:", liffUrl);
+    window.location = liffUrl;
+  } catch (error) {
+    console.error("Error creating Permanent Link:", error);
+    // แสดงข้อความแจ้งผู้ใช้ หรือจัดการ error ในรูปแบบอื่นๆ
+  }
+}
 
 
     async function main() {
