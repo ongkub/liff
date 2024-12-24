@@ -313,10 +313,21 @@ _lt('send', 'pv', ['4f32ac38-1bcb-4324-b646-edb9a92c857a']);
     }
 
 
+    async function redirect(){
+      const liffUrl = await liff.permanentlink.createUrlBy(window.location.href);
+      window.location = liffUrl;
+    }
+
+
     async function main() {
       await liff.init({
         liffId: "2006674119-0JVBpKzJ" // **อย่าลืมแก้ไข liffId ให้ถูกต้อง**
       })
+      const {userAgent} = navigator;
+      console.log("User Agent:", userAgent); 
+      if(!liff.isInClient() && userAgent.includes('Line')){
+        redirect();
+      } else{
       if (liff.isLoggedIn()) {
         console.log("Success");
         getUserProfile();
@@ -325,6 +336,7 @@ _lt('send', 'pv', ['4f32ac38-1bcb-4324-b646-edb9a92c857a']);
       }
       // enable ปุ่ม
       document.getElementById('shareButton').disabled = false;
+    }
     }
 
     main();
