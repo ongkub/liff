@@ -7,27 +7,36 @@
   <link rel="stylesheet" href="css/style.css" media="all">
 </head>
 <body>
-  <p id="os"><b>OS:</b> </p>
-  <p id="language"><b>Language:</b> </p>
-  <p id="version"><b>Version:</b> </p>
-  <p id="isInClient"><b>isInClient:</b> </p>
-  <p id="accessToken"><b>AccessToken:</b> </p>
-  <img id="pictureUrl">
-  <p id="userId"><b>userId:</b> </p>
-  <p id="displayName"><b>displayName:</b> </p>
-  <p id="statusMessage"><b>statusMessage:</b> </p>
-  <p id="decodedIDToken"><b>email:</b> </p>
-  <p id="type"><b>type:</b> </p>
-  <p id="viewType"><b>viewType:</b> </p>
-  <p id="utouId"><b>utouId:</b> </p>
-  <p id="roomId"><b>roomId:</b> </p>
-  <p id="groupId"><b>groupId:</b> </p>
-  <p id="friendship"><b>isFriendship:</b> </p>
-  <p id="scanCode"><b>Code:</b> </p>
-  <p id="isLoggedIn"><b>isLoggedIn:</b> </p>
-  <p id="universalLink1"><b>Universal Link:</b> </p>
-  <p id="universalLink2"><b>Universal Link with Query params:</b> </p>
-  <p><a href="https://ongkub.github.io/liff/path/?param=9">Link to Path</a></p>
+
+  <header>
+    <img src="path/to/your/logo.png" alt="Logo" class="logo"> 
+  </header>
+
+  <h2>LIFF App Information</h2>
+
+  <div>
+    <p><b>OS:</b> <span id="os"></span></p>
+    <p><b>Language:</b> <span id="language"></span></p>
+    <p><b>Version:</b> <span id="version"></span></p>
+    <p><b>isInClient:</b> <span id="isInClient"></span></p>
+    <p><b>AccessToken:</b> <span id="accessToken"></span></p> 
+    <img id="pictureUrl" alt="Profile Picture" class="profile-image">
+    <p><b>userId:</b> <span id="userId"></span></p>
+    <p><b>displayName:</b> <span id="displayName"></span></p>
+    <p><b>statusMessage:</b> <span id="statusMessage"></span></p>
+    <p><b>email:</b> <span id="decodedIDToken"></span></p>
+    <p><b>type:</b> <span id="type"></span></p>
+    <p><b>viewType:</b> <span id="viewType"></span></p>
+    <p><b>utouId:</b> <span id="utouId"></span></p>
+    <p><b>roomId:</b> <span id="roomId"></span></p>
+    <p><b>groupId:</b> <span id="groupId"></span></p>
+    <p><b>isFriendship:</b> <span id="friendship"></span></p>
+    <p><b>Code:</b> <span id="scanCode"></span></p>
+    <p><b>isLoggedIn:</b> <span id="isLoggedIn"></span></p>
+    <p><b>Universal Link:</b> <span id="universalLink1"></span></p>
+    <p><b>Universal Link with Query params:</b> <span id="universalLink2"></span></p>
+    <p><a href="https://ongkub.github.io/liff/path/?param=9">Link to Path</a></p>
+  </div>
 
   <button id="btnMsg" onclick="sendMsg()">Send Message</button>
   <button id="btnShare" onclick="shareMsg()">Share Target Picker for MerryChrismas2025</button>
@@ -36,6 +45,7 @@
   <button id="btnScanCode" onclick="scanCode()">Scan Code</button>
   <button id="btnLogOut" onclick="logOut()">Log Out</button>
   <button id="btnClose" onclick="closed()">Close</button>
+
 
 <script src="js/vconsole.min.js"></script> 
   <script>
