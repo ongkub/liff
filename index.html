@@ -30,7 +30,7 @@
   <p><a href="https://ongkub.github.io/liff/path/?param=9">Link to Path</a></p>
 
   <button id="btnMsg" onclick="sendMsg()">Send Message</button>
-  <button id="btnShare" onclick="shareMsg()">Share Target Picker for NEWYEAR2024</button>
+  <button id="btnShare" onclick="shareMsg()">Share Target Picker for MerryChrismas2025</button>
   <button id="btnShare" onclick="shareMsg2()">Share Target Picker for ThaiNewYear</button>
   <button onclick="openWindow()">Open Window</button>
   <button id="btnScanCode" onclick="scanCode()">Scan Code</button>
@@ -58,10 +58,31 @@
       await liff.shareTargetPicker([
     {
       "type": "flex",
-      "altText": "สุขสันต์วันปีใหม่ 2024 นะครับ จากอ๋อง",
+      "altText": "สุขสันต์วันปีใหม่ 2025 นะครับ จากอ๋อง",
       "contents": {
   "type": "bubble",
   "size": "giga",
+  "header": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "Powered by Spark Factor",
+        "align": "end",
+        "size": "sm",
+        "margin": "0px",
+        "color": "#ffffff"
+      }
+    ],
+    "paddingAll": "5px",
+    "paddingEnd": "5%",
+    "action": {
+      "type": "uri",
+      "label": "action",
+      "uri": "https://sparkth.io"
+    }
+  },
   "hero": {
     "type": "video",
     "altContent": {
@@ -69,11 +90,11 @@
       "size": "full",
       "aspectRatio": "1.5:1",
       "aspectMode": "cover",
-      "url": "https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg"
+      "url": "https://ongkub.github.io/liff/video/spark2025template.png"
     },
-    "url": "https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.mp4",
-    "previewUrl": "https://sparkth.io/wp-content/uploads/2023/12/HNY-2024.001.jpeg",
-    "aspectRatio": "1.5:1"
+    "url": "https://ongkub.github.io/liff/video/Spark%202025.mp4",
+    "aspectRatio": "4:3",
+    "previewUrl": "https://ongkub.github.io/liff/video/spark2025template.png"
   },
   "body": {
     "type": "box",
@@ -81,10 +102,11 @@
     "contents": [
       {
         "type": "text",
-        "text": "Happy New Year",
+        "text": "MERRY CHRISTMAS",
         "weight": "bold",
         "size": "xl",
-        "align": "center"
+        "align": "center",
+        "color": "#1C64FF"
       },
       {
         "type": "box",
@@ -98,7 +120,7 @@
           },
           {
             "type": "text",
-            "text": "2024 ",
+            "text": "2025",
             "size": "sm",
             "color": "#999999",
             "margin": "md",
@@ -125,30 +147,8 @@
             "color": "#666666",
             "size": "sm",
             "flex": 5,
-            "text": "ขอให้มีความสุขและรอยยิ้มตลอดปี 2024 นะครับ \nประสบความสำเร็จทางด้านการงาน\nเงินทองไหลมาเทมา ร่ำรวยยิ่งๆขึ้นไปครับ\nหวังสิ่งใดก็สมปรารถนา​ ร่างกายแข็งแรงนะครับ",
+            "text": "ขอบคุณสำหรับมิตรภาพดีๆ ตลอดปีที่ผ่านมา \nขอให้มีความสุขและรอยยิ้มตลอดปี 2025  \nประสบความสำเร็จทางด้านการงาน\nเงินทองไหลมาเทมา ร่ำรวยยิ่งๆขึ้นไปครับ\nหวังสิ่งใดก็สมปรารถนา​ ร่างกายแข็งแรงนะครับ",
             "align": "center"
-          },
-          {
-            "type": "box",
-            "layout": "baseline",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "โดย",
-                "color": "#aaaaaa",
-                "size": "sm",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "อ๋อง",
-                "wrap": true,
-                "color": "#666666",
-                "size": "sm",
-                "flex": 5
-              }
-            ]
           },
           {
             "type": "box",
@@ -168,6 +168,55 @@
       }
     ],
     "alignItems": "center"
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "คุณสามารถส่งคำอวยพรหาเพื่อนๆของคุณได้ฟรี",
+        "color": "#666666",
+        "size": "xs"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "เพื่อเริ่มใช้งานแอปครั้งแรก เราขออนุญาตเข้าถึงโปรไฟล์ของคุณเพื่อใช้ชื่อและรูปภาพในการสร้างการ์ดอวยพรเท่านั้น \nข้อมูลของคุณจะไม่ถูกจัดเก็บ และแอปนี้มีจุดประสงค์เพื่อส่งความสุขหาเพื่อนๆ เท่านั้น! ",
+            "color": "#999999",
+            "size": "xxs",
+            "wrap": true
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "uri",
+              "label": "เขียนการ์ดอวยพรให้เพื่อน",
+              "uri": "https://liff.line.me/2006674119-0JVBpKzJ"
+            },
+            "style": "primary",
+            "flex": 5,
+            "color": "#1C64FF",
+            "height": "sm"
+          }
+        ],
+        "width": "90%",
+        "spacing": "lg"
+      }
+    ],
+    "spacing": "sm",
+    "alignItems": "center"
+  },
+  "styles": {
+    "header": {
+      "backgroundColor": "#1C64FF"
+    },
+    "footer": {
+      "separator": true
+    }
   }
 }
     }
