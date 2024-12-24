@@ -322,7 +322,7 @@ _lt('send', 'pv', ['4f32ac38-1bcb-4324-b646-edb9a92c857a']);
     console.log("redirect");
     const liffUrl = await liff.permanentLink.createUrlBy(window.location.href);
     console.log("liffUrl:", liffUrl);
-    window.open(liffUrl, '_blank');
+    window.location = liffUrl;
     setTimeout(() => { liff.closeWindow(); }, "3000");
   } catch (error) {
     console.error("Error creating Permanent Link:", error);
