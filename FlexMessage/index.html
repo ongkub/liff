@@ -320,7 +320,8 @@ _lt('send', 'pv', ['4f32ac38-1bcb-4324-b646-edb9a92c857a']);
     async function redirect(){
   try {
     console.log("redirect");
-    const liffUrl = await liff.permanentLink.createUrlBy(window.location.href);
+    //const liffUrl = await liff.permanentLink.createUrlBy(window.location.href);
+    const liffUrl = line://app/1657677472-OYGa2ZYM;
     console.log("liffUrl:", liffUrl);
     window.location = liffUrl;
     setTimeout(() => { liff.closeWindow(); }, "3000");
