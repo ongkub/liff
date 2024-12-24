@@ -318,7 +318,9 @@ _lt('send', 'pv', ['4f32ac38-1bcb-4324-b646-edb9a92c857a']);
     }
 
     async function redirect(){
+      console.log("redirect"); 
       const liffUrl = await liff.permanentlink.createUrlBy(window.location.href);
+      console.log("liffUrl:", liffUrl); 
       window.location = liffUrl;
     }
 
