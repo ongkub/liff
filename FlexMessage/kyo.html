@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+  <title>LIFF For Sending Flex Message</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* เพิ่ม CSS เพื่อจัดรูปแบบ radio button */
+    .image-choice {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+
+<body>
+    <header>
+    <img src="https://sparkth.io/wp-content/uploads/2022/08/logo.png" alt="Logo" class="logo"> 
+  </header>
+  
+  <h2>กำหนดหัวข้ออวยพร</h2>
+  <textarea id="headText" maxlength="50" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 50 ตัวอักษร)">Happy New Year</textarea> 
+
+  
+  <h2>กำหนดข้อความอวยพร</h2>
+  <p>ไม่เกิน200 ตัวอักษร</p>
+  <textarea id="freeText" maxlength="200" placeholder="ใส่ข้อความที่นี่ (ไม่เกิน 200 ตัวอักษร)">สวัสดีปีใหม่ 2568  ขอให้ปีนี้เป็นปีที่สดใส
+เต็มไปด้วยความสุข สมหวังในทุกสิ่ง
+และประสบความสำเร็จในทุกๆ ด้าน</textarea> 
+
+  <button id="shareButton">แชร์</button>
+  <pre id="flexMessageJson"></pre>
+
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script>
+    async function shareMsg() {
+      // ดึงข้อความจาก textarea
+      console.log("shareMsg");
+      const freeText = document.getElementById("freeText").value;
+      const headText = document.getElementById("headText").value;
+
+      // ดึงข้อมูล profile ของผู้ใช้
+      const profile = await liff.getProfile();
+
+      // สร้าง Flex Message
+      const flexMessage = {
+        type: "flex",
+        altText: `${headText} โดย ${profile.displayName}`,
+        contents: {
+  "type": "bubble",
+  "size": "mega",
+  "hero": {
+    "type": "image",
+    "aspectRatio": "4:3",
+    "aspectMode": "cover",
+    "size": "full",
+    "url": "https://ongkub.github.io/liff/image/kyo.jpg"
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": headText,
+        "weight": "bold",
+        "size": "xl",
+        "align": "center",
+        "color": "#1C64FF"
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "margin": "md",
+        "contents": [
+          {
+            "type": "icon",
+            "size": "sm",
+            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+          },
+          {
+            "type": "text",
+            "text": "2025 ",
+            "size": "sm",
+            "color": "#999999",
+            "margin": "md",
+            "flex": 0,
+            "align": "center"
+          },
+          {
+            "type": "icon",
+            "size": "sm",
+            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png"
+          }
+        ],
+        "spacing": "md",
+        "justifyContent": "center"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "wrap": true,
+            "color": "#666666",
+            "size": "sm",
+            "flex": 5,
+            "text": freeText,
+            "align": "center"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "50%",
+            "cornerRadius": "xxl"
+          }
+        ],
+        "margin": "lg",
+        "spacing": "lg",
+        "alignItems": "center"
+      }
+    ],
+    "alignItems": "center"
+  },
+  "styles": {
+    "header": {
+      "backgroundColor": "#1C64FF"
+    },
+    "footer": {
+      "separator": true
+    }
+  }
+}
+      };
+
+      // แปลง Flex Message เป็น JSON string
+      const flexMessageJson = JSON.stringify(flexMessage, null, 2); //  null, 2  ใช้สำหรับ format JSON ให้อ่านง่าย
+
+      // แสดงผล JSON string ใน element ที่มี id="flexMessageJson"
+      //document.getElementById("flexMessageJson").textContent = flexMessageJson;
+      document.getElementById("flexMessageJson").textContent = "ส่งสำเร็จ";
+      console.log(flexMessageJson);
+
+      // แชร์ Flex Message
+      await liff.shareTargetPicker([flexMessage]);
+    }
+
+    async function getUserProfile() {
+      const profile = await liff.getProfile()
+    }
+
+    async function main() {
+      console.log("main")
+      await liff.init({ liffId: "2006674119-KjeRdq20" })
+      if(liff.isLoggedIn()) {
+      getUserProfile();
+      // enable ปุ่ม
+      document.getElementById('shareButton').disabled = false;
+      } else {
+        liff.login()
+      }
+    }    
+
+    main();
+
+    // เพิ่ม event listener ให้กับปุ่ม
+    document.getElementById('shareButton').addEventListener('click', shareMsg);
+  </script>
+</body>
+</html>
