@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+  <title>LIFF For Sending Flex Message</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* เพิ่ม CSS เพื่อจัดรูปแบบ radio button */
+    .image-choice {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+
+<body>
+    <header>
+    <img src="https://sparkth.io/wp-content/uploads/2022/08/logo.png" alt="Logo" class="logo"> 
+  </header>
+  
+  <h2>ส่งการ์ดปีใหม่</h2>
+
+  <button id="shareButton">แชร์</button>
+  <pre id="flexMessageJson"></pre>
+
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script>
+    async function shareMsg() {
+
+      const profile = await liff.getProfile();
+
+      // สร้าง Flex Message
+      const flexMessage = {
+        type: "flex",
+        altText: `เรียนเชิญมาร่วมงานแต่งงานโดย ${profile.displayName}`,
+        contents: {
+  "type": "bubble",
+  "size": "giga",
+  "hero": {
+    "type": "image",
+    "url": "https://ongkub.github.io/liff/image/nattybird.jpg",
+    "size": "full",
+    "aspectRatio": "20:13",
+    "aspectMode": "cover",
+    "action": {
+      "type": "uri",
+      "uri": "https://line.me/"
+    }
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "Wedding Ceremony (TH)",
+        "weight": "bold",
+        "size": "xl"
+      },
+      {
+        "type": "text",
+        "text": "Panachai & Jutarat"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "margin": "xl",
+        "spacing": "xs",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "Date",
+                "color": "#aaaaaa",
+                "size": "sm",
+                "flex": 1
+              },
+              {
+                "type": "text",
+                "text": "March 1, 2025",
+                "wrap": true,
+                "color": "#666666",
+                "size": "sm",
+                "flex": 4
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "Time",
+                "color": "#aaaaaa",
+                "size": "sm",
+                "flex": 1
+              },
+              {
+                "type": "text",
+                "text": "18:00 pm – 21:30 pm",
+                "wrap": true,
+                "color": "#666666",
+                "size": "sm",
+                "flex": 4
+              }
+            ]
+          }
+        ],
+        "offsetTop": "none",
+        "paddingStart": "xs",
+        "paddingEnd": "xs",
+        "alignItems": "center",
+        "width": "80%"
+      }
+    ],
+    "paddingStart": "xs",
+    "paddingEnd": "xs",
+    "alignItems": "center"
+  },
+  "footer": {
+    "type": "box",
+    "layout": "horizontal",
+    "spacing": "sm",
+    "contents": [
+      {
+        "type": "button",
+        "style": "primary",
+        "height": "sm",
+        "action": {
+          "type": "uri",
+          "label": "Add LINE",
+          "uri": "https://lin.ee/53cYfHY"
+        },
+        "color": "#989391"
+      },
+      {
+        "type": "button",
+        "style": "primary",
+        "height": "sm",
+        "action": {
+          "type": "uri",
+          "label": "Reservation",
+          "uri": "https://www.theknot.com/pjthewedding"
+        },
+        "color": "#989391"
+      }
+    ]
+  },
+  "styles": {
+    "body": {
+      "backgroundColor": "#F3F2E9"
+    },
+    "footer": {
+      "backgroundColor": "#F3F2E9"
+    }
+  }
+}
+      };
+
+      // แปลง Flex Message เป็น JSON string
+      const flexMessageJson = JSON.stringify(flexMessage, null, 2); //  null, 2  ใช้สำหรับ format JSON ให้อ่านง่าย
+
+      // แสดงผล JSON string ใน element ที่มี id="flexMessageJson"
+      //document.getElementById("flexMessageJson").textContent = flexMessageJson;
+      document.getElementById("flexMessageJson").textContent = "ส่งสำเร็จ";
+      console.log(flexMessageJson);
+
+      // แชร์ Flex Message
+      await liff.shareTargetPicker([flexMessage]);
+    }
+
+    async function getUserProfile() {
+      const profile = await liff.getProfile()
+    }
+
+    async function main() {
+      await liff.init({
+        liffId: "2006674119-rVmEaMqj" // **อย่าลืมแก้ไข liffId ให้ถูกต้อง**
+      })
+      const {userAgent} = navigator;
+      console.log("User Agent:", userAgent); 
+      console.log("liff.isInClient():", liff.isInClient());
+      console.log("result",!liff.isInClient() && (userAgent.includes('Line') || userAgent.includes('FB')))
+      if (!liff.isInClient() && (userAgent.includes('Line') || userAgent.includes('FB'))){
+        redirect();
+      } else{
+      if (liff.isLoggedIn()) {
+        console.log("Success");
+        getUserProfile();
+      } else {
+        liff.login()
+      }
+      // enable ปุ่ม
+      document.getElementById('shareButton').disabled = false;
+    }
+    }
+
+    main();
+
+  </script>
+</body>
+</html>
