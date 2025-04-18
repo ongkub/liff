@@ -2,13 +2,16 @@
 
 body {
   font-family: Kanit !important;
+  background-color: #FFFFFF; /* <-- 1. พื้นหลังสีขาว */
+  color: #000000; /* <-- 1. ตัวหนังสือหลักสีดำ */
 }
 
 button {
   display: block;
   width: 100%;
   padding: 8px 0;
-  margin: 8px auto
+  margin: 8px auto;
+  /* กลับไปใช้สไตล์ปุ่มเริ่มต้น หรือกำหนดใหม่ตามธีมสว่าง */
 }
 
 #pictureUrl {
@@ -29,9 +32,16 @@ button {
   border-radius: 100px;
 }
 
+/* 6. ลบสไตล์ธีมมืด ใส่กรอบเทาอ่อน */
 #accessToken, #utouId {
   display: block;
-  overflow: auto
+  overflow: auto;
+  /* background-color: #1a1a1a; ลบออก */
+  border: 1px solid #CCCCCC; /* เปลี่ยนเป็นกรอบเทาอ่อน */
+  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: #000000; /* ทำให้มั่นใจว่าเป็นสีดำ (หรือตาม body) */
 }
 
 .centerScreen h1{
@@ -42,105 +52,11 @@ font-style: normal;
 font-weight: 600;
 font-size: 60px;
 line-height: 21px;
-/* identical to box height, or 70% */
 text-align: center;
 
-color: #EE4886;
+color: #06C755; /* <-- 2. เปลี่ยนเป็นสีเขียวธีม */
 }
 
 .centerScreen p{
 
-left: calc(50% - 240px/2 + 0.5px);
-top: 560px;
-
-font-family: 'Kanit';
-font-style: normal;
-font-weight: 600;
-font-size: 45px;
-line-height: 21px;
-/* identical to box height, or 131% */
-text-align: center;
-
-color: #EF7279;
-
-}
-
-.container {
-  margin: 50px 100px;
-  width: 500px;
-  text-align: center;
-}
-
-.progress2 {
-  padding: 6px;
-  border-radius: 30px;
-  background: rgba(0, 0, 0, 0.25);  
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
-}
-
-.progress-bar2 {
-  height: 30px;
-  border-radius: 30px;
-  background-image: 
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
-  transition: 0.4s linear;  
-  transition-property: width, background-color;    
-}
-
-.progress-moved .progress-bar2 {
-  width: 100%; 
-  background-color: #EF476F;  
-  animation: progressAnimation 2s;
-}
-
-@keyframes progressAnimation {
-  0%   { width: 5%; background-color: #F9BCCA;}
-  100% { width: 100%; background-color: #EF476F; }
-}
-
-
-.circleTopLeft{
-  /* Ellipse 46 */
-
-position: absolute;
-width: 200px;
-height: 200px;
-left: -100px;
-top: -100px;
-border-radius: 100px;
-z-index: -1;
-background: #F0D9E9;
-
-}
-
-.bottomRight{
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  overflow: hidden;
-  right: 0px;
-  bottom: 0px;
-}
-
-.circleBottomRight{
-  /* Ellipse 45 */
-
-position: absolute;
-width: 400px;
-height: 400px;
-right: -200px;
-bottom: -200px;
-border-radius: 400px;
-z-index: -1;
-background: #F0D9E9;
-
-}
-.lastUpdate{
-font-style: normal !important;
-font-weight: 400 !important;
-font-size: 25px !important;
-line-height: 138% !important;
-text-align: center !important;
-color: #000000 !important;
-margin-top: 15%;
-}
+left: calc(50% -
