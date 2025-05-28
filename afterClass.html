@@ -19,7 +19,7 @@
   <div class="centerScreen">
     <center>
       <img
-        src="https://ongkub.github.io/liff/image/LINE%20Ads%20Helper.jpg" 
+        src="https://sparkth.io/wp-content/themes/spark-factor-theme/assets/images/spark-factor-logo.svg" 
         width="400px" />
       <div>
         <h1>
@@ -57,13 +57,13 @@
     }
 
     async function main() {
-      await liff.init({ liffId: "2007286501-0nyMB3R5" }); // ใส่ LIFF ID ของคุณที่นี่
+      await liff.init({ liffId: "2006674119-dEWEp0XB" }); // ใส่ LIFF ID ของคุณที่นี่
 
       if (liff.isLoggedIn()) {
         const profile = await getUserProfile();
 
         // Construct the redirect URL with pre-filled data
-        const redirectUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfwTW49GiZnnGfiZyoKjDPP3bzcAhFyOQGosKkpb0grqpo3LQ/viewform?usp=pp_url&entry.1222314060=${profile.userId}`; {/* <-- Redirect URL เปลี่ยนแล้ว */}
+        const redirectUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfQQwFouBcIVSx8-SPA__JZe-acSBRaO9RqPoqzp5Xb_BLBeA/viewform?usp=pp_url&entry.1849707983=${profile.userId}`; {/* <-- Redirect URL เปลี่ยนแล้ว */}
 
         // Redirect the user
         window.location.replace(redirectUrl);
