@@ -32,43 +32,42 @@ button {
 }
 
 /* เพิ่มกรอบเล็กน้อยเพื่อให้เห็นขอบเขต */
-#accessToken, #utouId {
+#accessToken,
+#utouId {
   display: block;
   overflow: auto;
   border: 1px solid #CCCCCC;
   padding: 5px;
   margin-top: 5px;
   margin-bottom: 5px;
-  color: #000000; /* ใช้สีดำตาม body */
+  color: #000000;
+  /* ใช้สีดำตาม body */
 }
 
-.centerScreen h1{
-left: calc(50% - 197px/2);
-top: 500px;
-font-family: 'Kanit';
-font-style: normal;
-font-weight: 600;
-font-size: 60px;
-line-height: 21px;
-text-align: center;
-
-color: #06C755; /* <-- สีเขียวธีม */
+.centerScreen h1 {
+  left: calc(50% - 197px/2);
+  top: 500px;
+  font-family: 'Kanit';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 60px;
+  line-height: 21px;
+  text-align: center;
+  color: #0064ff;
+  /* เปลี่ยนเป็นสีน้ำเงินหลัก */
 }
 
-.centerScreen p{
-
-left: calc(50% - 240px/2 + 0.5px);
-top: 560px;
-
-font-family: 'Kanit';
-font-style: normal;
-font-weight: 600;
-font-size: 45px;
-line-height: 21px;
-text-align: center;
-
-color: #555555; /* <-- สีเทาเข้ม */
-
+.centerScreen p {
+  left: calc(50% - 240px/2 + 0.5px);
+  top: 560px;
+  font-family: 'Kanit';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 45px;
+  line-height: 21px;
+  text-align: center;
+  color: #58595b;
+  /* เปลี่ยนเป็นสีเทา (สีที่สาม) */
 }
 
 .container {
@@ -80,46 +79,58 @@ color: #555555; /* <-- สีเทาเข้ม */
 .progress2 {
   padding: 6px;
   border-radius: 30px;
-  background: #E0E0E0; /* <-- สีเทาอ่อน */
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* <-- เงา */
+  background: #E0E0E0;
+  /* สีเทาอ่อนยังคงเดิม */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  /* เงา */
 }
 
 .progress-bar2 {
   height: 30px;
   border-radius: 30px;
   background-image:
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05)); /* gradient */
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+  /* gradient */
   transition: 0.4s linear;
   transition-property: width, background-color;
 }
 
 .progress-moved .progress-bar2 {
   width: 100%;
-  background-color: #06C755; /* <-- สีเขียวธีม */
+  background-color: #0064ff;
+  /* เปลี่ยนเป็นสีน้ำเงินหลัก */
   animation: progressAnimation 2s;
 }
 
 @keyframes progressAnimation {
-  0%   { width: 5%; background-color: #A3FCCF;} /* <-- สีเขียวอ่อน */
-  100% { width: 100%; background-color: #06C755; } /* <-- สีเขียวธีม */
+  0% {
+    width: 5%;
+    background-color: #0D3692;
+  }
+
+  /* เปลี่ยนเป็นสีน้ำเงินเข้ม (สีรอง) */
+  100% {
+    width: 100%;
+    background-color: #0064ff;
+  }
+  /* เปลี่ยนเป็นสีน้ำเงินหลัก */
 }
 
 
-.circleTopLeft{
+.circleTopLeft {
   /* Ellipse 46 */
-
-position: absolute;
-width: 200px;
-height: 200px;
-left: -100px;
-top: -100px;
-border-radius: 100px;
-z-index: -1;
-background: #06C755; /* <-- สีเขียวธีม */
-
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: -100px;
+  top: -100px;
+  border-radius: 100px;
+  z-index: -1;
+  background: #0064ff;
+  /* เปลี่ยนเป็นสีน้ำเงินหลัก */
 }
 
-.bottomRight{
+.bottomRight {
   position: absolute;
   width: 200px;
   height: 200px;
@@ -128,25 +139,26 @@ background: #06C755; /* <-- สีเขียวธีม */
   bottom: 0px;
 }
 
-.circleBottomRight{
+.circleBottomRight {
   /* Ellipse 45 */
-
-position: absolute;
-width: 400px;
-height: 400px;
-right: -200px;
-bottom: -200px;
-border-radius: 400px;
-z-index: -1;
-background: #06C755; /* <-- สีเขียวธีม */
-
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  right: -200px;
+  bottom: -200px;
+  border-radius: 400px;
+  z-index: -1;
+  background: #0064ff;
+  /* เปลี่ยนเป็นสีน้ำเงินหลัก */
 }
-.lastUpdate{
-font-style: normal !important;
-font-weight: 400 !important;
-font-size: 25px !important;
-line-height: 138% !important;
-text-align: center !important;
-color: #000000 !important; /* <-- สีดำ */
-margin-top: 15%;
+
+.lastUpdate {
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 25px !important;
+  line-height: 138% !important;
+  text-align: center !important;
+  color: #000000 !important;
+  /* สีดำยังคงเดิม */
+  margin-top: 15%;
 }
