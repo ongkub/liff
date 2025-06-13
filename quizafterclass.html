@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title> Ads</title> 
+  <link rel="stylesheet" href="css/formstyle.css">
+  <style>
+    .centerScreen {
+      margin-top: 15%;
+      margin-right: auto;
+      margin-bottom: 0px;
+      margin-left: auto;
+    }
+  </style>
+</head>
+
+<body style="background-color: #FFFFFF;"> 
+  <div class="centerScreen">
+    <center>
+      <img
+        src="https://sparkth.io/wp-content/themes/spark-factor-theme/assets/images/spark-factor-logo.svg" 
+        width="400px" />
+      <div>
+        <h1>ตอบคำถามท้ายคาบ</h1>
+      </div>
+      <div class="container">
+        <div class="progress2 progress-moved">
+          <div class="progress-bar2">
+          </div>
+        </div>
+      </div>
+      <div>
+        <p>
+          Now Loading…
+        </p>
+      </div>
+
+    </center>
+  </div>
+
+  <div>
+    <div class="circleTopLeft">
+    </div>
+  </div>
+  <div class="bottomRight">
+    <div class="circleBottomRight">
+    </div>
+  </div>
+   <script src="https://static.line-scdn.net/liff/edge/versions/2.21.0/sdk.js"></script>
+  <script>
+    async function getUserProfile() {
+      const profile = await liff.getProfile();
+      return profile;
+    }
+
+    async function main() {
+      await liff.init({ liffId: "2006674119-OeyNgb5J" }); // ใส่ LIFF ID ของคุณที่นี่
+
+      if (liff.isLoggedIn()) {
+        const profile = await getUserProfile();
+
+        // Construct the redirect URL with pre-filled data
+        const redirectUrl = `https://docs.google.com/forms/d/e/1FAIpQLSephRHnWLtJYt8_XOlsH8TYpNnBBcq6RPF4Iu6lpUXo5tK1ZA/viewform?usp=pp_url&entry.1849707983=${profile.userId}`; {/* <-- Redirect URL เปลี่ยนแล้ว */}
+
+        // Redirect the user
+        window.location.replace(redirectUrl);
+      } else {
+        liff.login();
+      }
+    }
+
+    main();
+  </script>
+</body>
+
+</html>
