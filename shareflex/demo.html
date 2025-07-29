@@ -77,9 +77,7 @@
 
             // 2. ตรวจสอบว่า API พร้อมใช้งานหรือไม่
             if (!liff.isApiAvailable('shareTargetPicker')) {
-            // แจ้งเตือนให้ผู้ใช้ทราบว่าต้องเปิดในแอป LINE บนมือถือ
-            alert("ฟังก์ชันนี้ต้องเปิดผ่านแอปพลิเคชัน LINE บนมือถือเท่านั้นครับ");
-            // ไม่ต้องใช้ liff.closeWindow() เพราะรันบนเบราว์เซอร์ภายนอก
+            alert("ไม่สามารถแชร์คอนเทนต์ได้");
             return;
             }
 
@@ -88,21 +86,7 @@
             const flexMessage = await response.json();
 
             // 4. เรียกหน้า Share Target Picker ทันที
-            try {
-              const result = await liff.shareTargetPicker([flexMessage]);
-                if (result) {
-                    // ส่งสำเร็จ
-                    alert("แชร์ข้อความเรียบร้อย!");
-                } else {
-                    // กดยกเลิก
-                    console.log("ผู้ใช้ยกเลิกการแชร์");
-                }
-            } catch (error) {
-                alert("เกิดข้อผิดพลาด: " + error.message);
-            } finally {
-                // ไม่ว่าจะสำเร็จหรือยกเลิก ให้ปิดหน้าต่าง LIFF
-                liff.closeWindow();
-            }
+             await liff.shareTargetPicker([flexMessage]);
         }
 
         // เรียกใช้งานฟังก์ชันหลัก
