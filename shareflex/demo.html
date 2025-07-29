@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <title>Sharing-Loading</title>
+    <style>
+        /* โค้ด CSS ที่จำเป็น (บางส่วนนำมาจากโค้ดของคุณ) */
+        .centerScreen {
+            margin-top: 15%;
+            margin-right: auto;
+            margin-bottom: 0px;
+            margin-left: auto;
+            text-align: center; /* ใช้ text-align แทน <center> */
+        }
+        /* ตัวอย่าง Progress Bar แบบง่ายๆ */
+        .container {
+            width: 300px;
+            margin: 20px auto;
+        }
+        .progress2 {
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            padding: 3px;
+        }
+        .progress-bar2 {
+            height: 20px;
+            width: 100%; /* ทำให้เต็มเพื่อแสดงว่ากำลังโหลด */
+            background-color: #4caf50;
+            border-radius: 20px;
+            animation: pulse 1.5s infinite; /* Animation ให้ดูเหมือนกำลังทำงาน */
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        /* รูปวงกลมตกแต่ง (ถ้ามีไฟล์ CSS อยู่แล้วก็ไม่ต้องใช้ส่วนนี้) */
+        .circleTopLeft, .circleBottomRight {
+            /* Your styles for decorative circles */
+        }
+    </style>
+
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+</head>
+<body style="background-color: #FFFFFF;">
+    <div class="centerScreen">
+        <img src="https://sparkth.io/wp-content/themes/spark-factor-theme/assets/images/spark-factor-logo.svg"
+             width="400px" />
+        <div>
+            <h1>แชร์ข้อความให้เพื่อนของคุณ</h1>
+        </div>
+        <div class="container">
+            <div class="progress2 progress-moved">
+                <div class="progress-bar2"></div>
+            </div>
+        </div>
+        <div>
+            <p>Now Loading…</p>
+        </div>
+    </div>
+
+    <div><div class="circleTopLeft"></div></div>
+    <div class="bottomRight"><div class="circleBottomRight"></div></div>
+
+
+    <script>
+        async function main() {
+            // 1. เริ่มต้น LIFF และ Login
+            // อย่าลืมเปลี่ยน "YOUR_LIFF_ID"
+            await liff.init({ liffId: "2004737575-0PBxkA7Z" });
+
+            if (!liff.isLoggedIn()) {
+                liff.login({ redirectUri: window.location.href });
+                return;
+            }
+
+            // 2. ตรวจสอบว่า API พร้อมใช้งานหรือไม่
+            if (!liff.isApiAvailable('shareTargetPicker')) {
+                alert("ฟังก์ชันแชร์ไม่พร้อมใช้งาน");
+                liff.closeWindow();
+                return;
+            }
+
+            // 3. สร้าง Flex Message ที่จะแชร์
+            const response = await fetch('../shareflex/obj/flex-message.json');
+            const flexMessage = await response.json();
+
+            // 4. เรียกหน้า Share Target Picker ทันที
+            try {
+              const result = await liff.shareTargetPicker([flexMessage]);
+                if (result) {
+                    // ส่งสำเร็จ
+                    alert("แชร์ข้อความเรียบร้อย!");
+                } else {
+                    // กดยกเลิก
+                    console.log("ผู้ใช้ยกเลิกการแชร์");
+                }
+            } catch (error) {
+                alert("เกิดข้อผิดพลาด: " + error.message);
+            } finally {
+                // ไม่ว่าจะสำเร็จหรือยกเลิก ให้ปิดหน้าต่าง LIFF
+                liff.closeWindow();
+            }
+        }
+
+        // เรียกใช้งานฟังก์ชันหลัก
+        main();
+    </script>
+</body>
+</html>
