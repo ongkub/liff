@@ -21,8 +21,7 @@
             <p>Now Loading…</p>
             <p id="status-message" style="font-weight: bold;"></p>
             
-            <button id="close-btn" style="display: none;">ปิดหน้าต่าง</button>
-        </div>
+            </div>
     </div>
 
     <div><div class="circleTopLeft"></div></div>
@@ -38,12 +37,7 @@
             }
 
             const statusMessage = document.getElementById('status-message');
-            const closeButton = document.getElementById('close-btn'); // [เพิ่ม] ดึงปุ่ม
-
-            // [เพิ่ม] กำหนดการทำงานให้ปุ่มปิด
-            closeButton.onclick = () => {
-                window.close();
-            };
+            // [ลบ] โค้ดที่เกี่ยวกับปุ่มถูกนำออกไป
 
             if (!liff.isApiAvailable('shareTargetPicker')) {
                 statusMessage.textContent = "ไม่สามารถแชร์คอนเทนต์ได้";
@@ -70,10 +64,8 @@
                     setTimeout(() => {
                         liff.closeWindow();
                     }, 2000); 
-                } else {
-                    // [เพิ่ม] ทำให้ปุ่มปิดแสดงขึ้นมา
-                    closeButton.style.display = 'block';
                 }
+                // [ลบ] โค้ดที่ทำให้ปุ่มแสดงผลถูกนำออกไป
             }
         }
         main();
