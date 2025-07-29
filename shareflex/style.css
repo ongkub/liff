@@ -2,41 +2,23 @@
 
 body {
     font-family: Kanit !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
 }
 
-button {
-    display: block;
-    width: 100%;
-    padding: 8px 0;
-    margin: 8px auto;
+.centerScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-#pictureUrl {
-    display: block;
-    margin: 0 auto;
-    width: 12%;
-    display: -moz-box;
-    display: -webkit-box;
-    display: box;
-    -moz-box-pack: center;
-    -moz-box-align: center;
-    -webkit-box-pack: center;
-    -webkit-box-align: center;
-    box-pack: center;
-    box-align: center;
-    -moz-border-radius: 100px;
-    -webkit-border-radius: 100px;
-    border-radius: 100px;
-}
-
-#accessToken, #utouId {
-    display: block;
-    overflow: auto;
-}
+/* [ลบ] สไตล์ของ button และ #close-btn ถูกนำออกไปทั้งหมด */
 
 .centerScreen h1 {
-    left: calc(50% - 197px/2);
-    top: 500px;
     font-family: 'Kanit';
     font-style: normal;
     font-weight: 600;
@@ -47,8 +29,6 @@ button {
 }
 
 .centerScreen p {
-    left: calc(50% - 240px/2 + 0.5px);
-    top: 560px;
     font-family: 'Kanit';
     font-style: normal;
     font-weight: 600;
@@ -59,7 +39,7 @@ button {
 }
 
 .container {
-    margin: 50px auto; /* ปรับจาก 50px 100px เพื่อให้อยู่กลางมากขึ้น */
+    margin: 50px auto; 
     width: 500px;
     text-align: center;
 }
@@ -119,14 +99,4 @@ button {
     border-radius: 400px;
     z-index: -1;
     background: #F0D9E9;
-}
-
-.lastUpdate {
-    font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 25px !important;
-    line-height: 138% !important;
-    text-align: center !important;
-    color: #000000 !important;
-    margin-top: 15%;
 }
