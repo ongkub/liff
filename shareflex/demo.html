@@ -5,7 +5,6 @@
     <title>Sharing-Loading</title>
     
     <link rel="stylesheet" href="style.css">
-
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body style="background-color: #FFFFFF;">
@@ -21,7 +20,7 @@
         </div>
         <div>
             <p>Now Loading…</p>
-            <p id="status-message" style="color: red; font-weight: bold;"></p>
+            <p id="status-message" style="font-weight: bold;"></p>
         </div>
     </div>
 
@@ -37,8 +36,10 @@
                 return;
             }
 
+            const statusMessage = document.getElementById('status-message');
+
             if (!liff.isApiAvailable('shareTargetPicker')) {
-                document.getElementById('status-message').textContent = "ไม่สามารถแชร์คอนเทนต์ได้";
+                statusMessage.textContent = "ไม่สามารถแชร์คอนเทนต์ได้";
                 return;
             }
 
@@ -48,14 +49,25 @@
                 const result = await liff.shareTargetPicker([flexMessage]);
 
                 if (result) {
-                    // สำเร็จ
+                    // แสดงข้อความบนหน้าเว็บแทน alert
+                    statusMessage.style.color = 'green'; // เปลี่ยนเป็นสีเขียว
+                    statusMessage.textContent = "แชร์ข้อความเรียบร้อย!";
                 } else {
+                    statusMessage.style.color = 'orange';
+                    statusMessage.textContent = "คุณยกเลิกการแชร์";
                     console.log("ผู้ใช้ยกเลิกการแชร์");
                 }
             } catch (error) {
-                document.getElementById('status-message').textContent = "เกิดข้อผิดพลาด: " + error.message;
+                statusMessage.style.color = 'red';
+                statusMessage.textContent = "เกิดข้อผิดพลาด: " + error.message;
             } finally {
-                liff.closeWindow();
+                // เพิ่มเงื่อนไขให้ปิดหน้าต่างเฉพาะในแอป LINE
+                if (liff.isInClient()) {
+                    // หน่วงเวลา 2 วินาทีเพื่อให้ผู้ใช้อ่านข้อความทัน
+                    setTimeout(() => {
+                        liff.closeWindow();
+                    }, 2000); 
+                }
             }
         }
         main();
