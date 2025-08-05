@@ -1,53 +1,52 @@
 {
-    "type": "flex",
-    "altText": "SparkTH ส่งข้อความถึงคุณ",
-    "contents": {
-  "type": "bubble",
-  "direction": "ltr",
-  "header": {
-    "type": "box",
-    "layout": "vertical",
+  "type": "flex",
+  "altText": "เนื้อหาที่เราคิดว่าคุณน่าจะชอบ",
+  "contents": {
+    "type": "carousel",
     "contents": [
       {
-        "type": "text",
-        "text": "Header",
-        "align": "center",
-        "contents": []
-      }
-    ]
-  },
-  "hero": {
-    "type": "image",
-    "url": "https://vos.line-scdn.net/bot-designer-template-images/bot-designer-icon.png",
-    "size": "full",
-    "aspectRatio": "1.51:1",
-    "aspectMode": "fit"
-  },
-  "body": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
+        "type": "bubble",
+        "size": "giga",
+        "body": {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "image",
+              "url": "https://sparkth.io/wp-content/uploads/2025/03/D6_เช็กสอบคะแนน-NOW-Point-01-1.jpg",
+              "size": "full",
+              "aspectMode": "cover",
+              "gravity": "top",
+              "aspectRatio": "3:4"
+            }
+          ],
+          "paddingAll": "0px"
+        }
+      },
       {
-        "type": "text",
-        "text": "Body",
-        "align": "center",
-        "contents": []
-      }
-    ]
-  },
-  "footer": {
-    "type": "box",
-    "layout": "horizontal",
-    "contents": [
-      {
-        "type": "button",
-        "action": {
-          "type": "uri",
-          "label": "Button",
-          "uri": "https://linecorp.com"
+        "type": "bubble",
+        "size": "giga",
+        "body": {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "image",
+              "url": "https://sparkth.io/wp-content/uploads/2025/03/D6_เช็กสอบคะแนน-NOW-Point-02-1.jpg",
+              "size": "full",
+              "aspectMode": "cover",
+              "gravity": "top",
+              "aspectRatio": "3:4",
+              "action": {
+                "type": "uri",
+                "label": "เช็คคะแนน NOW Point",
+                "uri": "https://liff.line.me/2000733931-wPdEZX0R/channels/5000175678/crm/member/reward"
+              }
+            }
+          ],
+          "paddingAll": "0px"
         }
       }
     ]
   }
-}
 }
