@@ -1,1 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <title>GSB NOW - เข้าร่วมกิจกรรม</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body style="background-color: #FFFFFF;">
+    <div class="centerScreen">
+        <img src="https://ongkub.github.io/liff/shareflex/gsbnow.png" width="800px" />
+        <div>
+            <h1>ยินดีต้อนรับสู่กิจกรรม GSB NOW</h1>
+        </div>
+        <div class="container">
+            <div class="progress2 progress-moved">
+                <div class="progress-bar2"></div>
+            </div>
+        </div>
+        <div>
+            <p>กำลังเข้าร่วมกิจกรรม...</p>
+            <p id="status-message" style="font-weight: bold;"></p>
+        </div>
+    </div>
+    <div><div class="circleTopLeft"></div></div>
+    <div class="bottomRight"><div class="circleBottomRight"></div></div>
+    <script>
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
 
+        async function main() {
+            await liff.init({ liffId: "2004737575-LdazVWKP" });
+            
+            const statusMessage = document.getElementById('status-message');
+            
+            if (!liff.isLoggedIn()) {
+                liff.login({ redirectUri: window.location.href });
+                return;
+            }
+            
+            try {
+                // Get active parameter and name from URL
+                const activeParam = getUrlParameter('active');
+                const activeName = decodeURIComponent(getUrlParameter('name') || '');
+                console.log('Active parameter:', activeParam);
+                console.log('Active user name:', activeName);
+                
+                // Get current user profile to obtain UID
+                const profile = await liff.getProfile();
+                const newUID = profile.userId;
+                console.log('New user UID:', newUID);
+                console.log('New user name:', profile.displayName);
+                
+                // Prepare data for Microsoft Automate
+                const webhookData = {
+                    active: activeParam,
+                    new: newUID,
+                    timestamp: new Date().toISOString(),
+                    activeName: activeName,
+                    newName: profile.displayName
+                };
+                
+                console.log('Sending to webhook:', JSON.stringify(webhookData, null, 2));
+                statusMessage.textContent = "กำลังส่งข้อมูลไปยังระบบ...";
+                
+                // Send to Microsoft Automate webhook
+                const webhookUrl = 'https://prod-09.southeastasia.logic.azure.com:443/workflows/f4086a74f3684792a6f4940e3a581ab0/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=uca-yo3bg9vcEWLipmSrGmUa5idHBmUDPaoob-vfxrk';
+                
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(webhookData)
+                });
+                
+                console.log('Webhook response status:', response.status);
+                
+                if (response.ok) {
+                    statusMessage.style.color = 'green';
+                    statusMessage.textContent = "ลงทะเบียนสำเร็จ! กำลังเปลี่ยนไปหน้ากิจกรรม...";
+                    
+                    // Redirect to activity page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'https://liff.line.me/2000733931-ykWNa039/channels/5000175678/survey/form/01K3D568WF5ZHKFAY3XSKN5EPF';
+                    }, 2000);
+                    
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                statusMessage.style.color = 'red';
+                statusMessage.textContent = "เกิดข้อผิดพลาด: " + error.message;
+                
+                // Still redirect to activity page after 5 seconds even if error occurs
+                setTimeout(() => {
+                    window.location.href = 'https://liff.line.me/2000733931-ykWNa039/channels/5000175678/survey/form/01K3D568WF5ZHKFAY3XSKN5EPF';
+                }, 5000);
+            }
+        }
+        
+        // Check if we have the active parameter, if not show error
+        const activeParam = getUrlParameter('active');
+        if (!activeParam) {
+            document.getElementById('status-message').innerHTML = '<span style="color: red;">ไม่พบข้อมูลการเชิญ</span>';
+        } else {
+            main();
+        }
+    </script>
+</body>
+</html>
