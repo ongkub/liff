@@ -27,35 +27,59 @@
     <script>
         // Function to get LIFF query parameters
         function getLiffParameter(name) {
+            console.log('Getting LIFF parameter:', name);
             try {
-                const context = liff.getContext();
-                if (context && context.query) {
-                    const params = new URLSearchParams(context.query);
-                    return params.get(name) || '';
+                if (typeof liff !== 'undefined' && liff.getContext) {
+                    const context = liff.getContext();
+                    console.log('LIFF context:', context);
+                    if (context && context.query) {
+                        console.log('LIFF query:', context.query);
+                        const params = new URLSearchParams(context.query);
+                        const value = params.get(name) || '';
+                        console.log(`LIFF param ${name}:`, value);
+                        return value;
+                    }
                 }
-                return '';
+                console.log('No LIFF context available, trying URL parsing');
+                return getUrlParameter(name);
             } catch (error) {
-                console.log('Cannot get LIFF context, falling back to URL params');
+                console.log('Error getting LIFF context:', error);
                 return getUrlParameter(name);
             }
         }
 
         // Function to get URL parameters (fallback)
         function getUrlParameter(name) {
-            // First try from liff.state
-            const liffState = getUrlParameter('liff.state');
+            console.log('Getting URL parameter:', name);
+            console.log('Current URL:', window.location.href);
+            console.log('Search params:', window.location.search);
+            
+            // Parse liff.state if it exists
+            const urlParams = new URLSearchParams(window.location.search);
+            const liffState = urlParams.get('liff.state');
+            console.log('Raw liff.state:', liffState);
+            
             if (liffState) {
-                const decodedState = decodeURIComponent(liffState);
-                const stateParams = new URLSearchParams(decodedState.substring(1)); // Remove leading ?
-                const value = stateParams.get(name);
-                if (value) return value;
+                try {
+                    const decodedState = decodeURIComponent(liffState);
+                    console.log('Decoded liff.state:', decodedState);
+                    
+                    // Check if it contains our parameters
+                    if (decodedState.includes('active=') || decodedState.includes('name=')) {
+                        const stateParams = new URLSearchParams(decodedState.startsWith('?') ? decodedState.substring(1) : decodedState);
+                        const value = stateParams.get(name);
+                        console.log(`From liff.state ${name}:`, value);
+                        if (value) return value;
+                    }
+                } catch (error) {
+                    console.log('Error parsing liff.state:', error);
+                }
             }
             
-            // Fallback to regular URL parameters
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            var results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            // Try direct URL parameters
+            const directValue = urlParams.get(name);
+            console.log(`Direct URL param ${name}:`, directValue);
+            return directValue || '';
         }
 
         async function main() {
@@ -134,9 +158,37 @@
         
         // Check if we have the active parameter, if not show error
         const checkParam = () => {
-            setTimeout(() => {
-                const activeParam = getLiffParameter('active');
-                if (!activeParam) {
+            console.log('=== Starting parameter check ===');
+            console.log('Page URL:', window.location.href);
+            
+            // First check immediately 
+            const activeParam = getLiffParameter('active');
+            console.log('Immediate active param check:', activeParam);
+            
+            if (activeParam) {
+                console.log('Active parameter found immediately, calling main()');
+                main();
+            } else {
+                console.log('No active parameter found immediately, waiting for LIFF...');
+                // Wait a bit longer for LIFF to fully initialize
+                setTimeout(() => {
+                    console.log('Checking again after delay...');
+                    const activeParam2 = getLiffParameter('active');
+                    console.log('Delayed active param check:', activeParam2);
+                    
+                    if (!activeParam2) {
+                        console.log('Still no active parameter, showing error');
+                        document.getElementById('status-message').innerHTML = '<span style="color: red;">ไม่พบข้อมูลการเชิญ</span>';
+                    } else {
+                        console.log('Found active parameter after delay, calling main()');
+                        main();
+                    }
+                }, 2000);
+            }
+        };
+        
+        console.log('=== Page loaded, starting check ===');
+        checkParam();
                     document.getElementById('status-message').innerHTML = '<span style="color: red;">ไม่พบข้อมูลการเชิญ</span>';
                 } else {
                     main();
