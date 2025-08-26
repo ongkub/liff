@@ -18,7 +18,7 @@
             </div>
         </div>
         <div>
-            <p>กำลังเข้าร่วมกิจกรรม...</p>
+            <p>กำลังลงทะเบียนเข้าร่วมกิจกรรม...</p>
             <p id="status-message" style="font-weight: bold;"></p>
         </div>
     </div>
@@ -34,7 +34,8 @@
         }
 
         async function main() {
-            await liff.init({ liffId: "2004737575-LdazVWKP" });
+            // Use same LIFF ID as sharing page, but with different endpoint URL
+            await liff.init({ liffId: "2004737575-0PBxkA7Z" });
             
             const statusMessage = document.getElementById('status-message');
             
