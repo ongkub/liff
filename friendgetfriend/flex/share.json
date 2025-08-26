@@ -1,0 +1,83 @@
+{
+  "type": "flex",
+  "altText": "ชวนเพื่อนใหม่ร่วมกิจกรรม GSB NOW",
+  "contents": {
+    "type": "bubble",
+    "direction": "ltr",
+    "header": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "ชวนเพื่อนใหม่ร่วมกิจกรรม GSB NOW",
+          "align": "center",
+          "weight": "bold",
+          "size": "lg",
+          "color": "#ffffff"
+        }
+      ],
+      "backgroundColor": "#1DB446",
+      "paddingAll": "20px"
+    },
+    "hero": {
+      "type": "image",
+      "url": "https://ongkub.github.io/liff/shareflex/gsbnow.png",
+      "size": "full",
+      "aspectRatio": "20:13",
+      "aspectMode": "cover"
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "🎉 ร่วมสนุกกับกิจกรรมสุดพิเศษ",
+          "weight": "bold",
+          "size": "xl",
+          "margin": "md"
+        },
+        {
+          "type": "text",
+          "text": "แตะปุ่มด้านล่างเพื่อเข้าร่วมกิจกรรมและรับสิทธิพิเศษมากมาย",
+          "size": "sm",
+          "color": "#666666",
+          "margin": "md",
+          "wrap": true
+        },
+        {
+          "type": "separator",
+          "margin": "xxl"
+        },
+        {
+          "type": "button",
+          "style": "primary",
+          "height": "sm",
+          "action": {
+            "type": "uri",
+            "label": "🚀 เข้าร่วมกิจกรรม",
+            "uri": "http://ongkub.github.io/liff/friendgetfriend/new?active={param}"
+          },
+          "margin": "xl"
+        }
+      ],
+      "spacing": "md",
+      "paddingAll": "20px"
+    },
+    "footer": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "GSB NOW - ธนาคารออมสิน",
+          "size": "xs",
+          "color": "#aaaaaa",
+          "align": "center"
+        }
+      ],
+      "paddingAll": "10px"
+    }
+  }
+}
