@@ -25,8 +25,33 @@
     <div><div class="circleTopLeft"></div></div>
     <div class="bottomRight"><div class="circleBottomRight"></div></div>
     <script>
-        // Function to get URL parameters
+        // Function to get LIFF query parameters
+        function getLiffParameter(name) {
+            try {
+                const context = liff.getContext();
+                if (context && context.query) {
+                    const params = new URLSearchParams(context.query);
+                    return params.get(name) || '';
+                }
+                return '';
+            } catch (error) {
+                console.log('Cannot get LIFF context, falling back to URL params');
+                return getUrlParameter(name);
+            }
+        }
+
+        // Function to get URL parameters (fallback)
         function getUrlParameter(name) {
+            // First try from liff.state
+            const liffState = getUrlParameter('liff.state');
+            if (liffState) {
+                const decodedState = decodeURIComponent(liffState);
+                const stateParams = new URLSearchParams(decodedState.substring(1)); // Remove leading ?
+                const value = stateParams.get(name);
+                if (value) return value;
+            }
+            
+            // Fallback to regular URL parameters
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
             var results = regex.exec(location.search);
@@ -45,9 +70,9 @@
             }
             
             try {
-                // Get active parameter and name from URL
-                const activeParam = getUrlParameter('active');
-                const activeName = decodeURIComponent(getUrlParameter('name') || '');
+                // Get active parameter and name from LIFF context or URL
+                const activeParam = getLiffParameter('active');
+                const activeName = decodeURIComponent(getLiffParameter('name') || '');
                 console.log('Active parameter:', activeParam);
                 console.log('Active user name:', activeName);
                 
@@ -108,12 +133,17 @@
         }
         
         // Check if we have the active parameter, if not show error
-        const activeParam = getUrlParameter('active');
-        if (!activeParam) {
-            document.getElementById('status-message').innerHTML = '<span style="color: red;">ไม่พบข้อมูลการเชิญ</span>';
-        } else {
-            main();
-        }
+        const checkParam = () => {
+            setTimeout(() => {
+                const activeParam = getLiffParameter('active');
+                if (!activeParam) {
+                    document.getElementById('status-message').innerHTML = '<span style="color: red;">ไม่พบข้อมูลการเชิญ</span>';
+                } else {
+                    main();
+                }
+            }, 1000); // Wait for LIFF to initialize
+        };
+        checkParam();
     </script>
 </body>
 </html>
