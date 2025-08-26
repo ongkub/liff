@@ -26,7 +26,7 @@
     <div class="bottomRight"><div class="circleBottomRight"></div></div>
     <script>
         async function main() {
-            await liff.init({ liffId: "2004737575-2Vnw1oNd" });
+            await liff.init({ liffId: "2004737575-0PBxkA7Z" });
             if (!liff.isLoggedIn()) {
                 liff.login({ redirectUri: window.location.href });
                 return;
@@ -43,30 +43,35 @@
                 // Get user profile to obtain UID
                 const profile = await liff.getProfile();
                 const userUID = profile.userId;
+                console.log('User UID:', userUID);
                 
                 // Fetch the original flex message
                 const response = await fetch('https://ongkub.github.io/liff/friendgetfriend/flex/share.json');
                 const flexMessage = await response.json();
+                console.log('Original Flex Message:', JSON.stringify(flexMessage, null, 2));
                 
                 // Update the URI in the flex message to include the UID parameter
-                if (flexMessage.body && flexMessage.body.contents) {
-                    flexMessage.body.contents.forEach(content => {
+                if (flexMessage.contents && flexMessage.contents.body && flexMessage.contents.body.contents) {
+                    flexMessage.contents.body.contents.forEach(content => {
                         if (content.type === 'button' && content.action && content.action.uri) {
                             // Replace {param} with actual UID
                             content.action.uri = content.action.uri.replace('{param}', userUID);
+                            console.log('Updated button URI:', content.action.uri);
                         }
                     });
                 }
+                
+                console.log('Final Flex Message to send:', JSON.stringify(flexMessage, null, 2));
                 
                 // Share the updated flex message
                 const result = await liff.shareTargetPicker([flexMessage]);
                 
                 if (result) {
                     statusMessage.style.color = 'green';
-                    statusMessage.textContent = "เชิญเพื่อนของคุณเรียบร้อย!";
+                    statusMessage.textContent = "แชร์ข้อความเรียบร้อย!";
                 } else {
                     statusMessage.style.color = 'orange';
-                    statusMessage.textContent = "คุณยกเลิกการเชิญเพื่อน";
+                    statusMessage.textContent = "คุณยกเลิกการแชร์";
                 }
             } catch (error) {
                 statusMessage.style.color = 'red';
