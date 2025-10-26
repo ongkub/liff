@@ -1,0 +1,29 @@
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+await liff.init({ liffId: 2008361634 })
+
+switch (liff.getOS()) {
+  case "android": body.style.backgroundColor = "#d1f5d3"; break
+  case "ios": body.style.backgroundColor = "#eeeeee"; break
+}
+
+<section id="profile">
+  <img id="pictureUrl" src="https://vos.line-scdn.net/imgs/apis/ic_mini.png">
+  <p id="userId"></p>
+  <p id="displayName"></p>
+  <p id="statusMessage"></p>
+  <p id="email"></p>
+</section>
+
+async function main() {
+  // ...
+  getUserProfile()
+}
+
+async function getUserProfile() {
+  const profile = await liff.getProfile();
+  pictureUrl.src = profile.pictureUrl ? profile.pictureUrl : 'https://vos.line-scdn.net/imgs/apis/ic_mini.png';
+  userId.innerHTML = '<b>userId:</b> ' + profile.userId;
+  statusMessage.innerHTML = '<b>statusMessage:</b> ' + profile.statusMessage;
+  displayName.innerHTML = '<b>displayName:</b> ' + profile.displayName;
+  email.innerHTML = "<b>email:</b> " + liff.getDecodedIDToken().email
+}
