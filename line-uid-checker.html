@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ตรวจสอบ LINE UID</title>
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Kanit', sans-serif !important;
+      background: #FFFFFF;
+      color: #000000;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+    
+    .circleTopLeft {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      left: -100px;
+      top: -100px;
+      border-radius: 100px;
+      z-index: -1;
+      background: #0064ff;
+    }
+    
+    .bottomRight {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      overflow: hidden;
+      right: 0px;
+      bottom: 0px;
+    }
+    
+    .circleBottomRight {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      right: -200px;
+      bottom: -200px;
+      border-radius: 400px;
+      z-index: -1;
+      background: #0064ff;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .header {
+      margin-bottom: 50px;
+      animation: fadeInDown 0.8s ease-out;
+    }
+    
+    .header h1 {
+      font-weight: 600;
+      font-size: 48px;
+      color: #0064ff;
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+    
+    .header p {
+      font-weight: 500;
+      font-size: 20px;
+      color: #58595b;
+      opacity: 0.8;
+    }
+    
+    .card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0, 100, 255, 0.1);
+      margin-bottom: 30px;
+      animation: fadeInUp 0.8s ease-out;
+      border: 2px solid rgba(0, 100, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      box-shadow: 0 15px 50px rgba(0, 100, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .input-group {
+      margin-bottom: 25px;
+      text-align: left;
+    }
+    
+    .input-group label {
+      display: block;
+      font-weight: 500;
+      font-size: 16px;
+      color: #000000;
+      margin-bottom: 10px;
+      padding-left: 5px;
+    }
+    
+    .input-wrapper {
+      position: relative;
+    }
+    
+    .input-wrapper input {
+      width: 100%;
+      padding: 16px 20px;
+      border: 2px solid #E0E0E0;
+      border-radius: 12px;
+      font-family: 'Kanit', sans-serif;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: #FAFAFA;
+    }
+    
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: #0064ff;
+      background: #FFFFFF;
+      box-shadow: 0 0 0 4px rgba(0, 100, 255, 0.1);
+    }
+    
+    .input-wrapper input.error {
+      border-color: #FF4444;
+      background: #FFF5F5;
+    }
+    
+    .error-message {
+      color: #FF4444;
+      font-size: 14px;
+      margin-top: 8px;
+      display: none;
+      padding-left: 5px;
+      animation: shake 0.3s ease;
+    }
+    
+    .error-message.show {
+      display: block;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 16px 0;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Kanit', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #0064ff 0%, #0D3692 100%);
+      color: #FFFFFF;
+      box-shadow: 0 4px 15px rgba(0, 100, 255, 0.3);
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 100, 255, 0.4);
+    }
+    
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+      background: #FFFFFF;
+      color: #0064ff;
+      border: 2px solid #0064ff;
+      margin-top: 15px;
+    }
+    
+    .btn-secondary:hover {
+      background: #0064ff;
+      color: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 100, 255, 0.3);
+    }
+    
+    .result-section {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    .result-section.show {
+      display: block;
+    }
+    
+    .profile-container {
+      margin: 30px 0;
+      animation: scaleIn 0.5s ease;
+    }
+    
+    #pictureUrl {
+      width: 120px;
+      height: 120px;
+      border-radius: 100px;
+      margin: 0 auto 20px;
+      display: block;
+      border: 4px solid #0064ff;
+      box-shadow: 0 8px 25px rgba(0, 100, 255, 0.2);
+      object-fit: cover;
+      transition: all 0.3s ease;
+    }
+    
+    #pictureUrl:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 100, 255, 0.3);
+    }
+    
+    .profile-name {
+      font-size: 28px;
+      font-weight: 600;
+      color: #000000;
+      margin-bottom: 10px;
+    }
+    
+    .profile-uid {
+      font-size: 14px;
+      color: #58595b;
+      font-family: monospace;
+      background: #F5F5F5;
+      padding: 8px 16px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .loading.show {
+      display: block;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #E0E0E0;
+      border-top: 4px solid #0064ff;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      animation: spin 1s linear infinite;
+    }
+    
+    .loading-text {
+      color: #58595b;
+      font-size: 16px;
+    }
+    
+    .info-box {
+      background: #F0F7FF;
+      border-left: 4px solid #0064ff;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: left;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #0D3692;
+      line-height: 1.6;
+    }
+    
+    .info-box strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 15px;
+      }
+      
+      .header h1 {
+        font-size: 36px;
+      }
+      
+      .card {
+        padding: 25px;
+      }
+      
+      #pictureUrl {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="circleTopLeft"></div>
+  <div class="bottomRight">
+    <div class="circleBottomRight"></div>
+  </div>
+  
+  <div class="container">
+    <div class="header">
+      <h1>🔍 ตรวจสอบ UID</h1>
+      <p>ค้นหาข้อมูลผู้ใช้งาน LINE จาก UID</p>
+    </div>
+    
+    <div class="card">
+      <div class="input-group">
+        <label for="uidInput">กรอก LINE User ID</label>
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            id="uidInput" 
+            placeholder="เช่น U1234567890abcdef1234567890abcdef"
+            autocomplete="off"
+          >
+        </div>
+        <div class="error-message" id="errorMessage">
+          ⚠️ รูปแบบ UID ไม่ถูกต้อง (ต้องขึ้นต้นด้วย U และมี 33 ตัวอักษร)
+        </div>
+      </div>
+      
+      <button class="btn btn-primary" id="checkBtn" onclick="checkUID()">
+        ตรวจสอบ UID
+      </button>
+      
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">กำลังค้นหาข้อมูล...</div>
+      </div>
+      
+      <div class="result-section" id="resultSection">
+        <div class="profile-container">
+          <img id="pictureUrl" src="" alt="Profile Picture">
+          <div class="profile-name" id="displayName">-</div>
+          <div class="profile-uid" id="displayUid">-</div>
+        </div>
+        
+        <button class="btn btn-secondary" id="sendLinkBtn" onclick="sendRewardLink()">
+          📤 ส่งลิงก์กรอกข้อมูลรางวัล
+        </button>
+      </div>
+      
+      <div class="info-box">
+        <strong>💡 หมายเหตุ:</strong>
+        แอปพลิเคชันนี้ต้องการ Backend API เพื่อดึงข้อมูลโปรไฟล์จาก LINE Messaging API 
+        เนื่องจาก LIFF SDK ไม่สามารถดึงข้อมูลของ UID อื่นได้โดยตรงจากฝั่ง Client
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // LIFF Initialization
+    let liffId = 'YOUR_LIFF_ID'; // ใส่ LIFF ID ของคุณที่นี่
+    
+    window.onload = function() {
+      initializeLiff();
+    }
+    
+    async function initializeLiff() {
+      try {
+        await liff.init({ liffId: liffId });
+        console.log('LIFF initialized successfully');
+        
+        // ตรวจสอบว่าเข้าสู่ระบบแล้วหรือยัง
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        }
+      } catch (error) {
+        console.error('LIFF initialization failed', error);
+        // ในกรณีที่ยังไม่ได้ config LIFF ID ให้ทำงานต่อได้ในโหมด demo
+        console.log('Running in demo mode');
+      }
+    }
+    
+    // ตรวจสอบรูปแบบ UID
+    function validateUID(uid) {
+      // LINE UID มักจะขึ้นต้นด้วย U และตามด้วย 32 ตัวอักษร (รวมเป็น 33 ตัว)
+      const uidPattern = /^U[0-9a-f]{32}$/i;
+      return uidPattern.test(uid);
+    }
+    
+    // ฟังก์ชันตรวจสอบ UID
+    async function checkUID() {
+      const uidInput = document.getElementById('uidInput');
+      const errorMessage = document.getElementById('errorMessage');
+      const loading = document.getElementById('loading');
+      const resultSection = document.getElementById('resultSection');
+      const checkBtn = document.getElementById('checkBtn');
+      
+      const uid = uidInput.value.trim();
+      
+      // ซ่อนผลลัพธ์เดิม
+      resultSection.classList.remove('show');
+      errorMessage.classList.remove('show');
+      uidInput.classList.remove('error');
+      
+      // ตรวจสอบ UID
+      if (!validateUID(uid)) {
+        uidInput.classList.add('error');
+        errorMessage.classList.add('show');
+        return;
+      }
+      
+      // แสดง loading
+      loading.classList.add('show');
+      checkBtn.disabled = true;
+      
+      try {
+        // เรียก Backend API เพื่อดึงข้อมูลโปรไฟล์
+        // ในที่นี้จะเป็น mock data เพื่อแสดงตัวอย่าง
+        const profileData = await fetchProfileData(uid);
+        
+        // แสดงผลลัพธ์
+        displayProfile(profileData, uid);
+        
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+        alert('เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาลองใหม่อีกครั้ง');
+      } finally {
+        loading.classList.remove('show');
+        checkBtn.disabled = false;
+      }
+    }
+    
+    // ฟังก์ชันเรียก API (ต้องมี Backend)
+    async function fetchProfileData(uid) {
+      // TODO: เรียก Backend API จริง
+      // const response = await fetch(`https://your-api.com/profile/${uid}`);
+      // const data = await response.json();
+      // return data;
+      
+      // Mock data สำหรับ demo
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            displayName: 'ผู้ใช้งาน LINE',
+            pictureUrl: 'https://via.placeholder.com/150/0064ff/FFFFFF?text=LINE',
+            statusMessage: 'สวัสดีค่ะ'
+          });
+        }, 1500);
+      });
+    }
+    
+    // แสดงข้อมูลโปรไฟล์
+    function displayProfile(profile, uid) {
+      document.getElementById('pictureUrl').src = profile.pictureUrl;
+      document.getElementById('displayName').textContent = profile.displayName;
+      document.getElementById('displayUid').textContent = uid;
+      
+      document.getElementById('resultSection').classList.add('show');
+    }
+    
+    // ส่งลิงก์กรอกข้อมูลรางวัล
+    async function sendRewardLink() {
+      const uid = document.getElementById('uidInput').value.trim();
+      const displayName = document.getElementById('displayName').textContent;
+      
+      // สร้างลิงก์กรอกข้อมูลรางวัล (URL ตัวอย่าง)
+      const rewardFormUrl = `https://your-reward-form.com/?uid=${uid}`;
+      
+      // สร้างข้อความที่จะส่ง
+      const message = `สวัสดีค่ะคุณ ${displayName}\n\nกรุณากรอกข้อมูลเพื่อรับรางวัลที่ลิงก์ด้านล่างนี้ค่ะ\n${rewardFormUrl}`;
+      
+      try {
+        // ส่งข้อความผ่าน LIFF
+        if (liff.isApiAvailable('sendMessages')) {
+          await liff.sendMessages([
+            {
+              type: 'text',
+              text: message
+            }
+          ]);
+          
+          alert('ส่งลิงก์เรียบร้อยแล้ว!');
+          
+          // ปิด LIFF window
+          liff.closeWindow();
+        } else {
+          // ถ้าไม่สามารถส่งข้อความได้ ให้เปิด external browser
+          window.open(`https://line.me/R/oaMessage/@your-channel/?${encodeURIComponent(message)}`);
+        }
+      } catch (error) {
+        console.error('Error sending message:', error);
+        
+        // Fallback: คัดลอกข้อความไปที่ clipboard
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(message);
+          alert('คัดลอกข้อความไปยังคลิปบอร์ดแล้ว คุณสามารถนำไปส่งเองได้');
+        } else {
+          alert('ไม่สามารถส่งข้อความได้ กรุณาลองใหม่อีกครั้ง');
+        }
+      }
+    }
+    
+    // Enter key support
+    document.getElementById('uidInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        checkUID();
+      }
+    });
+    
+    // Real-time validation
+    document.getElementById('uidInput').addEventListener('input', function() {
+      const errorMessage = document.getElementById('errorMessage');
+      if (errorMessage.classList.contains('show')) {
+        errorMessage.classList.remove('show');
+        this.classList.remove('error');
+      }
+    });
+  </script>
+</body>
+</html>
