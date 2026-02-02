@@ -23,7 +23,7 @@
     },
     "hero": {
       "type": "image",
-      "url": "https://sparkth.io/wp-content/uploads/2025/08/GSB_Mockup_Avtivity.png",
+      "url": "https://sparkth.io/wp-content/uploads/2025/08/GSB_Mockup_Avtivity.png", //แก้ไขรูปที่นี่
       "size": "5xl",
       "aspectRatio": "1:1",
       "aspectMode": "cover",
