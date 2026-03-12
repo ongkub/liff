@@ -2,749 +2,1208 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advance Mock Exam: LINE Ads (50 ข้อ)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LINE Certified Coach – Advance Mock Exam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         :root {
-            --primary: #00B900;
-            --dark: #111111;
-            --light: #F5F5F5;
-            --correct: #28a745;
-            --incorrect: #dc3545;
+            --green: #00B900;
+            --green-dark: #009900;
+            --green-light: #e8fde8;
+            --green-mid: #c8f5c8;
+            --black: #0a0a0a;
+            --gray-900: #111827;
+            --gray-700: #374151;
+            --gray-400: #9CA3AF;
+            --gray-200: #E5E7EB;
+            --gray-100: #F3F4F6;
+            --white: #ffffff;
+            --correct: #16a34a;
+            --correct-bg: #dcfce7;
+            --incorrect: #dc2626;
+            --incorrect-bg: #fee2e2;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 4px 24px rgba(0,0,0,0.1);
+            --shadow-lg: 0 12px 48px rgba(0,0,0,0.18);
         }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Sarabun', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light);
-            color: var(--dark);
-            margin: 0;
-            padding: 20px;
+            font-family: 'Noto Sans Thai', sans-serif;
+            background: #f0f7f0;
+            min-height: 100vh;
             display: flex;
+            align-items: flex-start;
             justify-content: center;
+            padding: 0;
         }
+
+        /* ─── BG PATTERN ─── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(0,185,0,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 85% 80%, rgba(0,185,0,0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
         #app {
-            background: white;
-            max-width: 900px;
+            position: relative;
+            z-index: 1;
             width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            padding: 30px;
-            box-sizing: border-box;
+            max-width: 600px;
+            min-height: 100vh;
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
         }
-        h1, h2, h3 { color: var(--primary); }
-        .btn {
-            background-color: var(--primary);
+
+        @media (min-width: 640px) {
+            body { padding: 24px 16px; align-items: center; }
+            #app { min-height: auto; border-radius: 24px; overflow: hidden; }
+        }
+
+        /* ─── SCREENS ─── */
+        .screen { display: none; flex-direction: column; flex: 1; }
+        .screen.active { display: flex; }
+
+        /* ─── LOADING ─── */
+        #loading-screen {
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 20px;
+            background: linear-gradient(160deg, #003d00, #00b900 80%, #00d400);
+        }
+
+        .loader-logo {
+            width: 72px;
+            height: 72px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            animation: logoPop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+
+        @keyframes logoPop {
+            from { transform: scale(0) rotate(-20deg); opacity: 0; }
+            to { transform: scale(1) rotate(0); opacity: 1; }
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            opacity: 0.85;
+            letter-spacing: 0.5px;
+        }
+
+        .loader-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .loader-dots span {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 50%;
+            animation: dotBounce 1.2s ease-in-out infinite;
+        }
+
+        .loader-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loader-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes dotBounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+        }
+
+        /* ─── START SCREEN ─── */
+        #start-screen {
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .start-header {
+            background: linear-gradient(160deg, #003d00 0%, #00b900 100%);
+            padding: 48px 28px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: 0; right: 0;
+            height: 60px;
+            background: white;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.5);
+            object-fit: cover;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            display: block;
+            margin: 0 auto 12px;
+        }
+
+        .profile-greeting {
+            color: rgba(255,255,255,0.85);
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+
+        .profile-name {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .exam-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.35);
+            padding: 5px 14px;
+            border-radius: 100px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            backdrop-filter: blur(4px);
+        }
+
+        .exam-badge::before { content: '●'; color: #90ff90; font-size: 8px; }
+
+        .start-body {
+            padding: 48px 28px 32px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .start-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--black);
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+
+        .start-title span { color: var(--green); }
+
+        .start-desc {
+            font-size: 14px;
+            color: var(--gray-700);
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .topic-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+
+        .chip {
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 2px solid;
+        }
+
+        .chip-oa { background: #e8fde8; color: #166534; border-color: #bbf7d0; }
+        .chip-ads { background: #ffe8e8; color: #991b1b; border-color: #fecaca; }
+        .chip-shop { background: #fff8e1; color: #92400e; border-color: #fde68a; }
+        .chip-crm { background: #e8f4ff; color: #1e40af; border-color: #bfdbfe; }
+        .chip-club { background: #f5e8ff; color: #6b21a8; border-color: #e9d5ff; }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--gray-100);
+            border-radius: var(--radius-sm);
+            padding: 14px 10px;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--green);
+            font-family: 'IBM Plex Mono', monospace;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        .btn-start {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
             color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 8px;
+            border-radius: var(--radius);
+            font-size: 17px;
+            font-weight: 700;
+            font-family: 'Noto Sans Thai', sans-serif;
             cursor: pointer;
-            transition: 0.3s;
-            font-weight: bold;
-            margin-top: 15px;
+            box-shadow: 0 6px 24px rgba(0,185,0,0.35);
+            transition: transform 0.15s, box-shadow 0.15s;
+            letter-spacing: 0.5px;
+            margin-top: auto;
         }
-        .btn:hover { background-color: #009900; }
-        .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .btn-start:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(0,185,0,0.45); }
+        .btn-start:active { transform: translateY(0); }
+
+        /* ─── QUIZ SCREEN ─── */
+        #quiz-screen { min-height: 100vh; }
+
+        .quiz-top-bar {
+            background: white;
+            padding: 14px 20px 10px;
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .quiz-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .q-number-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-400);
+            font-family: 'IBM Plex Mono', monospace;
+            letter-spacing: 1px;
+        }
+
+        .q-score-live {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--green-light);
+            border-radius: 100px;
+            padding: 4px 12px;
+        }
+
+        .q-score-live-num {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--green-dark);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .category-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--gray-100);
+            border-radius: 100px;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green), #00d400);
+            border-radius: 99px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
+
+        .quiz-body {
+            padding: 24px 20px 100px;
+            flex: 1;
+        }
+
+        .q-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fff8, #f0fdf0);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--green);
+        }
+
+        .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
         .option-btn {
-            display: block;
             width: 100%;
             text-align: left;
-            background: #fff;
-            border: 2px solid #ddd;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            font-size: 16px;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            padding: 16px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: 'Noto Sans Thai', sans-serif;
+            color: var(--gray-900);
             cursor: pointer;
-            transition: 0.2s;
-            line-height: 1.5;
-        }
-        .option-btn:hover:not(:disabled) { border-color: var(--primary); background: #f0fdf0; }
-        .option-btn.selected { border-color: var(--primary); background: #e6ffe6; }
-        .option-btn.correct { border-color: var(--correct); background: #d4edda; color: #000; font-weight: bold;}
-        .option-btn.incorrect { border-color: var(--incorrect); background: #f8d7da; color: #000;}
-        #explanation {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            display: none;
-            border-left: 5px solid var(--primary);
-            line-height: 1.6;
-        }
-        .header-flex {
+            transition: border-color 0.15s, background 0.15s, transform 0.1s;
             display: flex;
-            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.55;
+        }
+
+        .option-letter {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            display: flex;
             align-items: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gray-700);
+            font-family: 'IBM Plex Mono', monospace;
+            transition: background 0.15s, color 0.15s;
+            margin-top: 1px;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--green);
+            background: var(--green-light);
+            transform: translateX(4px);
+        }
+
+        .option-btn:hover:not(:disabled) .option-letter {
+            background: var(--green);
+            color: white;
+        }
+
+        .option-btn.correct {
+            border-color: var(--correct);
+            background: var(--correct-bg);
+        }
+
+        .option-btn.correct .option-letter {
+            background: var(--correct);
+            color: white;
+        }
+
+        .option-btn.incorrect {
+            border-color: var(--incorrect);
+            background: var(--incorrect-bg);
+        }
+
+        .option-btn.incorrect .option-letter {
+            background: var(--incorrect);
+            color: white;
+        }
+
+        .explanation-box {
+            display: none;
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin-bottom: 16px;
+            animation: slideUp 0.3s ease both;
+        }
+
+        .explanation-box.show { display: block; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .exp-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .exp-icon { font-size: 20px; }
+
+        .exp-status {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .exp-status.correct { color: var(--correct); }
+        .exp-status.incorrect { color: var(--incorrect); }
+
+        .exp-text {
+            font-size: 13.5px;
+            color: var(--gray-700);
+            line-height: 1.7;
+            border-top: 1px solid var(--gray-200);
+            padding-top: 10px;
+            margin-top: 4px;
+        }
+
+        .exp-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--green-dark);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .btn-next {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Noto Sans Thai', sans-serif;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 4px 16px rgba(0,185,0,0.3);
+            transition: transform 0.15s;
+        }
+
+        .btn-next.show { display: block; }
+        .btn-next:active { transform: scale(0.98); }
+
+        /* ─── RESULT SCREEN ─── */
+        #result-screen { min-height: 100vh; }
+
+        .result-header {
+            background: linear-gradient(160deg, #003d00 0%, #00b900 100%);
+            padding: 40px 28px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-header::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .result-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px; left: 0; right: 0;
+            height: 60px;
+            background: var(--gray-100);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+
+        .result-avatar {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.5);
+            object-fit: cover;
+            margin: 0 auto 10px;
+            display: block;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-name {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 4px;
+        }
+
+        .result-subtext {
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-body {
+            background: var(--gray-100);
+            flex: 1;
+        }
+
+        .score-card {
+            margin: -2px 20px 0;
+            background: white;
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 2;
+        }
+
+        .score-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gray-400);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .score-main {
+            text-align: center;
             margin-bottom: 20px;
         }
-        .badge { background: #333; color: white; padding: 5px 10px; border-radius: 20px; font-size: 14px; }
-        #progress-bar { width: 100%; background: #eee; height: 10px; border-radius: 5px; margin-bottom: 20px; }
-        #progress-fill { height: 100%; background: var(--primary); border-radius: 5px; width: 0%; transition: width 0.3s; }
+
+        .score-big {
+            font-size: 64px;
+            font-weight: 800;
+            color: var(--green);
+            font-family: 'IBM Plex Mono', monospace;
+            line-height: 1;
+        }
+
+        .score-total {
+            font-size: 22px;
+            color: var(--gray-400);
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 400;
+        }
+
+        .score-bar-wrap {
+            background: var(--gray-200);
+            border-radius: 99px;
+            height: 12px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #00b900, #00d400);
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .score-pct {
+            text-align: right;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--green-dark);
+            font-family: 'IBM Plex Mono', monospace;
+            margin-bottom: 20px;
+        }
+
+        .score-message {
+            background: var(--green-light);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            font-size: 14px;
+            color: var(--gray-900);
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .cat-breakdown {
+            margin: 16px 20px;
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .cat-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-400);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .cat-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .cat-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-700);
+            width: 130px;
+            min-width: 130px;
+        }
+
+        .cat-bar-wrap {
+            flex: 1;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .cat-bar-fill {
+            height: 100%;
+            border-radius: 99px;
+            background: var(--green);
+            transition: width 1s ease 0.5s;
+        }
+
+        .cat-score-txt {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gray-700);
+            font-family: 'IBM Plex Mono', monospace;
+            width: 32px;
+            text-align: right;
+        }
+
+        .result-actions {
+            padding: 16px 20px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-share {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #06c755, #00b900);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Noto Sans Thai', sans-serif;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0,185,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.15s;
+        }
+
+        .btn-share:active { transform: scale(0.98); }
+
+        .btn-retry {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            color: var(--gray-900);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Noto Sans Thai', sans-serif;
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+
+        .btn-retry:hover { border-color: var(--green); color: var(--green); }
+
+        /* ─── ERROR TOAST ─── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: var(--gray-900);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 999;
+            transition: transform 0.3s;
+            white-space: nowrap;
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* ─── SHARE BUTTON ICON ─── */
+        .share-icon {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (min-width: 640px) {
+            #start-screen, #quiz-screen, #result-screen { min-height: auto; }
+            .quiz-top-bar { position: relative; }
+            .start-header { padding: 40px 36px 48px; }
+            .start-body { padding: 48px 36px 36px; }
+            .quiz-body { padding: 24px 28px 36px; }
+            .score-card { margin: -2px 28px 0; }
+            .cat-breakdown { margin: 16px 28px; }
+            .result-actions { padding: 16px 28px 36px; }
+        }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <div id="start-screen" style="text-align: center;">
-        <h1>🟢 Advance Mock Exam: LINE Ads</h1>
-        <h3>ข้อสอบจำลองระดับ Expert (50 ข้อ)</h3>
-        <p>ทดสอบการวิเคราะห์โครงสร้างแคมเปญ, Bidding, Custom Audience, กฎเกณฑ์โฆษณา และการเชื่อมต่อ Business Manager</p>
-        <button class="btn" onclick="startQuiz()">เริ่มทำข้อสอบ</button>
-    </div>
 
-    <div id="quiz-screen" style="display: none;">
-        <div id="progress-bar"><div id="progress-fill"></div></div>
-        <div class="header-flex">
-            <h2 id="q-number" style="margin: 0;">ข้อที่ 1/50</h2>
-            <span class="badge" id="q-category">LINE Ads</span>
+    <!-- LOADING -->
+    <div id="loading-screen" class="screen active">
+        <div class="loader-logo">🟢</div>
+        <div class="loader-text">กำลังโหลด...</div>
+        <div class="loader-dots">
+            <span></span><span></span><span></span>
         </div>
-        <p id="q-text" style="font-size: 18px; line-height: 1.6; font-weight: bold;"></p>
-        <div id="options-container"></div>
-        <div id="explanation"></div>
-        <button class="btn" id="next-btn" style="display: none; width: 100%;" onclick="nextQuestion()">ข้อถัดไป</button>
     </div>
 
-    <div id="result-screen" style="display: none; text-align: center;">
-        <h1>🎉 สิ้นสุดการทดสอบ!</h1>
-        <h2 id="final-score">คุณทำได้: 0 / 50 คะแนน</h2>
-        <p id="final-message"></p>
-        <button class="btn" onclick="location.reload()">ทำข้อสอบอีกครั้ง</button>
+    <!-- START -->
+    <div id="start-screen" class="screen">
+        <div class="start-header">
+            <img id="start-avatar" class="profile-avatar" src="https://profile.line-scdn.net/0h00000000000000000000000000000000000000" alt="avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 80 80\'><circle cx=\'40\' cy=\'40\' r=\'40\' fill=\'%2300B900\'/><text x=\'50%\' y=\'55%\' text-anchor=\'middle\' font-size=\'36\' fill=\'white\'>👤</text></svg>'">
+            <div class="profile-greeting">สวัสดี,</div>
+            <div class="profile-name" id="start-name">ผู้ใช้งาน</div>
+            <span class="exam-badge">Advance Mock Exam</span>
+        </div>
+        <div class="start-body">
+            <div class="start-title">ทดสอบความรู้<br><span>LINE for Business</span></div>
+            <div class="start-desc">โจทย์จำลองสถานการณ์จริง 50 ข้อ เจาะลึกทุกโซลูชันในระบบนิเวศของ LINE for Business</div>
+
+            <div class="topic-chips">
+                <span class="chip chip-oa">LINE OA (10 ข้อ)</span>
+                <span class="chip chip-ads">LINE Ads (10 ข้อ)</span>
+                <span class="chip chip-shop">LINE Shopping (10 ข้อ)</span>
+                <span class="chip chip-crm">MyCustomer CRM (10 ข้อ)</span>
+                <span class="chip chip-club">LINE Family Club (10 ข้อ)</span>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-num">50</div>
+                    <div class="stat-label">ข้อสอบ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">5</div>
+                    <div class="stat-label">หมวดหมู่</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">∞</div>
+                    <div class="stat-label">เวลา</div>
+                </div>
+            </div>
+
+            <button class="btn-start" onclick="startQuiz()">🚀 เริ่มทำข้อสอบเลย!</button>
+        </div>
     </div>
+
+    <!-- QUIZ -->
+    <div id="quiz-screen" class="screen">
+        <div class="quiz-top-bar">
+            <div class="quiz-top-row">
+                <span class="q-number-label" id="q-num-label">Q 01 / 50</span>
+                <div class="q-score-live">
+                    <span style="font-size:13px;">⭐</span>
+                    <span class="q-score-live-num" id="live-score">0</span>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                <span class="category-tag" id="q-cat-tag">Category</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="quiz-body">
+            <p class="q-text" id="q-text"></p>
+            <div class="options-list" id="options-container"></div>
+            <div class="explanation-box" id="explanation-box">
+                <div class="exp-header">
+                    <span class="exp-icon" id="exp-icon"></span>
+                    <span class="exp-status" id="exp-status"></span>
+                </div>
+                <div class="exp-label">💡 คำอธิบาย</div>
+                <div class="exp-text" id="exp-text"></div>
+            </div>
+            <button class="btn-next" id="btn-next" onclick="nextQuestion()">ข้อถัดไป →</button>
+        </div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="result-screen" class="screen">
+        <div class="result-header">
+            <img id="result-avatar" class="result-avatar" src="" alt="avatar">
+            <div class="result-name" id="result-name">ผู้ใช้งาน</div>
+            <div class="result-subtext">สิ้นสุดการทดสอบแล้ว 🎉</div>
+        </div>
+        <div class="result-body">
+            <div class="score-card">
+                <div class="score-label">คะแนนที่ได้</div>
+                <div class="score-main">
+                    <span class="score-big" id="score-big">0</span>
+                    <span class="score-total">/50</span>
+                </div>
+                <div class="score-bar-wrap">
+                    <div class="score-bar-fill" id="score-bar-fill" style="width:0%"></div>
+                </div>
+                <div class="score-pct" id="score-pct">0%</div>
+                <div class="score-message" id="score-msg"></div>
+            </div>
+
+            <div class="cat-breakdown">
+                <div class="cat-title">📊 ผลแยกตามหมวด</div>
+                <div id="cat-rows"></div>
+            </div>
+
+            <div class="result-actions">
+                <button class="btn-share" onclick="shareResult()">
+                    <svg class="share-icon" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
+                    แชร์ผลลัพธ์ให้เพื่อน
+                </button>
+                <button class="btn-retry" onclick="retryQuiz()">🔄 ทำข้อสอบอีกครั้ง</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <script>
-const quizData = [
-    {
-        question: "แบรนด์ A เปิดแคมเปญใหม่โดยเปิดใช้งาน CBO (Campaign Budget Optimization) เพื่อทดสอบกลุ่มเป้าหมาย แอดมินต้องการให้ระบบเรียนรู้ผ่าน Learning Phase ได้เต็มประสิทธิภาพ แอดมินควรตั้งค่าตามข้อใดจึงจะถูกต้องตามกฎของระบบ?",
-        options: [
-            "ตั้งงบแคมเปญ 500 บาท/วัน และรอให้เกิด 40 คอนเวอร์ชันต่อแคมเปญ",
-            "ตั้งงบแคมเปญ 1,000 บาท/วัน และรอให้เกิด 40 คอนเวอร์ชันต่อกลุ่มโฆษณา (Ads Group)",
-            "ตั้งงบแคมเปญ 1,000 บาท/วัน และปรับกลยุทธ์การเสนอราคา (Bidding Strategy) ที่ระดับกลุ่มโฆษณาให้ต่างกัน",
-            "ตั้งงบแคมเปญ 1,000 บาท/วัน และรอให้เกิด 40 คอนเวอร์ชันต่อโฆษณา (Ad)"
-        ],
-        answer: 1,
-        explanation: "CBO บังคับงบประมาณขั้นต่ำที่ 1,000 บาท/วัน และเมื่อเปิด CBO จะไม่สามารถตั้งค่างบประมาณรายวันหรือกลยุทธ์การเสนอราคาในระดับ Ads Group ได้ นอกจากนี้ Learning Phase จะเสถียรเมื่อเกิด 40 Conversion ต่อ Ads Group"
-    },
-    {
-        question: "เอเจนซี่ต้องการนำฐานข้อมูลเบอร์โทรศัพท์ลูกค้า 5,000 รายชื่อ มาอัปโหลดแบบ Unhash เพื่อสร้าง Custom Audience ใน LINE Ads ข้อใดคือรูปแบบการจัดเตรียมไฟล์ที่ถูกต้อง?",
-        options: [
-            "ต้องใส่รหัสประเทศ +66 นำหน้าทุกเบอร์เสมอ",
-            "ห้ามใส่รหัสประเทศ แต่สามารถมีขีด (-) หรือเว้นวรรคได้ เช่น 080-123-4567",
-            "ต้องแปลงไฟล์เป็น SHA256 ด้วยตัวเองก่อนอัปโหลดเสมอ",
-            "ต้องใส่รหัสประเทศ +66 และห้ามมีเว้นวรรคเด็ดขาด"
-        ],
-        answer: 1,
-        explanation: "การอัปโหลดเบอร์โทรศัพท์แบบ Unhash (ให้ระบบ LINE จัดการเข้ารหัสให้) มีข้อกำหนดว่า 'ห้ามใส่รหัสประเทศ' แต่ระบบอนุญาตให้พิมพ์แบบมีขีด (080-123-4567), พิมพ์ติดกัน หรือเว้นวรรคได้"
-    },
-    {
-        question: "ร้านค้าออนไลน์ต้องการทำ Retargeting โดยสร้างกลุ่มเป้าหมายจากคนที่เคย 'คลิกรูปภาพโฆษณา' เมื่อ 4 เดือนที่แล้ว และคนที่ 'ดูวิดีโอโฆษณา' เมื่อ 2 เดือนที่แล้ว ข้อใดประเมินความเป็นไปได้ถูกต้องตามระบบ LINE Ads?",
-        options: [
-            "ทำได้ทั้ง 2 กลุ่ม เพราะระบบเก็บข้อมูลได้ 180 วัน",
-            "ทำไม่ได้ทั้ง 2 กลุ่ม เพราะข้อมูลหมดอายุแล้ว",
-            "ทำได้เฉพาะกลุ่มคนคลิกรูปภาพ เพราะระบบเก็บข้อมูลได้ 180 วัน แต่กลุ่มดูวิดีโอระบบเก็บย้อนหลังได้เพียง 30 วัน",
-            "ทำได้เฉพาะกลุ่มดูวิดีโอ เพราะรูปภาพเก็บข้อมูลได้เพียง 30 วัน"
-        ],
-        answer: 2,
-        explanation: "กลุ่มเป้าหมายการรับชมวิดีโอ (Video Views) เก็บข้อมูลย้อนหลังได้เพียง 30 วัน (ข้อมูล 2 เดือนก่อนจึงหมดอายุแล้ว) ส่วนจำนวนคนคลิกรูปภาพ (Image Click) เก็บย้อนหลังได้ถึง 180 วัน (และต้องมีคนคลิกเกิน 100 คน)"
-    },
-    {
-        question: "ลูกค้าต้องการให้โฆษณาชนะการประมูลเสมอ และใช้งบประมาณรายวันให้หมด โดยยอมรับราคาต่อคอนเวอร์ชัน (CPA) ที่สูงขึ้นได้ แอดมินควรเลือก Bidding Strategy รูปแบบใด?",
-        options: [
-            "Event Cost Cap",
-            "Target Cost",
-            "No Limit",
-            "Auto Bidding"
-        ],
-        answer: 2,
-        explanation: "กลยุทธ์แบบ No Limit คือการบอกระบบให้ใช้เงินให้เยอะที่สุด สู้ทุกราคา เพื่อให้ได้อิมเพรสชันและคอนเวอร์ชันสูงสุด โดยใช้งบรายวันให้หมด"
-    },
-    {
-        question: "แบรนด์อาหารเสริมต้องการยิงแอดใน LINE Ads แต่ถูกระงับบัญชีโฆษณา เพื่อให้บัญชีได้รับการอนุมัติอย่างถูกต้องตามนโยบาย แบรนด์ต้องทำอย่างไร?",
-        options: [
-            "อัปโหลดใบเสร็จภาษี ภ.พ.20",
-            "อัปโหลดเอกสารจดทะเบียนผลิตภัณฑ์ (อย.) และใบอนุญาตโฆษณา (ฆอ.)",
-            "อัปโหลดใบอนุญาตจากกรมการปกครอง",
-            "อาหารเสริมเป็นสินค้าต้องห้ามเด็ดขาด ไม่สามารถลงโฆษณาได้"
-        ],
-        answer: 1,
-        explanation: "อาหาร เครื่องดื่ม อาหารเสริม และยาสามัญประจำบ้าน ที่มีการกล่าวอ้างสรรพคุณ ต้องอัปโหลดเอกสารจดทะเบียนผลิตภัณฑ์ (อย.) และเอกสารอนุญาตการโฆษณา (ฆอ.) เพื่อประกอบการพิจารณา"
-    },
-    {
-        question: "บริษัทมี LINE OA 3 บัญชี และ LINE Ads 2 บัญชี ต้องการนำข้อมูลจาก LINE Tag ของเว็บไซต์ ไปใช้ยิงโฆษณาร่วมกันข้ามบัญชี ข้อใดคือวิธีแก้ปัญหาที่ถูกต้อง?",
-        options: [
-            "สร้างกลุ่มเป้าหมายแล้วส่ง Export File ข้ามบัญชี",
-            "สร้าง Business Manager เพื่อแชร์กลุ่มเป้าหมายและ LINE Tag ระหว่างบัญชี",
-            "ไม่สามารถทำได้ ข้อมูล LINE Tag ผูกติดได้แค่บัญชีโฆษณาเดียวเท่านั้น",
-            "เปิดใช้งาน MyShop Open API"
-        ],
-        answer: 1,
-        explanation: "Business Manager มีหน้าที่ในการเก็บและรวบรวมกลุ่มเป้าหมาย รวมถึง LINE Tag จาก LINE OA และ LINE Ad Account ที่มีการเชื่อมต่อกัน เพื่อแชร์ Data ข้ามบัญชีได้ (หลังจากสถานะเป็น Verified)"
-    },
-    {
-        question: "วัตถุประสงค์ 'เว็บไซต์คอนเวอร์ชัน (Website Conversion)' มีข้อจำกัดเรื่องรูปแบบการชำระเงินและ Bidding อย่างไร หากใช้ชิ้นงานรูปแบบวิดีโอ (Video)?",
-        options: [
-            "สามารถเลือกประมูลแบบ CPC และ CPM ได้",
-            "บังคับให้ต้องประมูลแบบ CPM Bidding Only เท่านั้น",
-            "บังคับให้ใช้กลยุทธ์ No Limit เท่านั้น",
-            "ไม่สามารถใช้วิดีโอในวัตถุประสงค์เว็บไซต์คอนเวอร์ชันได้"
-        ],
-        answer: 1,
-        explanation: "ตามตาราง Objective vs Format หากใช้วัตถุประสงค์ Website Conversion ร่วมกับชิ้นงาน Video หรือ Small Video จะรองรับเฉพาะการชำระเงินแบบ CPM Bidding Only เท่านั้น"
-    },
-    {
-        question: "ร้าน B ต้องการยิงโฆษณาแบนเนอร์เพื่อ 'เพิ่มเพื่อน (Gain Friends)' ให้ LINE OA ข้อใดคือราคาประมูล (Bidding) ขั้นต่ำของแคมเปญลักษณะนี้ใน LINE Ads?",
-        options: [
-            "0.1 บาท/เพื่อน",
-            "2 บาท/เพื่อน",
-            "5 บาท/เพื่อน",
-            "10 บาท/เพื่อน"
-        ],
-        answer: 3,
-        explanation: "ราคาประมูลขั้นต่ำสำหรับโฆษณาวัตถุประสงค์เพิ่มเพื่อน (Cost Per Friend) ใน LINE Ads Manager คือ 10 บาทขึ้นไป"
-    },
-    {
-        question: "นักการตลาดต้องการลงโฆษณาภาพเคลื่อนไหว (Animation Ad) ในตำแหน่ง Chat List ข้อใดคือสเปกไฟล์ที่ระบบอนุญาต?",
-        options: [
-            "ขนาด 1080x1080 (ไฟล์ GIF) ความยาว 5 วินาที",
-            "ขนาด 600x400 (ไฟล์ APNG) ความยาว 1-4 วินาที",
-            "ขนาด 1200x628 (ไฟล์ MP4) ความยาวไม่จำกัด",
-            "ขนาด 16:9 (ไฟล์ GIF) Loop อัตโนมัติ"
-        ],
-        answer: 1,
-        explanation: "รูปแบบ Animation Ad ใน LINE Ads บังคับใช้ขนาด 600 x 400, ประเภทไฟล์ APNG, ความยาว 1-4 วินาที และกำหนด Loop ได้ 1-4 ครั้ง"
-    },
-    {
-        question: "หากพบว่ารายงาน CTR (อัตราการคลิก) ของโฆษณาแสดงผลอยู่ระดับ 0 (ไม่แสดงผลลัพธ์) สาเหตุหลักคืออะไร และควรแก้ไขอย่างไร?",
-        options: [
-            "ชิ้นงานผิดกฎ ต้องอัปโหลดใหม่",
-            "การแข่งขันไม่เพียงพอ จึงไม่สามารถประเมินได้ ควรปรับปรุงกลุ่มเป้าหมายหรือปรับงบประมาณ/ราคาเสนอ",
-            "CTR ต่ำกว่า 1% ควรเปลี่ยนรูปภาพ",
-            "โฆษณาชนะการประมูลแต่ไม่มีคนคลิกเลย ควรปิดแคมเปญ"
-        ],
-        answer: 1,
-        explanation: "ระดับ CTR ที่เป็น 0 หมายถึง 'ไม่แสดงผลลัพธ์' สาเหตุเกิดจาก 'การแข่งขันไม่เพียงพอ จึงไม่สามารถประเมินได้' วิธีแก้ไขคือปรับปรุงกลุ่มเป้าหมาย โฆษณา หรืองบประมาณ/ราคาประมูลให้สู้คู่แข่งได้"
-    },
-    {
-        question: "แบรนด์ C เลือก Bidding Strategy แบบ 'Target Cost' ข้อใดอธิบายพฤติกรรมของระบบได้ถูกต้องที่สุด?",
-        options: [
-            "ระบบจะพยายามทำให้ราคาประมูลสู้ได้ตลอดเวลา โดยยอมให้ราคาเกินที่ตั้งไว้เล็กน้อย เพื่อใช้งบรายวันให้หมด (Default)",
-            "ระบบจะพยายามควบคุมราคา CPA ให้เป๊ะอยู่ในช่วง +-10% จากราคาที่กำหนด โดยอาจจะใช้เงินรายวันไม่หมดก็ได้",
-            "ระบบจะใช้เงินให้เยอะที่สุด สู้ทุกราคา",
-            "ระบบจะจ่ายเงินเฉพาะเมื่อมีคนคลิกโฆษณาเท่านั้น"
-        ],
-        answer: 1,
-        explanation: "Target Cost คือการตั้งค่าให้ระบบรักษาราคาคอนเวอร์ชันให้ตรงตามเป้า (เป๊ะ +-10%) ระบบจะให้ความสำคัญกับราคาต่อหัวมากกว่าการถลุงงบให้หมด (ส่วน Event Cost Cap คือยอมเกินเป้าเล็กน้อยเพื่อใช้งบให้หมด)"
-    },
-    {
-        question: "ข้อใดคือ Placement ที่โฆษณารูปแบบ 'Small Image (รูปขนาดเล็ก)' จะไม่ไปแสดงผลอย่างแน่นอน?",
-        options: [
-            "LINE TODAY",
-            "LINE VOOM",
-            "LINE OpenChat",
-            "LINE Album"
-        ],
-        answer: 1,
-        explanation: "ตามตาราง Objective vs Format ชิ้นงานประเภท Small Image จะแสดงใน Home Tab, Chat List, TODAY, OpenChat, Album, Note แต่จะไม่ไปแสดงใน LINE VOOM และ Wallet"
-    },
-    {
-        question: "การติดตั้ง 'Base Code' ของ LINE Tag ต้องติดตั้งที่ส่วนใดของเว็บไซต์?",
-        options: [
-            "ก่อนแท็ก </body>",
-            "ภายในแท็ก <head>",
-            "แทรกในปุ่ม Button (onClick)",
-            "สร้างหน้า Thank you page แยกต่างหาก"
-        ],
-        answer: 1,
-        explanation: "Base Code เป็นโค้ดหลักของ LINE Tag ที่ใช้ติดตามผู้เข้าชมเว็บไซต์ทั้งหมด โดยจะต้องติดตั้งไว้ที่ส่วนหัว (Head) ของทุกหน้าเว็บไซต์"
-    },
-    {
-        question: "แบรนด์ขายสินค้า D ต้องการซื้อโฆษณาตำแหน่ง 'Smart Channel Custom (Direct Deal)' แบรนด์สามารถกดซื้อเองบน LINE Ads Manager ได้เลยหรือไม่?",
-        options: [
-            "ได้ทันที หากมีงบประมาณเกิน 10,000 บาท",
-            "ได้ หากเป็นบัญชีรับรอง (Verified Account)",
-            "ไม่ได้ ต้องซื้อผ่าน LINE Agency Partner เท่านั้น",
-            "ไม่ได้ ตำแหน่งนี้สงวนไว้สำหรับบริการของ LINE เท่านั้น"
-        ],
-        answer: 2,
-        explanation: "วัตถุประสงค์ Smart Channel Custom (คิดเงินแบบ CPM) เป็น Direct Deal ที่ไม่สามารถประมูลเองได้ ต้องซื้อผ่านตัวแทน LINE Agency Partner เท่านั้น"
-    },
-    {
-        question: "การดึงรายงาน (Report) แบบกำหนดเองจากเมนูรายงานผลการดำเนินการ ข้อมูลรายงานสามารถดึงย้อนหลังได้นานที่สุดกี่วันหลังจากแคมเปญจบ?",
-        options: [
-            "1 สัปดาห์",
-            "14 วัน",
-            "30 วัน",
-            "ไม่มีวันหมดอายุ ตราบใดที่ยังไม่ลบแคมเปญ"
-        ],
-        answer: 0,
-        explanation: "การดึง Report จากเมนู 'รายงานผลการดำเนินการ' (Report & Figure) รายงานที่กดดาวน์โหลดไว้จะมีอายุ 1 สัปดาห์ (ข้อมูลในวงเล็บระบุว่า 'รายงานมีอายุ 1 สัปดาห์')"
-    },
-    {
-        question: "ธุรกิจขาย 'ช่อดอกกัญชา' ต้องการยิงโฆษณาใน LINE Ads ข้อใดคือข้อบังคับตามนโยบายโฆษณาผลิตภัณฑ์ควบคุม?",
-        options: [
-            "ยิงได้ปกติหากมีใบอนุญาต",
-            "ยิงได้เฉพาะแคมเปญเพิ่มเพื่อนเท่านั้น",
-            "ห้ามโฆษณาส่วนของช่อดอกกัญชาโดยเด็ดขาด",
-            "ยิงได้ หากเป็นผลิตภัณฑ์สำเร็จรูปที่มี อย."
-        ],
-        answer: 2,
-        explanation: "ผลิตภัณฑ์ต้องห้ามและควบคุม ระบุชัดเจนว่า 'โฆษณาส่วนของช่อดอกกัญชา' ถือเป็นสิ่งต้องห้าม (แม้ผลิตภัณฑ์สำเร็จรูป/เครื่องสำอาง/สารสกัด จะลงได้ แต่ 'สด/ช่อดอก' ลงไม่ได้)"
-    },
-    {
-        question: "เมื่อระบบเรียกเก็บเงินผ่านบัตรเครดิตใน LINE Ads แบบอัตโนมัติ (Threshold) ลำดับการเพิ่มเพดานการตัดเงินที่ถูกต้องคือข้อใด?",
-        options: [
-            "500 > 1,000 > 5,000",
-            "1,000 > 5,000 > 10,000 > 15,000",
-            "2,000 > 5,000 > 10,000 > 15,000",
-            "1,000 > 3,000 > 10,000 > 20,000"
-        ],
-        answer: 1,
-        explanation: "ลำดับ Threshold ของระบบคือ เมื่อใช้ถึง 1,000 ระบบจะตัดเงิน หากผ่านจะขยับลิมิตเป็น 5,000 > 10,000 > 15,000 และคงไว้อัตโนมัติที่ 15,000 บาทต่อไป (หรือตัดเมื่อครบ 20 วัน)"
-    },
-    {
-        question: "ข้อควรระวังในการสร้างบัญชีผู้ใช้โฆษณา (Ad Account) สำหรับ 'นิติบุคคล' คืออะไร?",
-        options: [
-            "ต้องใช้บัตรเครดิตที่เป็นชื่อนิติบุคคลเท่านั้น",
-            "เลขนิติบุคคล (Tax ID) เมื่อกรอกแล้วจะไม่สามารถแก้ไขได้",
-            "ต้องมี LINE OA ระดับ Premium ID เท่านั้น",
-            "ไม่สามารถเปลี่ยน Time zone ได้ แต่เปลี่ยนสกุลเงินได้"
-        ],
-        answer: 1,
-        explanation: "ในขั้นตอนการสร้างบัญชีโฆษณา มีข้อควรระวังคือ สำหรับนิติบุคคล: 'เลขนิติบุคคลกรอกแล้วไม่สามารถแก้ไขได้' และชื่อผู้ลงโฆษณา/หมวดสินค้า ก็ไม่สามารถแก้ไขได้เช่นกัน"
-    },
-    {
-        question: "การทำโฆษณาวิดีโอในสตรีม (In-stream Video) บน LINE VOOM หากโฆษณามีความยาวมากกว่า 6 วินาที ผู้ใช้งานจะสามารถกด 'ข้ามโฆษณา (Skip)' ได้ในวินาทีที่เท่าไร?",
-        options: [
-            "วินาทีที่ 3",
-            "วินาทีที่ 5",
-            "วินาทีที่ 6",
-            "ข้ามไม่ได้ ต้องดูจนจบเสมอ"
-        ],
-        answer: 2,
-        explanation: "โฆษณาวิดีโอในสตรีมบน VOOM ผู้ใช้งานสามารถกด 'ข้ามโฆษณา' ได้ในวินาทีที่ 6 ของโฆษณา (แต่หากโฆษณายาวน้อยกว่า 6 วินาที จะไม่สามารถกดข้ามได้)"
-    },
-    {
-        question: "ใน 1 แคมเปญ หากใช้ฟังก์ชันการทดสอบ A/B Testing จะสามารถสร้างกลุ่มทดสอบ (Test Groups) ได้สูงสุดกี่กลุ่ม?",
-        options: [
-            "2 กลุ่มทดสอบ",
-            "3 กลุ่มทดสอบ",
-            "5 กลุ่มทดสอบ",
-            "10 กลุ่มทดสอบ"
-        ],
-        answer: 2,
-        explanation: "การทำ A/B Testing ใน LINE Ads สามารถตั้งค่าจำนวนกลุ่มทดสอบได้สูงสุด 5 กลุ่มทดสอบ"
-    },
-    {
-        question: "เอเจนซี่ตั้งค่างบประมาณรายวัน (Daily Budget) ในระดับ Ad Group ให้น้อยที่สุดเท่าที่จะทำได้เพื่อหล่อเลี้ยงแคมเปญ ข้อใดคือจำนวนเงินขั้นต่ำที่สุดที่ระบบอนุญาต?",
-        options: [
-            "0.01 บาท/วัน",
-            "1 บาท/วัน",
-            "10 บาท/วัน",
-            "100 บาท/วัน"
-        ],
-        answer: 0,
-        explanation: "งบประมาณรายวัน (Daily Budget) ในระดับกลุ่มโฆษณา (Ad Group) บังคับให้ต้องมีค่า 'มากกว่า 0.01 บาท/วัน'"
-    },
-    {
-        question: "ในการกำหนดกลุ่มเป้าหมายแบบ 'Lookalike' เปอร์เซ็นต์ความแม่นยำสูงสุดที่ระบบสามารถขยายฐานได้คือเท่าไร?",
-        options: [
-            "1%",
-            "5%",
-            "10%",
-            "15%"
-        ],
-        answer: 3,
-        explanation: "การสร้าง Lookalike Audience ใน LINE Ads สามารถขยายฐานเปอร์เซ็นต์ได้สูงสุดถึง 15% และสร้างได้สูงสุด 10 กลุ่ม (โดย Audience ตั้งต้นต้องมีขนาดเกิน 100 คน)"
-    },
-    {
-        question: "โฆษณาภาพสไลด์ (Carousel Ad) ใน LINE Ads สามารถใส่รูปภาพได้สูงสุดกี่รูป?",
-        options: [
-            "5 รูป",
-            "8 รูป",
-            "10 รูป",
-            "15 รูป"
-        ],
-        answer: 2,
-        explanation: "รูปแบบโฆษณาภาพสไลด์ (Carousel) ใช้รูปขนาด 1080 x 1080px และสามารถใส่ได้สูงสุด 10 รูป"
-    },
-    {
-        question: "ข้อใดอธิบายคุณสมบัติของ LINE Creative Lab ได้อย่างถูกต้อง?",
-        options: [
-            "สามารถดาวน์โหลดชิ้นงานออกมาเก็บไว้ในคอมพิวเตอร์ได้",
-            "มีฟีเจอร์ AI Expand, Text to Image และ Remove BG",
-            "สร้างวิดีโอแบบ In-stream ความยาว 10 นาทีได้",
-            "ต้องมี Business Manager เท่านั้นจึงจะใช้งานได้"
-        ],
-        answer: 1,
-        explanation: "LINE Creative Lab มี AI ช่วยทำรูป เช่น AI Expand, Text to Image และ Remove BG (ข้อควรระวังคือ ส่งชิ้นงานตรงไปที่ Ads Account เท่านั้น 'โหลดมาใช้งานไม่ได้')"
-    },
-    {
-        question: "แบรนด์ E ทำโฆษณา 'วัตถุประสงค์การเข้าถึง (Reach)' ข้อจำกัดที่สำคัญที่สุดของวัตถุประสงค์นี้คืออะไร?",
-        options: [
-            "ไม่สามารถใช้วิดีโอได้",
-            "คิดเงินแบบ CPC เท่านั้น",
-            "ไม่มี Target Event Cost และใช้ A/B Testing ไม่ได้",
-            "ต้องประมูลขั้นต่ำ 10 บาทเสมอ"
-        ],
-        answer: 2,
-        explanation: "วัตถุประสงค์ Awareness - การเข้าถึง (Reach) คิดเงินแบบ CPM อย่างเดียว โดยมีข้อจำกัดคือ 'ไม่มี Target Event Cost' และ 'ใช้ A/B Testing ไม่ได้'"
-    },
-    {
-        question: "โครงสร้างโฆษณา LINE Ads บัญชีผู้ใช้โฆษณา (Ad Account) 1 บัญชี สามารถสร้างกลุ่มโฆษณา (Ad Group) ได้สูงสุดกี่กลุ่ม?",
-        options: [
-            "300 กลุ่ม",
-            "1,000 กลุ่ม",
-            "5,000 กลุ่ม",
-            "10,000 กลุ่ม"
-        ],
-        answer: 2,
-        explanation: "โครงสร้างกำหนดไว้ว่า 1 แคมเปญสร้างได้สูงสุด 300 existing Campaign, 1 Ads Account มี Ads Group ได้สูงสุด 5,000 existing Ads Group และมี Ads ได้สูงสุด 5,000 existing Ads"
-    },
-    {
-        question: "การกำหนดกลุ่มเป้าหมายหลัก (Core Audience) ในส่วนของพฤติกรรม (Behavior) ระบบสามารถเจาะจงพฤติกรรมใดได้บ้าง?",
-        options: [
-            "ผู้ติดตามบัญชีทางการ LINE, หัวข้อ OpenChat, ประเภทข่าว LINE TODAY",
-            "พฤติกรรมการดู YouTube",
-            "รายได้เฉลี่ยต่อเดือน (Salary)",
-            "ระดับการศึกษาและอาชีพ"
-        ],
-        answer: 0,
-        explanation: "พฤติกรรมที่เลือกระบุได้ ได้แก่ พฤติกรรมการซื้อสินค้า, ผู้ติดตามบัญชีทางการ LINE (OA Followers), หัวข้อ LINE OpenChat, ผู้ใช้งานบริการ LINE, ประเภทข่าว LINE TODAY และความตั้งใจในการซื้อ"
-    },
-    {
-        question: "ข้อควรระวังในการใส่ 'ป้าย (Badge)' บนชิ้นงานโฆษณา คืออะไร?",
-        options: [
-            "ใส่ได้สูงสุด 5 ป้าย ป้ายละไม่เกิน 10 ตัวอักษร",
-            "แสดงผลต่อเมื่อโฆษณาไปอยู่ในตำแหน่ง LINE VOOM เท่านั้น",
-            "บังคับให้ต้องใส่ป้ายทุกครั้งที่ยิงโฆษณาภาพสไลด์",
-            "ป้ายจะแสดงในตำแหน่ง Chat List เท่านั้น"
-        ],
-        answer: 1,
-        explanation: "ในการสร้าง Ads ระดับโฆษณา การใส่ 'ป้าย (Badge)' (ใส่ได้ 3 ป้าย ป้ายละ 20 ตัวอักษร) จะ 'แสดงผลต่อเมื่อไปอยู่ VOOM เท่านั้น'"
-    },
-    {
-        question: "ถ้าต้องการยิงโฆษณาเพื่อหาคน 'โหลดแอป (App Install)' ระบบรองรับการคิดเงินแบบใดบ้าง?",
-        options: [
-            "CPA อย่างเดียว",
-            "CPM อย่างเดียว",
-            "CPI, CPC หรือ CPM",
-            "CPC และ CPA"
-        ],
-        answer: 2,
-        explanation: "วัตถุประสงค์โหลดแอป (ติดตั้งแอป) รองรับการคิดเงินแบบ CPI (Cost Per Install) หรือ CPC (Cost Per Click) หรือ CPM"
-    },
-    {
-        question: "หากบริษัทมีงบประมาณน้อย แต่มี LINE OA หลายบัญชี (เช่น แตกแบรนด์ลูก) และต้องการให้สามารถ 'ชำระเงินและออกใบกำกับภาษีภายใต้บริษัทเดียว' ได้อย่างเป็นระบบ ควรใช้โครงสร้างแบบใด?",
-        options: [
-            "สร้าง Ads Account รวมกัน",
-            "สร้าง Group (กลุ่ม)",
-            "ใช้ CBO ข้ามบัญชี",
-            "สร้าง MyShop แยกต่างหาก"
-        ],
-        answer: 1,
-        explanation: "โครงสร้าง 'Group (กลุ่ม)' เหมาะสำหรับผู้ที่มีหลายบัญชีผู้ใช้โฆษณา และต้องการดูภาพรวม รวมถึงสามารถชำระเงินและออกใบกำกับภาษีภายใต้บริษัทเดียว หรือแยกบริษัทก็ได้ (1 บัญชีสร้างได้ 100 กลุ่ม)"
-    },
-    {
-        question: "นิติบุคคลต่างประเทศสามารถเปิดบัญชีโฆษณา LINE Ads ได้หรือไม่?",
-        options: [
-            "ได้ โดยเป็นหนึ่งใน 3 ประเภทบัญชีโฆษณาที่รองรับ",
-            "ไม่ได้ ต้องเป็นบริษัทที่จดทะเบียนในไทยเท่านั้น",
-            "ได้ แต่ต้องใช้เอเจนซี่ในไทยค้ำประกัน",
-            "ไม่ได้ ระบบอนุญาตเฉพาะนิติบุคคลไทยและธุรกิจส่วนตัว"
-        ],
-        answer: 0,
-        explanation: "บัญชีโฆษณามี 3 ประเภท ได้แก่ 1. นิติบุคคล 2. นิติบุคคลต่างประเทศ 3. ธุรกิจส่วนตัว"
-    },
-    {
-        question: "หากเลือกโหมด 'กำหนดเป้าหมายอัตโนมัติ (Auto Targeting)' ในระดับ Ad Group ข้อใดคือข้อจำกัดที่เกิดขึ้น?",
-        options: [
-            "ต้องตั้งค่า Bidding แบบ No Limit เท่านั้น",
-            "ไม่สามารถใช้ 'การกำหนดเป้าหมายอย่างละเอียด' ได้ และต้องเลือกกลุ่มเป้าหมายแบบ 'ไม่รวม (Exclude)' เท่านั้น",
-            "ระบบจะบังคับใช้ CBO อัตโนมัติ",
-            "ไม่สามารถตั้งค่างบประมาณรายวันได้"
-        ],
-        answer: 1,
-        explanation: "เมื่อเปิดโหมด 'กำหนดเป้าหมายอัตโนมัติ' จะ 'ไม่สามารถใช้ การกำหนดเป้าหมายอย่างละเอียด (Detailed Targeting)' ได้ และสามารถใช้ Custom Audience ได้เฉพาะในรูปแบบ 'ไม่รวม (Exclude)' เท่านั้น"
-    },
-    {
-        question: "เมื่อตั้งค่ากลยุทธ์ Bidding การเลือก 'Event Cost Cap' มีความหมายว่าอย่างไร?",
-        options: [
-            "ราคาเป๊ะ +-10% จ่ายเท่าที่บอก",
-            "ราคาสู้ได้ เกินราคาประมูลได้เล็กน้อย เพื่อใช้งบรายวันให้หมด",
-            "ใช้เงินให้เยอะที่สุด สู้ทุกราคา",
-            "ประมูลด้วยราคาต่ำสุดในตลาดเสมอ"
-        ],
-        answer: 1,
-        explanation: "Event Cost Cap (ค่าเริ่มต้น/Default) หมายถึง ราคาสู้ได้ เกินประมูลกว่าที่ตั้งไว้ได้เล็กน้อย โดยมุ่งเน้นให้งบรายวันใช้หมด"
-    },
-    {
-        question: "ในกรณีที่ผูกบัตรเครดิตเต็มจำนวน 5 ใบในบัญชีเดียว บัตรสถานะใดบ้างที่ระบบจะทำการ 'ตัดเงินอัตโนมัติ'?",
-        options: [
-            "บัตรหลักใบเดียวเท่านั้น",
-            "บัตรหลัก และ บัตรสำรอง",
-            "บัตรทุกใบในระบบเรียงตามลำดับ",
-            "บัตรหลัก และ บัตรไม่มีสถานะ"
-        ],
-        answer: 1,
-        explanation: "สามารถลงทะเบียนบัตรได้สูงสุด 5 ใบ โดยบัตรที่มีสถานะเป็น 'บัตรหลัก' และ 'บัตรสำรอง' เท่านั้นที่ระบบจะทำการตัดเงินอัตโนมัติ (บัตรไม่มีสถานะจะไม่ถูกตัดออโต้)"
-    },
-    {
-        question: "การใช้ Custom Audience รูปแบบ 'รหัสเครื่อง (IDFA/AAID)' เหมาะสำหรับทำการตลาดแบบใด?",
-        options: [
-            "Retargeting คนเข้าเว็บไซต์ผ่านเบราว์เซอร์",
-            "Retargeting คนที่เคยดูวิดีโอ 3 วินาที",
-            "Retargeting ลูกค้าที่ใช้งาน/เข้าถึงแอปพลิเคชันในมือถือ (App Audience)",
-            "เพิ่มจำนวนผู้ติดตาม LINE OA"
-        ],
-        answer: 2,
-        explanation: "IDFA (Apple) และ AAID (Android) เป็นรหัสประจำเครื่องมือถือ ซึ่งใช้สำหรับสร้างกลุ่มเป้าหมายจาก 'คนเข้าแอป' หรือใช้สำหรับ App Tracking"
-    },
-    {
-        question: "ข้อใดคือ Placement ที่มีจำนวนผู้ใช้งาน (Users) สูงที่สุดใน LINE Ecosystem?",
-        options: [
-            "HOME TAB",
-            "LINE VOOM",
-            "LINE TODAY",
-            "Chatlist"
-        ],
-        answer: 3,
-        explanation: "จากข้อมูล Placement: Chatlist มี 56M Users ซึ่งสูงที่สุด (รองลงมาคือ HOME TAB 45M, LINE TODAY 40M, LINE VOOM 35M)"
-    },
-    {
-        question: "การโฆษณาในวัตถุประสงค์ 'ดูวิดีโอ (Video View)' สามารถใช้ระบบ Optimization เพื่อเพิ่มประสิทธิภาพในแบบใดได้บ้าง?",
-        options: [
-            "OPT สำหรับดูวิดีโอ 3 วินาที หรือดูวิดีโอให้จบ 100% มากที่สุด",
-            "OPT สำหรับการเปิดเสียง (Sound-on) วิดีโอ",
-            "OPT สำหรับการแชร์วิดีโอลงใน OpenChat",
-            "OPT เพื่อหาคนที่กดซ่อนโฆษณา"
-        ],
-        answer: 0,
-        explanation: "วัตถุประสงค์ดูวิดีโอ มี Optimization (OPT) สำหรับเพิ่มจำนวนการดูวิดีโอ 3 วินาที หรือดูวิดีโอให้จบ 100% มากที่สุด"
-    },
-    {
-        question: "หากต้องการโปรโมต 'เว็บไซต์หาคู่ (Dating App/Web)' ใน LINE Ads กฎของระบบคืออะไร?",
-        options: [
-            "ลงโฆษณาได้ทันที ไม่มีเงื่อนไข",
-            "เป็นผลิตภัณฑ์ต้องห้าม / ควบคุม ที่อาจต้องระมัดระวังหรือใช้เอกสาร",
-            "ลงได้เฉพาะแคมเปญเพิ่มเพื่อน",
-            "ต้องลงผ่าน Agency เท่านั้น"
-        ],
-        answer: 1,
-        explanation: "เว็บไซต์หรือแอปพลิเคชันหาคู่ จัดอยู่ในหมวด 'ผลิตภัณฑ์ควบคุม' (Restricted) หรือสินค้าต้องพิจารณาพิเศษตามกฎหมายหรือนโยบายของ LINE (รวมถึงต้องมีเอกสารอ้างอิง)"
-    },
-    {
-        question: "โฆษณาแบบ 'ภาพนิ่ง (Image)' บน LINE Ads อนุญาตให้ใช้ไฟล์ขนาดสูงสุดไม่เกินเท่าไร?",
-        options: [
-            "2 MB",
-            "5 MB",
-            "10 MB",
-            "15 MB"
-        ],
-        answer: 2,
-        explanation: "ขนาดไฟล์รูปภาพ (Image) 1080x1080 และ 1200x628 กำหนดไว้ว่าขนาดไฟล์ต้องไม่เกิน 10MB"
-    },
-    {
-        question: "หากผู้ใช้งานต้องการใช้ 'LINE Pay' ในการชำระค่าโฆษณา มีเงื่อนไขการใช้งานอย่างไร?",
-        options: [
-            "ใช้ชำระได้เฉพาะบนคอมพิวเตอร์เท่านั้น",
-            "ลูกค้าต้องใช้มือถือ และเลือกบัตรเครดิตที่เชื่อมต่ออยู่กับ LINE Pay แล้วเท่านั้น",
-            "ต้องเติมเงินเข้า Rabbit LINE Pay E-Wallet อย่างเดียว ไม่สามารถตัดบัตรได้",
-            "สามารถใช้ LINE Pay เพื่อเปิด CBO แคมเปญไม่ได้"
-        ],
-        answer: 1,
-        explanation: "การจ่ายเงินผ่าน LINE Pay มีเงื่อนไขคือ 'ลูกค้าต้องใช้มือถือ และเลือกบัตรเครดิตที่เชื่อมต่ออยู่กับ LINE Pay แล้วเท่านั้น'"
-    },
-    {
-        question: "ในเมนู Report ตัวแปร 'Viewable impressions' จะนับ 1 อิมเพรสชันก็ต่อเมื่อใด?",
-        options: [
-            "เมื่อภาพแสดงขึ้นมา 1 พิกเซล",
-            "การแสดงโฆษณา 50% เป็นระยะเวลา 1 วินาทีสำหรับรูปภาพ และ 2 วินาทีขึ้นไปสำหรับวิดีโอ",
-            "ผู้ใช้หยุดดูหน้าจอนานกว่า 3 วินาที",
-            "เมื่อมีการกดขยายภาพ"
-        ],
-        answer: 1,
-        explanation: "ตามตาราง Report: Viewable impressions คือ การแสดงโฆษณา 50% เป็นระยะเวลา 1 วินาทีสำหรับรูปภาพ และ 2 วินาทีขึ้นไปสำหรับวิดีโอ"
-    },
-    {
-        question: "ข้อใดผิด เกี่ยวกับการเขียนคำโฆษณา (Ad Copy) ใน LINE Ads?",
-        options: [
-            "ใส่ชื่อ 20 ตัวอักษร คำอธิบาย 75 ตัวอักษร",
-            "ห้ามใช้คำว่า LINE หรือ LINE Character ในกรณีทำให้ผู้อ่านตีความผิดว่าเป็นบริษัท LINE",
-            "ห้ามพาคนไปลิงก์ LINE ส่วนบุคคล",
-            "คำว่า Friends สำหรับแคมเปญหาเพื่อน ไม่จำเป็นต้องมี S (Friend)"
-        ],
-        answer: 3,
-        explanation: "กฎคำโฆษณาระบุชัดเจนว่า 'Friends ต้องมี S' เสมอ (Gain Friends)"
-    },
-    {
-        question: "หากตั้งวัตถุประสงค์ 'เพิ่มเพื่อน (Gain Friend)' ข้อใดคือสิ่งที่ 'ไม่ต้องใส่' ในการตั้งค่าชิ้นงานโฆษณา?",
-        options: [
-            "ชื่อปุ่ม (Call to Action) และ URL",
-            "รูปภาพ",
-            "คำอธิบาย 75 ตัวอักษร",
-            "ชื่อ (Title)"
-        ],
-        answer: 0,
-        explanation: "ในการสร้าง Ads ระดับโฆษณา หากเลือก Gain Friend ระบบระบุว่า 'ชื่อปุ่ม (Gain Friend ไม่เลือก)' และ 'URL (Gain Friend ไม่ต้องใส่ URL)' เนื่องจากระบบมีปุ่มเพิ่มเพื่อนให้อัตโนมัติ"
-    },
-    {
-        question: "หากต้องการยิงแอดให้เฉพาะกลุ่มคนที่เดินทางผ่าน (อยู่ไม่นาน) หรือคนทำงานในพื้นที่ 'พัทยา' รัศมี 5 กิโลเมตร สามารถตั้งค่า Location Targeting ได้หรือไม่?",
-        options: [
-            "ไม่ได้ เลือกรัศมีได้แค่เขตจังหวัดเท่านั้น",
-            "ได้ โดยสามารถเลือกรัศมี 1-50 กม. และระบุเป็น 'อยู่ไม่นาน / คนทำงานในพื้นที่' ได้",
-            "ไม่ได้ ต้องส่งเป็น Broadcast OA แทน",
-            "ได้ แต่รัศมีต้องมากกว่า 10 กม. ขึ้นไป"
-        ],
-        answer: 1,
-        explanation: "Location Targeting ใน LINE Ads สามารถเลือก ที่ตั้ง 8 พื้นที่ / จังหวัด / เขต / รหัสไปรษณีย์ รัศมี 1-50 กม. และสามารถระบุเงื่อนไข (อยู่ในพื้นที่นี้ / อยู่ไม่นาน / คนทำงานในพื้นที่) ได้"
-    },
-    {
-        question: "ถ้าร้านค้าต้องการเชื่อมต่อ MyShop เข้ากับ LINE Ads (ผ่าน LINE Tag และ Conversion API) เพื่อส่งข้อมูลการสั่งซื้อกลับไปให้ Machine Learning เรียนรู้ ข้อมูลใดที่ร้านค้าต้องนำมาใส่ในระบบ MyShop?",
-        options: [
-            "URL ของ Landing Page",
-            "Tag ID (Base Code), Conversion API Access token, และ LINE OA Channel ID",
-            "รหัสพนักงาน OA",
-            "Tax ID ของบริษัท"
-        ],
-        answer: 1,
-        explanation: "การเชื่อมต่อ LINE Ads X MyShop ต้องการ 3 อย่างคือ 1. Connect Tag ID (Base code) 2. Add Conversion API Access token (จาก Business Manager) 3. Add LINE OA Channel ID"
-    },
-    {
-        question: "การทำ Audience 'ผู้ติดตามบัญชีทางการ LINE' ใน Core Audience มีข้อดีอย่างไร?",
-        options: [
-            "ส่งโฆษณาไปหาคนที่เป็นเพื่อนกับ OA อื่นที่เป็นคู่แข่งได้",
-            "จำกัดกรอบการส่งโฆษณาให้ผู้ที่ติดตามบัญชีทางการของเรา (หรืออิงตามหมวดหมู่ OA) เพื่อหาคนที่มีพฤติกรรมความสนใจที่คล้ายคลึงกัน",
-            "ดูประวัติการแชทของพวกเขาได้",
-            "ได้ Target Cost ต่ำกว่าปกติ 50%"
-        ],
-        answer: 1,
-        explanation: "การ Targeting กลุ่มผู้ติดตามบัญชีทางการ LINE (OA Followers) เป็นหนึ่งในหมวด Behavior เพื่อเจาะจงพฤติกรรมผู้ใช้ที่สนใจหรือติดตามบัญชีทางการในหมวดหมู่ที่เกี่ยวข้อง"
-    },
-    {
-        question: "หากคุณซื้อโฆษณาแบบ CPM (Cost Per Mille) โฆษณารูปแบบใดที่คุณสามารถเลือกใช้งานได้?",
-        options: [
-            "รูปภาพ และ ภาพสไลด์ เท่านั้น",
-            "รูปภาพ, วิดีโอ และ ภาพสไลด์",
-            "วิดีโอ อย่างเดียว",
-            "แอนิเมชัน เท่านั้น"
-        ],
-        answer: 1,
-        explanation: "กรณีชำระเงินแบบ CPM สามารถเลือกได้ระหว่างรูปภาพ, วิดีโอ และภาพสไลด์ (แต่ถ้าชำระแบบ CPC จะเลือกได้เฉพาะรูปภาพและภาพสไลด์เท่านั้น วิดีโอใช้ CPC ไม่ได้)"
-    },
-    {
-        question: "แคมเปญโฆษณามีระดับ CTR Level อยู่ที่ 4 หมายความว่าอย่างไร?",
-        options: [
-            "ต่ำกว่ามาตรฐาน ต้องปรับรูปภาพใหม่",
-            "สูงกว่ามาตรฐาน (อยู่ใน 20% แรก) ดีเยี่ยม",
-            "สูงกว่ามาตรฐาน (อยู่ใน 50% แรก) ไม่มีปัญหาในการตั้งค่ากลุ่มเป้าหมาย",
-            "คู่แข่งน้อย ไม่แสดงผลลัพธ์"
-        ],
-        answer: 2,
-        explanation: "ระดับ CTR แบ่งเป็น: 5 = สูงกว่ามาตรฐาน (20% แรก), 4 = สูงกว่ามาตรฐาน (50% แรก), 3 = ต่ำกว่ามาตรฐาน (50% ท้าย), 2 = 30% ท้าย, 1 = 10% ท้าย, 0 = ไม่แสดงผลลัพธ์"
-    },
-    {
-        question: "เครื่องมือใดที่สามารถใช้ทำชิ้นงานโฆษณา (ภาพ/วิดีโอ) บน LINE Ads ได้ฟรี และมีระบบ AI ช่วย Generate?",
-        options: [
-            "Business Manager",
-            "LINE Official Account Manager",
-            "LINE Creative Lab",
-            "MyShop Dashboard"
-        ],
-        answer: 2,
-        explanation: "LINE Creative Lab เป็นเครื่องมือสำหรับทำชิ้นงานฟรี สามารถใช้งานร่วมกับ Adobe Express มีฟีเจอร์ AI อย่าง AI Expand, Text to Image และ Remove BG"
-    },
-    {
-        question: "การโฆษณาด้วยรูปแบบ 'ภาพนิ่ง (Image)' บนตำแหน่ง 'LINE Album' รองรับวัตถุประสงค์ใดบ้าง?",
-        options: [
-            "เพิ่มเพื่อน และ เข้าชมเว็บไซต์",
-            "ติดตั้งแอป และ การเข้าถึง",
-            "ใช้งานได้ในทุกวัตถุประสงค์หลัก (เช่น เพิ่มเพื่อน, เข้าชมเว็บ, คอนเวอร์ชัน, Reach, App Install)",
-            "ไม่สามารถแสดงผลใน LINE Album ได้"
-        ],
-        answer: 2,
-        explanation: "ตามตาราง Objective vs Format: ตำแหน่ง 'Album' รองรับรูปแบบโฆษณา Image และ Small Image สำหรับเกือบทุกวัตถุประสงค์หลัก (ยกเว้น Video View, Dynamic Product Sales)"
+const LIFF_ID = '2006674119-kZ1RG7PE';
+
+let userProfile = { displayName: 'ผู้ใช้งาน', pictureUrl: '' };
+let currentQ = 0;
+let score = 0;
+let catScores = { 'LINE OA': {c:0,t:0}, 'LINE Ads': {c:0,t:0}, 'LINE Shopping': {c:0,t:0}, 'MyCustomer | CRM': {c:0,t:0}, 'LINE Family Club': {c:0,t:0} };
+
+/* ─────── LIFF INIT ─────── */
+async function initLiff() {
+    try {
+        await liff.init({ liffId: LIFF_ID });
+        if (liff.isLoggedIn()) {
+            const profile = await liff.getProfile();
+            userProfile.displayName = profile.displayName;
+            userProfile.pictureUrl = profile.pictureUrl || '';
+        } else {
+            if (liff.isInClient()) {
+                liff.login();
+                return;
+            }
+            // On external browser: show without profile
+        }
+    } catch (e) {
+        console.warn('LIFF init error:', e);
     }
+    showStartScreen();
+}
+
+function showStartScreen() {
+    document.getElementById('start-avatar').src = userProfile.pictureUrl || fallbackAvatar(userProfile.displayName);
+    document.getElementById('start-name').textContent = userProfile.displayName;
+    setScreen('start-screen');
+}
+
+function fallbackAvatar(name) {
+    const letter = encodeURIComponent(name.charAt(0) || 'U');
+    return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'><circle cx='40' cy='40' r='40' fill='%2300B900'/><text x='50%25' y='58%25' text-anchor='middle' font-size='34' fill='white' font-family='sans-serif'>${letter}</text></svg>`;
+}
+
+/* ─────── QUIZ DATA ─────── */
+const quizData = [
+    { category: "LINE OA", question: "แบรนด์ A ต้องการส่งโปรโมชันหาลูกค้าผ่านการบรอดแคสต์ โดยต้องการแนบลิงก์สินค้าจาก MyShop ไปด้วย และต้องการให้ลูกค้าที่กดลิงก์นี้ ถูกนำไปสร้างเป็นกลุ่มเป้าหมาย (Audience) เพื่อยิงโฆษณา LINE Ads ต่อ แบรนด์ควรเลือกใช้ฟีเจอร์ใดในการบรอดแคสต์เพื่อให้ตอบโจทย์นี้?", options: ["Rich Video Message","Card-Based Message","Text Message พร้อมแนบ URL ทั่วไป","Rich Message"], answer: 3, explanation: "Rich Message และ Card-Based Message สามารถดึงข้อมูลการ 'คลิก' ไปสร้าง Click Retargeting Audience ได้ แต่ Rich Message สามารถแสดงผลภาพใหญ่เต็มจอและฝังลิงก์ได้สูงสุดถึง 8 จุด จึงเหมาะที่สุดสำหรับการส่งโปรโมชัน (ส่วน Rich Video ผู้ใช้ไม่สามารถกดคลิกเพื่อไปสร้าง Audience ได้แบบ Click Retargeting รูปแบบปกติ)" },
+    { category: "LINE OA", question: "แบรนด์ร้านอาหารใช้แพ็กเกจ Basic (โควตา 15,000 ข้อความ) ปัจจุบันใช้โควตาไปแล้ว 12,000 ข้อความ แบรนด์มีการเชื่อมต่อ API เพื่อส่งข้อความยืนยันออเดอร์ (Push Message) ไปหาลูกค้า 2,000 ข้อความ และมีลูกค้าทักแชท 1:1 เข้ามาสอบถามอีก 1,500 ข้อความ หากแบรนด์ต้องการบรอดแคสต์หา Target Reach 3,000 คน แบรนด์จะเสียค่าใช้จ่ายส่วนเกินเท่าไร? (เรตส่วนเกิน Basic = 0.1 บาท)", options: ["150 บาท","200 บาท","350 บาท","ไม่เสียค่าใช้จ่าย เพราะแชท 1:1 ไม่ถูกนับรวมในโควตา"], answer: 1, explanation: "ระบบนับโควตาจาก: บรอดแคสต์ + Step Message + API (Push Message) เท่านั้น (แชท 1:1 ไม่ถูกนับรวม) ดังนั้น ยอดใช้คือ 12,000 + API 2,000 = 14,000 ข้อความ หากบรอดแคสต์อีก 3,000 จะรวมเป็น 17,000 ข้อความ ซึ่งเกินโควตามา 2,000 ข้อความ คิดเป็นเงิน 2,000 * 0.1 = 200 บาท" },
+    { category: "LINE OA", question: "ธุรกิจคลินิกความงามต้องการสมัครบัญชีรับรอง (Verified Account) เพื่อใช้งานโฆษณา Gain Friend Ads แอดมินจึงเตรียมหน้าเว็บไซต์และกรอกข้อมูลบริษัทครบถ้วน แต่ระบบปฏิเสธการอนุมัติ สาเหตุใดต่อไปนี้มีความเป็นไปได้มากที่สุดตามกฎของ LINE?", options: ["คลินิกไม่ได้อัปโหลดใบเสร็จชำระภาษีของบริษัท","บนหน้าเว็บไซต์ของคลินิกไม่มีหลักฐานใบอนุญาตประกอบกิจการสถานพยาบาลแสดงอยู่","คลินิกใช้โลโก้บริษัทเป็นรูป Profile แทนที่จะใช้รูปแพทย์ผู้เชี่ยวชาญ","คลินิกไม่ได้สมัคร Premium ID ก่อนขอ Verified Account"], answer: 1, explanation: "ตามกฎหมายและข้อบังคับของ LINE ธุรกิจสถานพยาบาลหรือคลินิก จะต้องแสดงหลักฐาน 'ใบอนุญาตประกอบกิจการสถานพยาบาล' บนหน้าเว็บไซต์ให้ชัดเจน จึงจะสามารถผ่านการพิจารณาเป็นบัญชีรับรอง (โล่น้ำเงิน) ได้" },
+    { category: "LINE OA", question: "ร้าน B เปิดบัญชี LINE OA ใหม่แบบใช้งานฟรี (Free Plan) ไม่ได้สมัคร OA Chat Package แอดมินเข้ามาดูประวัติแชทลูกค้าที่เคยส่งไฟล์ใบเสนอราคา (PDF) และรูปภาพรีวิวเมื่อ 7 เดือนที่แล้ว ปรากฏว่าดูไม่ได้ ข้อใดอธิบายสถานการณ์นี้ถูกต้อง?", options: ["แพ็กเกจ Free สามารถดูประวัติแชทย้อนหลังได้เพียง 6 เดือนเท่านั้น","ไฟล์ PDF และรูปภาพมีอายุเพียง 2 สัปดาห์ ไม่ว่าจะใช้แพ็กเกจใดก็ตาม","แอดมินถูกตั้งสิทธิ์เป็น 'โอเปอเรเตอร์ (ไม่มีสิทธิ์ดูข้อมูลเชิงลึก)' จึงดูประวัติแชทเก่าไม่ได้","ต้องใช้ Business Manager เพื่อดึงข้อมูลแชทที่หมดอายุกลับมา"], answer: 0, explanation: "หากใช้แพ็กเกจ Free (ไม่ซื้อ OA Chat Package) จะสามารถดูประวัติแชทย้อนหลังได้เพียง 6 เดือนเท่านั้น และไม่สามารถดาวน์โหลดประวัติแชทได้ (หากใช้ OA Chat Package จะดูย้อนหลังได้ 5 ปี)" },
+    { category: "LINE OA", question: "แบรนด์ Z สร้าง Step Message โดยตั้งเงื่อนไขเริ่มต้นที่ 'ผู้ใช้เพิ่มเพื่อนใหม่' และใน Step ที่ 2 ต้องการกรองส่งข้อความเฉพาะกลุ่มเป้าหมาย (Audience) ที่มีแนวโน้มจะซื้อสินค้าสูง ข้อใดคือข้อจำกัดของการใช้กลุ่มเป้าหมายใน Step Message?", options: ["ไม่สามารถใช้กลุ่มเป้าหมาย (Audience) มาเป็นเงื่อนไขในการกรอง Step ได้","สามารถใส่กลุ่มเป้าหมายเพื่อกรองใน Flow ได้สูงสุด 10 กลุ่ม","กลุ่มเป้าหมายที่นำมาใช้ต้องมี Target Reach อย่างน้อย 1,000 คนขึ้นไป","Step Message จะทำงานได้ก็ต่อเมื่อเป็นบัญชีรับรอง (Verified Account) เท่านั้น"], answer: 1, explanation: "ในฟีเจอร์ Step Message สามารถกรองเงื่อนไขใน Flow ได้หลากหลาย เช่น เพศ, อายุ, OS, พื้นที่ และสามารถเลือก 'กลุ่มเป้าหมาย' (Audience) มากรองได้สูงสุด 10 กลุ่มเป้าหมาย" },
+    { category: "LINE OA", question: "ร้าน C ต้องการตั้งค่า Rich Menu บน LINE OA ให้มีประสิทธิภาพสูงสุด โดยมีฟังก์ชันให้ลูกค้ากดปุ่มแล้วได้รับคูปองส่วนลดทันที และอีกปุ่มกดแล้วได้รับแต้มสะสม ข้อใดคือสิ่งที่ร้าน C ต้องทำ?", options: ["เลือกประเภท Action เป็น 'ลิงก์' แล้วนำ URL ของคูปองและ URL ของบัตรสะสมแต้มมาใส่","เลือกประเภท Action เป็น 'คูปอง' และ 'บัตรสะสมแต้ม' ได้โดยตรงจากการตั้งค่า Rich Menu","ต้องใช้งาน MyCustomer | CRM เท่านั้น จึงจะตั้งปุ่มบัตรสะสมแต้มบน Rich Menu ได้","Rich Menu ไม่สามารถตั้งค่าให้แจกคูปองได้โดยตรง ต้องส่งผ่าน Broadcast เท่านั้น"], answer: 1, explanation: "Rich Menu ของ LINE OA สามารถกำหนดประเภท Action ให้เป็น ลิงก์, ข้อความ, 'คูปอง', และ 'บัตรสะสมแต้ม' ได้โดยตรงจากระบบจัดการ โดยไม่ต้องนำ URL มาแปะเอง" },
+    { category: "LINE OA", question: "ข้อใดกล่าวผิดเกี่ยวกับการขอใบกำกับภาษี (Tax Invoice) สำหรับค่าบริการของ LINE OA?", options: ["สามารถขอใบกำกับภาษีผ่านแอปพลิเคชัน LINE OA บนมือถือได้","หากเคยขอใบกำกับภาษีรูปแบบเต็มไปแล้ว จะไม่สามารถเปลี่ยนกลับมาขอแบบย่อได้","สามารถขอใบกำกับภาษีได้เฉพาะตำแหน่ง 'แอดมิน (Admin)' เท่านั้น","ไม่สามารถแก้ไขเลขประจำตัวผู้เสียภาษีได้เอง ต้องติดต่อ Contact.line.me"], answer: 0, explanation: "การขอใบกำกับภาษีไม่สามารถทำผ่านแอปพลิเคชัน LINE OA บนมือถือได้ครับ จะต้องเข้าไปที่เว็บไซต์ manager.line.biz (บนคอมพิวเตอร์ หรือ Browser) เท่านั้น" },
+    { category: "LINE OA", question: "แอดมินต้องการใช้งานฟีเจอร์ LINE OA Call เพื่อรับสายลูกค้าผ่าน Browser (Google Chrome) แต่พบว่าฟีเจอร์ไม่ทำงาน ข้อใดคือเงื่อนไขสำคัญที่สุดที่จะทำให้ใช้งาน OA Call ได้?", options: ["ต้องมีผู้ติดตาม (Followers) อย่างน้อย 500 คน","ต้องเปลี่ยนแพ็กเกจเป็น Pro เท่านั้น","บัญชีจะต้องอยู่ในสถานะ 'โหมดแชท (Chat Mode)' เท่านั้นจึงจะใช้งานได้","ต้องใช้งาน MyShop ควบคู่กันเท่านั้น"], answer: 2, explanation: "ฟีเจอร์ LINE OA Call สามารถใช้งานได้กับทุกโล่บัญชีและทุกแพ็กเกจ แต่บัญชีจะต้องถูกตั้งค่าให้อยู่ใน 'แชทโหมด (Chat Mode)' เท่านั้น ระบบถึงจะอนุญาตให้รับสายและลูกค้าถึงจะเห็นปุ่มโทรได้" },
+    { category: "LINE OA", question: "ผู้ดูแลบัญชี A เผลอแก้ไข 'ชื่อบัญชี' (Account Name) ผิด และต้องการเปลี่ยนชื่อใหม่ให้ถูกต้องทันที ข้อใดคือความจริงเกี่ยวกับการเปลี่ยนชื่อบัญชี?", options: ["สามารถเปลี่ยนใหม่ได้ทันทีโดยไม่มีข้อจำกัด","ต้องรอ 7 วัน จึงจะสามารถเปลี่ยนชื่อบัญชีได้อีกครั้ง","ไม่สามารถเปลี่ยนชื่อบัญชีได้เลย หากไม่ใช่บัญชีรับรอง (Verified Account)","ต้องเสียค่าธรรมเนียม 888 บาททุกครั้งที่ต้องการเปลี่ยนชื่อบัญชี"], answer: 1, explanation: "หากเป็นบัญชีทั่วไป (Unverified) เมื่อทำการเปลี่ยนชื่อบัญชีแล้ว จะต้องรอให้ครบ 7 วัน จึงจะสามารถทำการแก้ไขเปลี่ยนชื่อใหม่ได้อีกครั้ง" },
+    { category: "LINE OA", question: "ร้าน D ต้องการแจก 'บัตรสะสมแต้ม (Reward Card)' แบบด่วนให้กับลูกค้าที่หน้าร้านผ่านการสแกน QR Code ข้อจำกัดใดต่อไปนี้เป็นจริงสำหรับฟีเจอร์ Reward Card ของ LINE OA?", options: ["ลูกค้าสามารถได้รับแต้มสูงสุด 100 แต้มต่อ 1 บัตรสะสม","ลูกค้าที่สแกน QR Code ไม่จำเป็นต้องเพิ่มเพื่อน LINE OA ก็สะสมแต้มได้","สามารถจำกัดการได้รับแต้ม เช่น ลูกค้าจะได้รับแต้ม 1 ครั้ง/วัน หรือ 1 ครั้ง/ช่วงเวลาที่กำหนดได้","หากร้านค้าระงับบัตร (Suspend) จะสามารถกู้ข้อมูลเดิมกลับมาได้ภายใน 30 วัน"], answer: 2, explanation: "ระบบ Reward Card สามารถตั้งค่า 'ข้อจำกัดการได้รับแต้ม' เพื่อป้องกันการทุจริตได้ เช่น ให้ได้แต้ม 1 ครั้ง/วัน (เริ่มรอบวันใหม่ตอนเที่ยงคืน) หรือระบุเวลาได้ ส่วนบัตรสะสมแต้มสูงสุดได้แค่ 50 แต้ม และหากระงับบัตรไปแล้วจะไม่สามารถกู้ข้อมูลเดิมกลับมาได้เลย" },
+    { category: "LINE Ads", question: "เอเจนซี่ตั้งค่าโฆษณาบน LINE Ads โดยใช้วัตถุประสงค์ 'เว็บไซต์คอนเวอร์ชัน' (Website Conversion) แคมเปญนี้จะสามารถแสดงผลในตำแหน่งใดได้บ้าง หากเลือกจ่ายเงินแบบ CPC?", options: ["Home Tab, Chat List, LINE VOOM, LINE TODAY","หากชำระเงินแบบ CPC จะไม่สามารถเลือกวัตถุประสงค์ 'เว็บไซต์คอนเวอร์ชัน' ได้","โฆษณาจะแสดงเฉพาะใน LINE TODAY และ OpenChat เท่านั้น","แสดงผลแบบอัตโนมัติในทุก Placement ยกเว้น LINE Wallet"], answer: 1, explanation: "สำหรับวัตถุประสงค์ 'เว็บไซต์คอนเวอร์ชัน (Website Conversion)' ระบบบังคับให้ใช้วิธีคิดเงินแบบ 'CPM Bidding Only' เท่านั้น ไม่สามารถใช้การประมูลแบบ CPC ได้ครับ" },
+    { category: "LINE Ads", question: "ลูกค้าต้องการให้โฆษณาใช้เงินอย่างคุ้มค่าที่สุด โดยสั่งให้แอดมินตั้งค่ากลยุทธ์การประมูลแบบ 'สู้ได้ทุกราคา ขอให้ใช้เงินงบรายวันให้เยอะที่สุด' แอดมินควรเลือก Bidding Strategy แบบใด?", options: ["Event Cost Cap","Target Cost","No Limit","Lowest Cost Bidding"], answer: 2, explanation: "กลยุทธ์แบบ 'No Limit' คือระบบจะใช้เงินให้เยอะที่สุดตามงบประมาณรายวันที่ตั้งไว้ โดยสู้ประมูลทุกราคาเพื่อกวาดอิมเพรสชันและคอนเวอร์ชันให้มากที่สุด" },
+    { category: "LINE Ads", question: "แบรนด์ E ต้องการลงโฆษณา Gain Friend Ads ผ่าน LINE Ads Manager (ไม่ใช่ฝั่ง OA Manager) ข้อใดคือ 'ราคาเสนอขั้นต่ำ' ของโฆษณาเพิ่มเพื่อนบนแพลตฟอร์มนี้?", options: ["0.1 บาท","2 บาท","5 บาท","10 บาท"], answer: 3, explanation: "บนระบบ LINE Ads Manager ราคาประมูล (Bidding) ขั้นต่ำสำหรับวัตถุประสงค์ 'เพิ่มเพื่อน' (Cost Per Friend) ถูกกำหนดไว้ที่ 10 บาทขึ้นไปต่อการเพิ่มเพื่อน 1 คน" },
+    { category: "LINE Ads", question: "หากบริษัทมีฐานข้อมูล 'เบอร์โทรศัพท์' ของลูกค้าเก่าจำนวน 1,000 เบอร์ (ยังไม่เข้ารหัส/Unhash) ต้องการนำมาอัปโหลดเพื่อสร้างกลุ่มเป้าหมาย (Custom Audience) บน LINE Ads ข้อใดคือรูปแบบการเตรียมข้อมูลที่ถูกต้อง?", options: ["ต้องใส่รหัสประเทศ +66 นำหน้าทุกเบอร์ เช่น +66801234567","ห้ามใส่รหัสประเทศ สามารถพิมพ์ติดกัน หรือเว้นวรรค หรือมีขีด (-) ได้ เช่น 080-123-4567","ต้องเข้ารหัสด้วย MD5 ก่อนอัปโหลดเสมอ","เบอร์โทรศัพท์ไม่สามารถนำมาสร้าง Audience ได้ ต้องใช้อีเมลเท่านั้น"], answer: 1, explanation: "สำหรับการอัปโหลดเบอร์โทรศัพท์แบบ Unhash (ให้ระบบเข้ารหัสให้) กฎคือ 'ห้ามใส่รหัสประเทศ' แต่สามารถมีขีด (080-123-4567), พิมพ์ติดกัน (0801234567), หรือเว้นวรรค (080 123 4567) ก็ได้ ระบบจะจัดการให้เอง" },
+    { category: "LINE Ads", question: "แคมเปญโฆษณา A รันมาแล้ว 2 วัน แต่สถานะระบบการเรียนรู้ (Machine Learning) ยังไม่ถึง 100% (ไม่เสถียร) ตามหลักการของ LINE Ads ระบบจะต้องเรียนรู้จนได้ผลลัพธ์ (Conversion) ถึงเท่าไร แคมเปญจึงจะเข้าสู่จุดเสถียร (Learning Phase Completed)?", options: ["20 คอนเวอร์ชัน ต่อ แคมเปญ","40 คอนเวอร์ชัน ต่อ แคมเปญ","40 คอนเวอร์ชัน ต่อ กลุ่มโฆษณา (Ad Group)","100 คอนเวอร์ชัน ต่อ โฆษณา (Ad)"], answer: 2, explanation: "การเรียนรู้ของระบบ Machine Learning ใน LINE Ads จะสำเร็จและเสถียรก็ต่อเมื่อเกิด '40 Conversions ต่อ Ads Group (กลุ่มโฆษณา)' ภายในระยะเวลาหนึ่งๆ (ปกติประมาณ 2-3 วัน)" },
+    { category: "LINE Ads", question: "หากแบรนด์ต้องการลงโฆษณาแบนเนอร์ไปแสดงในหน้า 'Smart Channel' บริเวณด้านบนสุดของหน้ารายชื่อแชท (Chat List) แบรนด์สามารถเลือกใช้วัตถุประสงค์ใดได้บ้างในระบบแบบซื้อด้วยตนเอง (Self-Bidding)?", options: ["เว็บไซต์คอนเวอร์ชัน (Website Conversion) เท่านั้น","การเข้าถึง (Reach), เข้าชมเว็บไซต์ (Website Visit), หรือ โหลดแอป (App Install)","สามารถใช้ได้ทุกวัตถุประสงค์","วัตถุประสงค์ Smart Channel Custom (คิดเงินแบบ CPM)"], answer: 1, explanation: "ในตำแหน่ง Chat List โฆษณาสามารถแสดงได้ผ่านหลายวัตถุประสงค์หลัก เช่น การเข้าถึง, เว็บไซต์คอนเวอร์ชัน, เข้าชมเว็บไซต์ ฯลฯ แต่ถ้าต้องการซื้อเป็น 'Smart Channel Custom (Direct Deal)' จะต้องซื้อผ่าน LINE Agency Partner เท่านั้น" },
+    { category: "LINE Ads", question: "บริษัทจำหน่าย 'ชุดตรวจ Covid-19 แบบ ATK (แอนติเจน)' ต้องการยิง LINE Ads ข้อใดคือเอกสารที่บริษัทต้องเตรียมอัปโหลดเพื่อขออนุมัติบัญชีโฆษณาให้ถูกต้อง?", options: ["ใบอนุญาตจากกรมการปกครอง","เอกสารจดทะเบียนผลิตภัณฑ์ (อย.) และ ใบอนุญาตโฆษณาเครื่องมือแพทย์ (ฆพ.)","ใบอนุญาตจากกระทรวงพาณิชย์ และกรมอนามัย","ชุดตรวจ ATK จัดเป็นผลิตภัณฑ์ต้องห้าม (Prohibited) ไม่สามารถลงโฆษณาใน LINE ได้เด็ดขาด"], answer: 1, explanation: "ชุดตรวจโควิดแบบแอนติบอดี (เจาะเลือด) เป็นสินค้าห้ามโฆษณา แต่แบบ ATK (แอนติเจน) สามารถลงโฆษณาได้ โดยผู้ลงโฆษณาต้องยื่นเอกสารการจดทะเบียนผลิตภัณฑ์จาก อย. และใบอนุญาตโฆษณาเครื่องมือแพทย์ (ฆพ.)" },
+    { category: "LINE Ads", question: "นักการตลาดต้องการดึงรายงานผลโฆษณา (Report) จาก LINE Ads ไปวิเคราะห์ต่อใน Excel หากเลือกดึงรายงานแบบแยกตามระดับ 'โฆษณา (Ads)' ระบบจะสามารถแบ่งข้อมูลตามมิติใดได้บ้าง?", options: ["แบ่งข้อมูลตาม OS, ที่อยู่, เพศ, อายุ, ความสนใจ ได้","สามารถดึงข้อมูลแยกตามยอดขายของ MyShop ได้","ระบบรายงานจะแสดงเฉพาะค่าใช้จ่ายรวม ไม่สามารถแยกย่อยตามเพศหรืออายุได้","ข้อมูลรายงานบนระบบจะมีอายุย้อนหลังได้เพียง 1 สัปดาห์เท่านั้น"], answer: 0, explanation: "ในระบบการดึงรายงานผลดำเนินการของ LINE Ads สามารถกำหนดแตกย่อย (Breakdown) ข้อมูลตามกลุ่มเป้าหมายได้ เช่น แยกว่าผลลัพธ์มาจาก OS ใด, ที่อยู่ไหน, เพศ, อายุ หรือ ความสนใจอะไร ได้อย่างละเอียด" },
+    { category: "LINE Ads", question: "ธุรกิจขายส่ง (B2B) มี LINE OA หลายบัญชี และมีบัญชีโฆษณา LINE Ads หลายบัญชีเพื่อยิงหาตัวแทนจำหน่าย หากต้องการแชร์กลุ่มเป้าหมายที่เก็บได้ (เช่น ยอดคนเข้าเว็บไซต์จาก LINE Tag) ไปใช้งานข้ามบัญชีกัน จะต้องใช้เครื่องมือใด?", options: ["LINE Official Account Manager","Business Manager","LINE Creative Lab","MyShop Open API"], answer: 1, explanation: "Business Manager ทำหน้าที่เป็นตัวกลางในการเก็บและรวบรวมกลุ่มเป้าหมาย และ LINE Tag จาก LINE OA และ LINE Ads Account หลายๆ บัญชีที่มีการเชื่อมต่อกัน เพื่อนำ Data มาแชร์และใช้งานข้ามกันได้ (บัญชีต้อง Verified ก่อน)" },
+    { category: "LINE Ads", question: "ข้อใดคือขนาดไฟล์ภาพเคลื่อนไหว (Animation) ที่สามารถใช้ลงโฆษณาใน LINE Ads ได้อย่างถูกต้อง?", options: ["ขนาด 1080x1080px (ไฟล์ GIF)","ขนาด 1200x628px (ไฟล์ MP4)","ขนาด 600x400px ความยาว 1-4 วินาที (ไฟล์ APNG)","ขนาด 9:16 (ไฟล์ APNG) ความยาวไม่เกิน 10 วินาที"], answer: 2, explanation: "รูปแบบโฆษณา Animation ใน LINE Ads กำหนดให้ใช้ขนาด Small Image คือ 600 x 400 พิกเซล, ความยาว 1-4 วินาที, วนซ้ำได้ 1-4 ครั้ง และต้องเป็นประเภทไฟล์ APNG (Animated PNG) เท่านั้น" },
+    { category: "LINE Shopping", question: "ร้านค้า A บน MyShop มียอดขายเดือนนี้ 15,000 บาท และมีคุณสมบัติตรงตามเกณฑ์ 'ร้านค้าแนะนำ' ข้อใดคือสิทธิประโยชน์ที่ร้านค้า A จะได้รับ?", options: ["ได้รับการยกเว้นค่าธรรมเนียมธุรกรรมการชำระเงิน 3%","ได้ป้ายสัญลักษณ์ 'ร้านแนะนำ', พื้นที่โปรโมตฟรีใน LINE SHOPPING และใช้งาน Dashboard วิเคราะห์การขาย","สามารถลงโฆษณา LINE Ads ได้ฟรี 1,000 บาท/เดือน","ได้รับฟีเจอร์ โอนตรงเข้าบัญชีร้านค้า (Direct Bank Transfer) ทันที"], answer: 1, explanation: "เกณฑ์ร้านแนะนำ Level 2 (ยอดขาย 10,000 บาทขึ้นไป) จะได้สิทธิ์พื้นที่โปรโมตฟรีใน LINE SHOPPING ส่วน Level 3 (ยอดขาย 100,000 บาทขึ้นไป) จะได้ป้ายสัญลักษณ์ 'ร้านแนะนำ' ด้วย ทั้งหมดนี้จะได้ใช้ Dashboard ด้วย" },
+    { category: "LINE Shopping", question: "ลูกค้ารายหนึ่งกดสั่งซื้อสินค้าใน MyShop และเลือกการจัดส่งแบบ เก็บเงินปลายทาง (COD) วันต่อมาร้านค้านำของไปส่งไปรษณีย์ ร้านค้าจะได้รับเงินค่าสินค้าจาก LINE Shopping เมื่อใด?", options: ["ได้รับทันทีเมื่อลูกค้ายืนยันคำสั่งซื้อในระบบ","ได้รับทุกวันจันทร์ โดยระบบจะโอนให้อัตโนมัติแม้ว่าลูกค้าจะยังไม่ได้รับของก็ตาม","ร้านค้าจะได้รับเงินตามรอบที่เลือกไว้ (เช่น วันจันทร์) ก็ต่อเมื่อเปลี่ยนสถานะคำสั่งซื้อเป็น 'จัดส่งสำเร็จ (Mark as shipped)' แล้ว และมียอดหลังหักค่าธรรมเนียมตั้งแต่ 100 บาทขึ้นไป","การเก็บเงินปลายทาง ร้านค้าจะต้องไปเก็บเงินกับลูกค้าเอง 100% ระบบไม่เกี่ยวข้อง"], answer: 2, explanation: "สำหรับระบบรับชำระเงินและเก็บเงินปลายทางผ่าน LINE Shopping ร้านค้าจะได้รับเงินยอดขายเข้าบัญชีตามรอบที่เลือกไว้ ภายในเวลา 21:00 น. โดยมีเงื่อนไขว่า 1. ยอดรวมเกิน 100 บาท และ 2. ร้านค้ากดยืนยันสถานะเป็น 'จัดส่งสำเร็จ' เรียบร้อยแล้ว" },
+    { category: "LINE Shopping", question: "ร้าน B ต้องการจัดโปรโมชันลดราคาแบบ 'WOW Item' (แฟลชเซล) ข้อใดคือข้อบังคับของการทำแคมเปญรูปแบบนี้?", options: ["สามารถใส่สินค้าได้ไม่จำกัดจำนวนรายการ","แคมเปญมีระยะเวลา 3 ชั่วโมงต่อ 1 รอบ และในขณะที่แคมเปญรันอยู่ จะไม่สามารถแก้ไขข้อมูลสินค้าในนั้นได้","ต้องลดราคาอย่างน้อย 50% ของราคาสินค้าป้ายขาว","สามารถตั้งเวลาล่วงหน้าเพื่อแสดงพร้อมกัน 2 แคมเปญได้"], answer: 1, explanation: "แคมเปญ Wow Item จะมีเวลาจำกัด 3 ชม. ต่อ 1 รอบ ใส่สินค้าได้สูงสุด 20 สินค้า ต้องลดขั้นต่ำอย่างน้อย 1 บาท และข้อควรระวังสำคัญคือ 'สินค้าจะไม่สามารถแก้ไขข้อมูลได้ในเวลานั้น จนกว่าจะจบแคมเปญ'" },
+    { category: "LINE Shopping", question: "นโยบายความประพฤติของผู้ขาย (Penalty Points): หากร้านค้าหลอกลวงหรือฉ้อโกงผู้ซื้อ จะโดนหักคะแนนพฤติกรรมกี่คะแนน และมีผลต่อร้านค้าอย่างไร?", options: ["หัก 5 คะแนน จำกัดการแสดงสินค้า","หัก 10 คะแนน ตัดสิทธิ์การเข้าร่วมแคมเปญ","หัก 20 คะแนน ถูกระงับการจ่ายเงินและตัดสิทธิ์การเข้าแคมเปญ","หัก 30 คะแนน ไม่สามารถใช้ระบบ MyShop ถาวร (แบนบัญชี)"], answer: 2, explanation: "ตามตารางนโยบายผู้ขาย การฉ้อโกง หรือบิดเบือนข้อมูลทางการเงินในทุกรูปแบบ ถือเป็นความผิดรุนแรง จะถูกหัก 20 คะแนน ซึ่งส่งผลให้ 'ถูกตัดสิทธิ์การเข้าร่วมแคมเปญ และ ระงับการจ่ายเงิน' ทันที" },
+    { category: "LINE Shopping", question: "หากลูกค้าซื้อสินค้ามูลค่า 1,000 บาท ผ่านแอป LINE SHOPPING LIVE โดยตรง (ถือเป็นช่องทางของ LINE) และชำระเงินผ่านบัตรเครดิต (ระบบ LINE Shopping) ร้านค้าจะต้องเสียค่าธรรมเนียมกี่เปอร์เซ็นต์ (ไม่รวม VAT)?", options: ["3% (เสียเฉพาะค่าธรรมเนียมธุรกรรม)","3% (เสียเฉพาะค่าธรรมเนียมช่วยขาย)","6% (เสียค่าธรรมเนียมธุรกรรม 3% และ ค่าธรรมเนียมช่วยขาย 3%)","ไม่มีค่าธรรมเนียมใดๆ"], answer: 2, explanation: "คำสั่งซื้อที่เกิดขึ้นผ่านช่องทางของ LINE Shopping ร้านค้าจะถูกคิด 'ค่าธรรมเนียมการใช้บริการ (ช่วยขาย)' 3% และเมื่อลูกค้าจ่ายผ่านบัตรเครดิตในระบบ ก็จะถูกคิด 'ค่าธรรมเนียมธุรกรรมการชำระเงิน' อีก 3% รวมเป็น 6% (ยังไม่รวม VAT)" },
+    { category: "LINE Shopping", question: "ฟีเจอร์ 'บรอดแคสต์เจาะกลุ่ม' ใน MyShop ระบบสามารถดึงกลุ่มเป้าหมายที่มีโอกาสซื้อจากพฤติกรรมลูกค้ามาให้ล่วงหน้า 5 กลุ่ม ข้อใดไม่ใช่กลุ่มเป้าหมายที่ระบบสร้างให้?", options: ["ผู้เข้าชมร้านค้าใน 90 วันล่าสุด","ผู้ที่มีสินค้าค้างในตะกร้าใน 180 วันล่าสุด","ผู้ที่บล็อกร้านค้าไปแล้วใน 30 วันล่าสุด","ลูกค้าประจำใน 90 วันล่าสุด (ซื้อ 2 คำสั่งซื้อขึ้นไป)"], answer: 2, explanation: "ระบบ MyShop จะดึง Data ลูกค้ามาให้ 5 กลุ่ม คือ: 1. ผู้เข้าชมร้าน 90 วัน, 2. ผู้สนใจร้าน 90 วัน, 3. สินค้าค้างตะกร้า 180 วัน, 4. ลูกค้าทั้งหมด 90 วัน, 5. ลูกค้าประจำ 90 วัน (ไม่มีการเจาะกลุ่มผู้ที่บล็อกไปแล้ว)" },
+    { category: "LINE Shopping", question: "ร้านค้าตั้งค่าฟีเจอร์ 'คูปองแนะนำเพื่อน' ใน MyShop ให้ลูกค้าส่งต่อกัน หากตั้งค่ารหัสส่วนลดเป็น 'จำนวนบาท' มีเงื่อนไขพิเศษอะไรที่ต้องระวัง?", options: ["รหัสส่วนลดแบบจำนวนบาท จะไม่สามารถใช้กับสินค้าที่มีราคาน้อยกว่า หรือ เท่ากับ จำนวนส่วนลดนั้นได้","ลูกค้าต้องมียอดซื้อขั้นต่ำ 1,000 บาทเสมอจึงจะใช้คูปองนี้ได้","รหัสคูปองจะหมดอายุอัตโนมัติภายใน 24 ชั่วโมง","ส่วนลดแบบจำนวนบาท ต้องหักลบ VAT ก่อนเสมอ"], answer: 0, explanation: "ข้อควรระวังของรหัสส่วนลด (Coupon) ใน MyShop คือ 'รหัสส่วนลดแบบจำนวนบาทไม่สามารถใช้กับสินค้าที่ราคาน้อยกว่าหรือเท่ากับส่วนลดได้'" },
+    { category: "LINE Shopping", question: "ถ้าลูกค้าต้องการสั่งซื้อ 'ของขวัญ (Send Gift)' ไปให้เพื่อนใน LINE ช่องทางการจัดส่งใดที่ไม่สามารถใช้งานร่วมกับฟีเจอร์นี้ได้?", options: ["ไปรษณีย์ไทย EMS","Kerry Express","การจัดส่งแบบเก็บเงินปลายทาง (COD) และ LINE MAN","J&T Express"], answer: 2, explanation: "คำสั่งซื้อของขวัญ (Send Gift) จะมีเงื่อนไขว่า ผู้ซื้อชำระเงิน และผู้รับเป็นคนกรอกที่อยู่ ดังนั้นระบบจะ 'ซ่อน' และไม่สามารถใช้ตัวเลือกการจัดส่งแบบเก็บเงินปลายทาง (COD) และ LINE MAN ได้" },
+    { category: "LINE Shopping", question: "ร้านค้าต้องการยกเลิกออเดอร์ให้กับผู้ซื้อที่ชำระเงินผ่าน Mobile Banking (SCB Easy) ระยะเวลาสูงสุดที่ร้านค้าสามารถกดยกเลิกและคืนเงินผ่านระบบได้คือเมื่อไร?", options: ["ภายใน 15 วัน","ภายใน 30 วัน","ภายใน 60 วัน","ภายใน 180 วัน"], answer: 3, explanation: "เงื่อนไขการยกเลิกคำสั่งซื้อ: สำหรับบัตรเครดิต/LINE Pay คือ 60 วัน, สำหรับ Mobile Banking ของกสิกร (KPLUS) หรือ QR คือ 30 วัน, แต่ถ้าเป็น SCB Easy จะสามารถยกเลิกคืนเงินได้สูงสุดถึง 180 วัน" },
+    { category: "LINE Shopping", question: "สินค้าหมวดหมู่ใดจัดอยู่ในประเภท 'สินค้าห้ามขาย' บน MyShop เด็ดขาด?", options: ["อาหารเสริมที่มี อย.","เครื่องสำอางนำเข้า","บุหรี่ไฟฟ้า สุรา(ที่มีแอลกอฮอล์เกิน 0.5 องศา) และ มอเตอร์ไซค์มือสอง","เสื้อผ้าแบรนด์เนมมือสอง"], answer: 2, explanation: "ตามกฎสินค้าต้องห้ามของ MyShop ไม่อนุญาตให้ขาย บุหรี่ไฟฟ้า, เครื่องดื่มที่มีแอลกอฮอล์เกิน 0.5 degree, มอเตอร์ไซค์มือสอง, อาวุธ, การพนัน และผลิตภัณฑ์ที่มีส่วนผสมของกัญชาเกินกำหนด" },
+    { category: "MyCustomer | CRM", question: "หากแบรนด์ต้องการใช้งาน MyCustomer | CRM ควบคู่กับบัญชี LINE OA ปัจจุบันค่าบริการของ MyCustomer | CRM คิดในรูปแบบใด?", options: ["คิดค่าบริการเป็นเปอร์เซ็นต์ (GP) จากยอดขาย 3%","ฟรี ไม่มีค่าใช้จ่ายสำหรับบัญชีโล่สีเทา","หากใช้ LINE OA แพ็กเกจ Pro (1,780 บ.) จะรวมการใช้งาน CRM ไว้แล้วไม่มีค่าใช้จ่ายเพิ่มเติม แต่ถ้าใช้ Free หรือ Basic จะมีค่าบริการ 369 บาท/เดือน","หักจากเงินมัดจำล่วงหน้า 500 บาทต่อเดือน"], answer: 2, explanation: "ตามแพ็กเกจของ LINE OA: หากใช้แพ็กเกจ Pro การใช้งาน MyCustomer | CRM จะถูกรวมอยู่ในแพ็กเกจแล้ว (ใช้ฟรี) แต่ถ้าใช้แพ็กเกจ Free หรือ Basic จะมีค่าบริการเสริมประมาณ 369 บาท/เดือน (ไม่รวม VAT)" },
+    { category: "MyCustomer | CRM", question: "ร้านเสื้อผ้ามีฐานสมาชิกลูกค้าเก่า (ไฟล์ Excel) จำนวน 3,000 รายชื่อ แอดมินต้องการนำเข้า (Import) ข้อมูลนี้สู่ระบบ MyCustomer | CRM ข้อมูลฟิลด์ (คอลัมน์) ใดที่ 'จำเป็น' (Required) ต้องกรอกเพื่ออัปโหลดเข้าระบบ?", options: ["เบอร์โทรศัพท์, ชื่อ, นามสกุล, จำนวนพอยท์, วันเกิด","เบอร์โทรศัพท์, อีเมล, เพศ","ID LINE, ชื่อ, สาขาที่สมัคร","รหัสบัตรประชาชน, จำนวนพอยท์, ระดับสมาชิก"], answer: 0, explanation: "การอัปโหลดไฟล์ (member-template .xlsx) เข้าสู่ระบบ MyCustomer | CRM ข้อมูลที่บังคับ (Required) ต้องมีคือ เบอร์โทรศัพท์, ชื่อ, นามสกุล, จำนวนพอยท์ (จำนวนเต็ม) และ วันเกิด (อายุต้อง > 11 ปี)" },
+    { category: "MyCustomer | CRM", question: "การตั้งค่าวันหมดอายุของพอยท์ในระบบ MyCustomer | CRM สามารถกำหนดให้พอยท์มีอายุยาวนานที่สุดได้กี่เดือน?", options: ["12 เดือน (1 ปี)","24 เดือน (2 ปี)","36 เดือน (3 ปี)","ไม่มีวันหมดอายุ"], answer: 1, explanation: "ระบบกำหนดให้สามารถตั้งค่าวันหมดอายุของพอยท์สะสมได้สูงสุดไม่เกิน 24 เดือน โดยสามารถเลือกให้หมดอายุตอนสิ้นเดือน หรือทุกวันที่ 31 ธันวาคมได้" },
+    { category: "MyCustomer | CRM", question: "เมื่อร้านค้าเชื่อมต่อ MyCustomer | CRM เข้ากับระบบ MyShop เพื่อแจกพอยท์อัตโนมัติจากการสั่งซื้อ ระบบจะทำการคำนวณและตัดรอบแจกพอยท์ให้ลูกค้าในเวลาใด?", options: ["แจกพอยท์ให้ทันทีหลังลูกค้ากดใส่ตะกร้า","แจกพอยท์ให้ทันทีที่ลูกค้าชำระเงินสำเร็จ (Real-time)","ระบบจะคำนวณจากออเดอร์ที่ชำระเงินแล้ว โดยตัดรอบทุกวันเวลา 19:00 น. และทยอยเพิ่มพอยท์จนถึง 20:00 น.","ร้านค้าต้องกดเพิ่มพอยท์แบบกำหนดเอง (Manual) เสมอ ไม่สามารถทำอัตโนมัติได้"], answer: 2, explanation: "หากตั้งค่าการเพิ่มพอยท์แบบ 'อัตโนมัติ' ระบบจะนำคำสั่งซื้อที่ชำระเงินสำเร็จแล้ว มาประมวลผลและทยอยโอนพอยท์ให้ลูกค้าในรอบเวลา 19:00 น. - 22:00 น. ของทุกวัน" },
+    { category: "MyCustomer | CRM", question: "ลูกค้าทำการสแกนรับพอยท์ผ่าน 'คิวอาร์โค้ดสติกเกอร์ (QR Code Sticker)' ที่ร้านแปะไว้ที่กล่องพัสดุ ข้อใดคือข้อจำกัดของการใช้ QR Code รูปแบบนี้?", options: ["1 คิวอาร์โค้ดสติกเกอร์ สามารถสแกนรับพอยท์ได้เพียง 1 ครั้งเท่านั้น และตัวสติกเกอร์มีอายุการใช้งาน 2 ปี","สามารถนำไปสแกนซ้ำได้ทุกวัน วันละ 1 ครั้ง","คิวอาร์โค้ดจะหมดอายุภายใน 30 วันนับจากวันที่พิมพ์","แอดมินไม่สามารถกำหนดจำนวนพอยท์ต่อสติกเกอร์ได้ ระบบจะสุ่มให้"], answer: 0, explanation: "คิวอาร์โค้ดสติกเกอร์ (QR Code Sticker) ใน MyCustomer | CRM สร้างมาเพื่อให้สมาชิกสแกนรับพอยท์ด้วยตนเอง โดย 1 คิวอาร์โค้ด/ลิงก์ จะรับพอยท์ได้ 1 ครั้งถ้วนเท่านั้น และระบบจะลบคิวอาร์ที่อายุเกิน 2 ปีอัตโนมัติ" },
+    { category: "MyCustomer | CRM", question: "ฟีเจอร์ 'กิจกรรมพิเศษ' (Special Campaign) ใน MyCustomer | CRM สามารถประยุกต์ใช้กับแคมเปญการตลาดแบบใดได้บ้าง?", options: ["การทำแคมเปญวันเกิด (Birthday Campaign) ให้ของขวัญสมาชิกเฉพาะในเดือนเกิด","การมอบสิทธิพิเศษเฉพาะสมาชิกระดับ Platinum ให้แลกของรางวัลพิเศษได้ทุกๆ 2 เดือน","ถูกทั้ง ก และ ข","สามารถใช้สำหรับลดค่าโฆษณาใน LINE Ads Platform"], answer: 2, explanation: "เมนูกิจกรรมพิเศษ (Special Campaign) สามารถกำหนดเงื่อนไขให้แสดงเฉพาะตาม 'วันเกิด/เดือนเกิด' หรือกำหนด 'สิทธิพิเศษ' ที่อิงตามระดับสมาชิก หรือ Tag ได้ รวมถึงให้สิทธิ์ซ้ำตามระยะเวลาที่กำหนดได้ (เช่น ทุกๆ 2 เดือน)" },
+    { category: "MyCustomer | CRM", question: "หากลูกค้าสะสมพอยท์ครบและกดแลกของรางวัลที่เป็นประเภท 'จัดส่งไปยังสมาชิก (Physical Product)' ร้านค้าจะบริหารจัดการที่อยู่และการส่งของลูกค้าได้อย่างไร?", options: ["ร้านค้าต้องแชทไปถามที่อยู่ลูกค้าใน LINE OA เอาเอง","ร้านค้าสามารถเข้าไปดูและอัปเดตสถานะในเมนู 'ติดตามการจัดส่งของรางวัล' ในระบบ MyCustomer | CRM","ระบบจะเชื่อมต่อกับไปรษณีย์ไทยเพื่อออกใบปะหน้าอัตโนมัติโดยที่ร้านไม่ต้องทำอะไรเลย","ไม่สามารถแจกรางวัลที่เป็นสินค้าจัดส่งได้ ระบบรองรับเฉพาะ E-Coupon เท่านั้น"], answer: 1, explanation: "เมื่อลูกค้าแลกรางวัลประเภทจัดส่ง ข้อมูลที่อยู่ของลูกค้าจะถูกบันทึกมาที่เมนู 'ติดตามการจัดส่งของรางวัล' หลังบ้าน ร้านค้าสามารถดูข้อมูล เพิ่มเลขแทร็กกิ้ง และกดยืนยันสถานะการจัดส่งให้ลูกค้าทราบได้ที่เมนูนี้" },
+    { category: "MyCustomer | CRM", question: "ร้าน F ต้องการปรับแต่งหน้า 'ลงทะเบียนสมัครสมาชิก (Member Registration Page)' ให้เก็บข้อมูลพฤติกรรมลูกค้าเชิงลึก เช่น ความสนใจงานอดิเรก ข้อจำกัดในการสร้างแบบฟอร์มคืออะไร?", options: ["สร้างคำถามเพิ่มได้สูงสุด 20 คำถาม โดยสามารถสร้างคำถามแบบตัวเลือกเดียวหรือหลายตัวเลือก และผูกเข้ากับระบบ Tag ได้","ไม่สามารถเพิ่มคำถามได้เลย ระบบบังคับให้ถามแค่ ชื่อ และ เบอร์โทรศัพท์","เพิ่มคำถามได้ไม่จำกัดจำนวน แต่ไม่สามารถติด Tag ได้","ต้องให้ผู้ใช้แนบไฟล์รูปถ่ายบัตรประชาชนเสมอในการสมัคร"], answer: 0, explanation: "ในหน้าสมัครสมาชิก มีคำถาม Default 5 ข้อ (เช่น ชื่อ วันเกิด สาขา) และร้านสามารถ Custom คำถามเพิ่มเองได้สูงสุด 20 คำถาม ซึ่งคำถามประเภท Dropdown หรือ Multiple Choice สามารถตั้งค่าให้ระบบ 'ติด Tag' อัตโนมัติตามตัวเลือกที่ลูกค้าตอบได้" },
+    { category: "MyCustomer | CRM", question: "แอดมินร้านต้องการเพิ่มพอยท์ให้ลูกค้า 'นายสมชาย' ที่เพิ่งซื้อของผ่าน LINE OA Chat แต่พบว่านายสมชาย 'ยังไม่ได้กดสมัครสมาชิก' ระบบ MyCustomer | CRM แอดมินจะสามารถให้พอยท์ได้หรือไม่?", options: ["ไม่ได้เด็ดขาด ระบบจะปฏิเสธการให้พอยท์จนกว่าสมชายจะสมัครสมาชิก","ได้ โดยแอดมินสามารถเพิ่มพอยท์ล่วงหน้าผ่าน 'เบอร์โทรศัพท์' ของสมชายได้เลย เมื่อสมชายมาสมัครสมาชิก พอยท์ก็จะเด้งโชว์ทันที","ได้ แต่ต้องดึงสมชายเข้ากรุ๊ปแชทก่อน","ให้ได้เฉพาะเมื่อสมชายซื้อสินค้าผ่าน MyShop เท่านั้น"], answer: 1, explanation: "ระบบ MyCustomer | CRM ยืดหยุ่นให้แอดมินสามารถ 'เพิ่มพอยท์ให้ลูกค้าที่ยังไม่สมัครสมาชิก' ได้ โดยอิงจาก เบอร์โทรศัพท์ (หรือการอัปโหลดไฟล์) และพอยท์จะรออยู่ในฐานข้อมูล เมื่อลูกค้าใช้เบอร์นั้นสมัครสมาชิก พอยท์จะไปรวมให้ในบัญชีทันที" },
+    { category: "MyCustomer | CRM", question: "การแบ่ง 'ระดับสมาชิก (Member Tier)' ใน MyCustomer | CRM สามารถตั้งค่าได้สูงสุดกี่ระดับ และคำนวณจากสิ่งใด?", options: ["สูงสุด 3 ระดับ คำนวณจากจำนวนเงินที่ซื้อ","สูงสุด 5 ระดับ คำนวณจากจำนวน 'พอยท์สะสม' ที่กำหนดในช่วง 6, 12, หรือ 24 เดือน","สูงสุด 10 ระดับ คำนวณจากจำนวนครั้งที่แชทหาแอดมิน","ไม่มีการแบ่งระดับสมาชิกในระบบนี้"], answer: 1, explanation: "สามารถสร้างระดับสมาชิกได้สูงสุด 5 ระดับ (Tiers) โดยระบบจะคำนวณสถานะอิงจาก 'จำนวนพอยท์สะสม' ตามกรอบเวลาที่ร้านค้ากำหนดไว้ เช่น นับยอดพอยท์สะสมในรอบ 6 เดือน, 12 เดือน หรือ 24 เดือน" },
+    { category: "LINE Family Club", question: "แบรนด์ G มียอดค่าใช้จ่ายบนแพลตฟอร์ม LINE ในเดือนมกราคม ดังนี้: ซื้อแพ็กเกจ Pro (1,780 บาท), ซื้อ OA Chat Package (555 บาท), และซื้อโฆษณาผ่านเอเจนซี่พาร์ทเนอร์ (50,000 บาท) แบรนด์ G จะได้รับ 'ดาว' เพื่อสะสมระดับสมาชิกใน LINE Family Club เท่าไร? (คิดก่อนรวม VAT ทุกยอด)", options: ["52,335 ดาว","50,000 ดาว","2,335 ดาว","0 ดาว"], answer: 2, explanation: "การสะสมดาวคำนวณจากยอดค่าใช้จ่ายสุทธิ (ไม่รวม VAT) ที่ 'ชำระค่าบริการด้วยตัวเอง' เท่านั้น การซื้อผ่าน Agency Partners จะไม่ถูกนำมาคำนวณดาว ดังนั้นจะได้ดาวจาก 1,780 + 555 = 2,335 ดาว (1 บาท = 1 ดาว)" },
+    { category: "LINE Family Club", question: "ร้าน H เริ่มสะสมดาวตั้งแต่ 1 มกราคม 2567 และมียอดค่าใช้จ่ายด้วยตนเองในระบบถึง 10,000 บาท ภายในสิ้นเดือนมีนาคม 2567 ส่งผลให้มี 10,000 ดาว ร้าน H จะถูกปรับระดับเป็นสมาชิกชั้นใด และเมื่อไร?", options: ["ระดับ Gold ทันทีในวันที่ 2 เมษายน 2567","ระดับ Silver ทันทีในวันที่ 2 เมษายน 2567","ระดับ Gold แต่ต้องรอรอบอัปเดตคือวันที่ 2 กรกฎาคม 2567","ระดับ Platinum ทันที"], answer: 0, explanation: "เกณฑ์ดาว: Green (0), Silver (1-8,999), Gold (9,000-59,999), Platinum (60,000+). 10,000 ดาวคือระดับ Gold. ระบบจะประมวลผล 'ปรับขึ้น (Upgrade)' ในวันที่ 2 ของเดือนถัดไปทันที จึงได้ปรับเป็น Gold ในวันที่ 2 เม.ย. 2567" },
+    { category: "LINE Family Club", question: "รอบการสะสมดาวของ LINE Family Club เพื่อใช้เป็นเกณฑ์ในการรักษาระดับ หรือพิจารณา 'ปรับลดระดับ' แบ่งออกเป็นกี่ช่วงต่อปี?", options: ["ช่วงเดียวคือ 1 มกราคม - 31 ธันวาคม","2 ช่วง คือ 1 ม.ค. - 30 มิ.ย. และ 1 ก.ค. - 31 ธ.ค.","4 ไตรมาสของปี","นับสะสมต่อเนื่องไปเรื่อยๆ ไม่มีตัดรอบ"], answer: 1, explanation: "การสะสมดาวจะแบ่งเป็น 2 ช่วง (2 รอบ) ต่อปี คือ รอบแรก 1 ม.ค. - 30 มิ.ย. และรอบสอง 1 ก.ค - 31 ธ.ค. โดยจะเริ่มนับดาวจากศูนย์ใหม่ในแต่ละรอบ เพื่อใช้ประเมินสถานะในวันที่ 2 ม.ค. และ 2 ก.ค. ของปีถัดไป" },
+    { category: "LINE Family Club", question: "ข้อใดคือยอดค่าใช้จ่ายที่ 'ไม่สามารถ' นำมานับสะสมดาวใน LINE Family Club ได้?", options: ["ค่าโฆษณาเพิ่มเพื่อน (Gain Friends Ads)","ค่าบริการพรีเมียมไอดี (Premium ID)","ค่าธรรมเนียมการใช้บริการ (Service fee) 3% จาก MyShop","ค่าโฆษณา Smart Channel Custom แบบ Direct Deal ที่ซื้อผ่านเอเจนซี่"], answer: 3, explanation: "ทุกค่าบริการที่ชำระด้วยตัวเอง (Self-serve) เช่น โฆษณาเพิ่มเพื่อน, Premium ID, Service fee MyShop สามารถสะสมดาวได้หมด ยกเว้น 'ค่าบริการที่ผ่าน Agency Partners' (รวมถึงการซื้อ Direct Deal) จะไม่นำมาคำนวณดาว" },
+    { category: "LINE Family Club", question: "หากบริษัทมีแอดมิน LINE OA อยู่ 5 คน ใครจะเป็นผู้ที่มีสิทธิ์กดรับ 'สิทธิพิเศษประจำเดือน' (เช่น Starbucks e-Coupon, LINE POINTS) ในระบบ LINE Family Club?", options: ["ทุกคนในองค์กรที่มีบัญชี LINE","แอดมิน (Administrator) คนแรกของบัญชีที่กดตกลง Consent เท่านั้น","ผู้ใช้งานที่เป็น แอดมิน (Administrator) ของระบบต่างๆ เช่น LINE OA, LINE Ads, MyCustomer หรือ MyShop ที่มีสถานะเป็นสมาชิก LINE Family Club","พนักงานบัญชีที่ทำการผูกบัตรเครดิตเท่านั้น"], answer: 2, explanation: "สิทธิพิเศษจะมอบให้กับผู้ใช้งานที่มีระดับเป็น 'แอดมิน (Administrator)' ของ LINE OA, LINE Ads, MyCustomer | CRM และ MyShop ที่มีสถานะบัญชีเป็นสมาชิกคลับ" },
+    { category: "LINE Family Club", question: "ร้าน J เป็นสมาชิกระดับ 'Platinum' (สะสมดาวเกิน 60,000 ดาว) สิทธิพิเศษประจำเดือน (Monthly Privilege) ข้อใดที่ระดับ Platinum จะได้รับแต่ระดับ Gold ไม่ได้รับ?", options: ["เครดิตยิงโฆษณาบน LINE 4,000 บาท","บริการ VIP Call Center","LINE POINTS 150 พอยท์","สิทธิเข้าร่วมกิจกรรมเวิร์กชอป"], answer: 1, explanation: "จากตารางสิทธิพิเศษ ทั้ง Gold และ Platinum จะได้เครดิตยิงแอด 4,000 บาท แต่สิ่งที่ Platinum มีให้ระดับเดียวคือ 'VIP Call Center' (ส่วน LINE POINTS แพลตตินัมจะได้ 500 พอยท์)" },
+    { category: "LINE Family Club", question: "คุณสมบัติของการเป็น 'สมาชิกใหม่' (ที่ได้รับสิทธิประโยชน์พิเศษสำหรับสมาชิกใหม่ 30 วัน) ต้องเข้าเกณฑ์ข้อใด?", options: ["เป็นบัญชี LINE OA ที่เพิ่งสมัครใหม่ภายใน 24 ชั่วโมง","เป็นบัญชีทางการ LINE ที่ไม่เคยเข้าร่วมโปรแกรม LINE Family Club มาก่อน และเป็นแอดมินคนแรกที่กด 'ตกลง' จากหน้ายินยอม","เป็นบัญชีที่มียอดใช้จ่ายถึง 100,000 บาทในครั้งแรก","เป็นร้านค้าที่เพิ่งเปิด MyShop ครั้งแรก"], answer: 1, explanation: "เงื่อนไขของการเป็น 'สมาชิกใหม่' คือต้องเป็นบัญชี LINE OA ที่ไม่เคยเข้าร่วมโปรแกรมนี้มาก่อน และเป็นแอดมินคนแรกของบัญชีที่กดตกลง Consent โดยจะคงสถานะนี้เป็นเวลา 30 วันนับจากวันกดตกลง" },
+    { category: "LINE Family Club", question: "สิทธิพิเศษประจำเดือน เช่น เครดิตยิงโฆษณาบน LINE และ คูปอง Starbucks จะสามารถเริ่มกดรับสิทธิ์ได้ตั้งแต่วันที่เท่าไรของทุกเดือน?", options: ["วันที่ 1 ของเดือน","วันที่ 2 ของเดือน","วันที่ 15 ของเดือน","สิ้นเดือนของทุกเดือน"], answer: 1, explanation: "ตามนโยบายของ LINE Family Club ผู้ใช้สามารถเริ่มรับทุกสิทธิพิเศษประจำเดือนได้ตั้งแต่วันที่ 2 ของทุกเดือน เป็นต้นไป" },
+    { category: "LINE Family Club", question: "ร้านค้า K ระดับ Gold มีดาวสะสมในรอบครึ่งปีแรก (ม.ค.-มิ.ย.) อยู่ที่ 20,000 ดาว เมื่อขึ้นรอบครึ่งปีหลัง (1 ก.ค.) ดาวสะสมของร้านค้า K จะเป็นอย่างไร?", options: ["สะสมต่อเนื่องเป็น 20,000 ดาวเท่าเดิม","ยอดใช้จ่าย (ดาวสะสม) จะถูกปรับเป็นศูนย์ และเริ่มนับดาวใหม่สำหรับรอบสอง","ดาวจะถูกลดลงครึ่งหนึ่งเหลือ 10,000 ดาว","ดาวจะถูกสะสมข้ามปีไปจนถึงธันวาคมปีหน้า"], answer: 1, explanation: "การสะสมดาวแบ่งเป็น 2 ช่วงชัดเจน คือ ม.ค.-มิ.ย. และ ก.ค.-ธ.ค. เมื่อขึ้นรอบใหม่ (เช่น วันที่ 1 ก.ค.) ดาวสะสมในหน้าคำนวณจะถูก 'ปรับกลับเป็นศูนย์ (0)' เสมอ เพื่อเริ่มนับการคงสถานะในรอบต่อไป" },
+    { category: "LINE Family Club", question: "การกดรับสิทธิ์ของ LINE Family Club จะต้องดำเนินการผ่านช่องทางใด?", options: ["ล็อกอินผ่านเว็บไซต์ manager.line.biz","แอดไลน์ LINE Family Club (@linefamilyclubth) และกดรับผ่าน Rich Menu","ติดต่อผ่านอีเมลของคลับ","โทรเข้าไปที่ VIP Call Center เพื่อขอเบิกสิทธิ์"], answer: 1, explanation: "ขั้นตอนการรับสิทธิ์คือ ต้องแอด LINE OA: @linefamilyclubth > กดปุ่ม 'สิทธิพิเศษประจำเดือน' จาก Rich Menu > เลือกสิทธิ์ที่สนใจ > กดยืนยันบัญชีที่ต้องการรับสิทธิ์ครับ" }
 ];
 
-let currentQuestionIndex = 0;
-let score = 0;
+/* ─────── UTILS ─────── */
+function setScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
 
+function showToast(msg, duration = 3000) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), duration);
+}
+
+const letters = ['ก', 'ข', 'ค', 'ง'];
+
+/* ─────── QUIZ ─────── */
 function startQuiz() {
-    document.getElementById('start-screen').style.display = 'none';
-    document.getElementById('quiz-screen').style.display = 'block';
+    currentQ = 0;
+    score = 0;
+    Object.keys(catScores).forEach(k => catScores[k] = { c: 0, t: 0 });
+    setScreen('quiz-screen');
     loadQuestion();
 }
 
 function loadQuestion() {
-    const q = quizData[currentQuestionIndex];
-    document.getElementById('q-number').innerText = `ข้อที่ ${currentQuestionIndex + 1}/50`;
-    document.getElementById('q-text').innerText = q.question;
-    
-    const optionsContainer = document.getElementById('options-container');
-    optionsContainer.innerHTML = '';
-    document.getElementById('explanation').style.display = 'none';
-    document.getElementById('next-btn').style.display = 'none';
+    const q = quizData[currentQ];
+    const total = quizData.length;
 
-    q.options.forEach((opt, index) => {
+    document.getElementById('q-num-label').textContent = `Q ${String(currentQ+1).padStart(2,'0')} / ${total}`;
+    document.getElementById('live-score').textContent = score;
+    document.getElementById('q-cat-tag').textContent = q.category;
+    document.getElementById('q-text').textContent = q.question;
+    document.getElementById('progress-fill').style.width = `${(currentQ / total) * 100}%`;
+
+    const container = document.getElementById('options-container');
+    container.innerHTML = '';
+
+    q.options.forEach((opt, i) => {
         const btn = document.createElement('button');
         btn.className = 'option-btn';
-        btn.innerText = `${String.fromCharCode(161 + index)}. ${opt}`;
-        btn.onclick = () => checkAnswer(index, btn);
-        optionsContainer.appendChild(btn);
+        btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt}</span>`;
+        btn.onclick = () => checkAnswer(i);
+        container.appendChild(btn);
     });
 
-    const progress = ((currentQuestionIndex) / 50) * 100;
-    document.getElementById('progress-fill').style.width = progress + '%';
+    const expBox = document.getElementById('explanation-box');
+    expBox.classList.remove('show');
+    const nextBtn = document.getElementById('btn-next');
+    nextBtn.classList.remove('show');
+
+    // scroll top
+    document.getElementById('quiz-screen').scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function checkAnswer(selectedIndex, btnElement) {
-    const q = quizData[currentQuestionIndex];
-    const options = document.getElementsByClassName('option-btn');
-    
-    for(let i=0; i<options.length; i++) {
-        options[i].disabled = true;
-        if(i === q.answer) {
-            options[i].classList.add('correct');
-        } else if (i === selectedIndex) {
-            options[i].classList.add('incorrect');
-        }
+function checkAnswer(selected) {
+    const q = quizData[currentQ];
+    const btns = document.querySelectorAll('.option-btn');
+
+    btns.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.answer) btn.classList.add('correct');
+        else if (i === selected) btn.classList.add('incorrect');
+    });
+
+    const correct = selected === q.answer;
+    if (correct) {
+        score++;
+        catScores[q.category].c++;
     }
+    catScores[q.category].t++;
 
-    if (selectedIndex === q.answer) score++;
+    document.getElementById('live-score').textContent = score;
 
-    const expDiv = document.getElementById('explanation');
-    expDiv.style.display = 'block';
-    expDiv.innerHTML = `<strong>${selectedIndex === q.answer ? '✅ ถูกต้อง!' : '❌ ยังไม่ถูก!'}</strong><br><br><b>💡 คำอธิบาย:</b> ${q.explanation}`;
-    
-    document.getElementById('next-btn').style.display = 'block';
+    const expBox = document.getElementById('explanation-box');
+    document.getElementById('exp-icon').textContent = correct ? '✅' : '❌';
+    const statusEl = document.getElementById('exp-status');
+    statusEl.textContent = correct ? 'ถูกต้อง!' : 'ยังไม่ถูก!';
+    statusEl.className = 'exp-status ' + (correct ? 'correct' : 'incorrect');
+    document.getElementById('exp-text').textContent = q.explanation;
+    expBox.classList.add('show');
+
+    document.getElementById('btn-next').classList.add('show');
 }
 
 function nextQuestion() {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < quizData.length) {
+    currentQ++;
+    if (currentQ < quizData.length) {
         loadQuestion();
     } else {
         showResult();
     }
 }
 
+/* ─────── RESULT ─────── */
 function showResult() {
-    document.getElementById('quiz-screen').style.display = 'none';
-    document.getElementById('result-screen').style.display = 'block';
-    document.getElementById('final-score').innerText = `คุณทำได้: ${score} / 50 คะแนน`;
-    
-    let msg = "";
-    if(score >= 45) msg = "สุดยอดมาก! คุณเชี่ยวชาญระดับ Expert 🏆 ยิงแอด LINE ได้แม่นยำทุกมิติ";
-    else if(score >= 35) msg = "ยอดเยี่ยม! ความรู้ของคุณแน่นมาก เตรียมสอบ Certificate ได้สบาย 🌟";
-    else if(score >= 25) msg = "ทำได้ดีครับ แต่ยังมีทริคการ Bidding และ Placement ที่ต้องทบทวนอีกนิด 📚";
-    else msg = "ไม่เป็นไรครับ LINE Ads มีรายละเอียดเชิงลึกเยอะมาก ลองทบทวนคู่มือแล้วลุยใหม่นะครับ 💪";
-    
-    document.getElementById('final-message').innerText = msg;
-    document.getElementById('progress-fill').style.width = '100%';
+    document.getElementById('result-avatar').src = userProfile.pictureUrl || fallbackAvatar(userProfile.displayName);
+    document.getElementById('result-name').textContent = userProfile.displayName;
+
+    const pct = Math.round((score / 50) * 100);
+
+    document.getElementById('score-big').textContent = score;
+    document.getElementById('score-pct').textContent = pct + '%';
+
+    setTimeout(() => {
+        document.getElementById('score-bar-fill').style.width = pct + '%';
+    }, 300);
+
+    let msg = '';
+    if (score >= 45) msg = '🏆 สุดยอดมาก! คุณคือ Master แห่ง LINE for Business ตัวจริง!';
+    else if (score >= 35) msg = '🌟 ยอดเยี่ยม! ความรู้แน่นมาก เตรียมสอบ Certificate ได้สบาย';
+    else if (score >= 25) msg = '📚 ทำได้ดีครับ ยังมีบางจุดที่ต้องทบทวนอีกนิด';
+    else msg = '💪 โซลูชัน LINE มีรายละเอียดเยอะมาก ลองทบทวนและทำใหม่นะครับ';
+
+    document.getElementById('score-msg').textContent = msg;
+
+    // category breakdown
+    const catRowsEl = document.getElementById('cat-rows');
+    catRowsEl.innerHTML = '';
+    Object.entries(catScores).forEach(([name, { c, t }]) => {
+        if (t === 0) return;
+        const pctCat = Math.round((c / t) * 100);
+        catRowsEl.innerHTML += `
+            <div class="cat-row">
+                <span class="cat-name">${name}</span>
+                <div class="cat-bar-wrap">
+                    <div class="cat-bar-fill" style="width:0%" data-pct="${pctCat}"></div>
+                </div>
+                <span class="cat-score-txt">${c}/${t}</span>
+            </div>`;
+    });
+
+    setTimeout(() => {
+        document.querySelectorAll('.cat-bar-fill').forEach(el => {
+            el.style.width = el.dataset.pct + '%';
+        });
+    }, 400);
+
+    setScreen('result-screen');
 }
+
+/* ─────── SHARE ─────── */
+async function shareResult() {
+    const pct = Math.round((score / 50) * 100);
+    let rank = '';
+    if (score >= 45) rank = '🏆 Master';
+    else if (score >= 35) rank = '🌟 Expert';
+    else if (score >= 25) rank = '📚 Learner';
+    else rank = '💪 Challenger';
+
+    const shareMsg = `🟢 LINE for Business Advance Mock Exam\n\n👤 ${userProfile.displayName}\n⭐ ทำได้ ${score}/50 คะแนน (${pct}%)\n${rank}\n\n📌 มาทดสอบความรู้กันเลย!`;
+
+    if (liff.isApiAvailable('shareTargetPicker')) {
+        try {
+            const result = await liff.shareTargetPicker([
+                {
+                    type: 'text',
+                    text: shareMsg
+                }
+            ]);
+            if (result) {
+                showToast('✅ แชร์ผลลัพธ์เรียบร้อยแล้ว!');
+            }
+        } catch (e) {
+            console.error(e);
+            showToast('❌ ไม่สามารถแชร์ได้ กรุณาลองใหม่');
+        }
+    } else {
+        // Fallback: copy to clipboard
+        try {
+            await navigator.clipboard.writeText(shareMsg);
+            showToast('📋 คัดลอกข้อความแล้ว! นำไปแชร์ได้เลย');
+        } catch {
+            showToast('ℹ️ กรุณาเปิดใน LINE เพื่อใช้งานการแชร์');
+        }
+    }
+}
+
+function retryQuiz() {
+    startQuiz();
+}
+
+/* ─────── START ─────── */
+window.addEventListener('DOMContentLoaded', () => {
+    initLiff();
+});
 </script>
 </body>
 </html>
