@@ -289,11 +289,39 @@
             box-shadow: 0 6px 24px rgba(0,185,0,0.35);
             transition: transform 0.15s, box-shadow 0.15s;
             letter-spacing: 0.5px;
-            margin-top: auto;
         }
 
         .btn-start:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(0,185,0,0.45); }
         .btn-start:active { transform: translateY(0); }
+
+        .start-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .btn-start-share {
+            width: 100%;
+            padding: 15px 24px;
+            background: white;
+            color: var(--green-dark);
+            border: 2px solid var(--green);
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Noto Sans Thai', sans-serif;
+            cursor: pointer;
+            transition: transform 0.15s, background 0.15s, color 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-start-share:hover { background: var(--green-light); transform: translateY(-2px); }
+        .btn-start-share:active { transform: translateY(0); }
 
         /* ─── QUIZ SCREEN ─── */
         #quiz-screen { min-height: 100vh; }
@@ -846,7 +874,13 @@
                 </div>
             </div>
 
-            <button class="btn-start" onclick="startQuiz()">🚀 เริ่มทำข้อสอบเลย!</button>
+            <div class="start-btn-group">
+                <button class="btn-start" onclick="startQuiz()">🚀 เริ่มทำข้อสอบเลย!</button>
+                <button class="btn-start-share" onclick="shareExam()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
+                    แชร์ข้อสอบนี้ให้เพื่อน
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1157,6 +1191,183 @@ function showResult() {
     }, 400);
 
     setScreen('result-screen');
+}
+
+/* ─────── SHARE EXAM (before quiz) ─────── */
+async function shareExam() {
+    const LIFF_URL = 'https://liff.line.me/2006674119-kZ1RG7PE';
+
+    const flexMessage = {
+        type: 'flex',
+        altText: `${userProfile.displayName} ชวนมาทดสอบ LINE for Business! 🟢`,
+        contents: {
+            type: 'bubble',
+            size: 'giga',
+            header: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [
+                    {
+                        type: 'box',
+                        layout: 'horizontal',
+                        contents: [
+                            {
+                                type: 'box',
+                                layout: 'vertical',
+                                contents: [
+                                    {
+                                        type: 'text',
+                                        text: '🟢 LINE for Business',
+                                        color: 'rgba(255,255,255,0.8)',
+                                        size: 'xs',
+                                        weight: 'bold'
+                                    },
+                                    {
+                                        type: 'text',
+                                        text: 'Advance Mock Exam',
+                                        color: '#ffffff',
+                                        size: 'xl',
+                                        weight: 'bold'
+                                    }
+                                ],
+                                flex: 1
+                            },
+                            {
+                                type: 'image',
+                                url: userProfile.pictureUrl || 'https://profile.line-scdn.net/0h00000000000000000000000000000000000000',
+                                size: '56px',
+                                aspectMode: 'cover',
+                                aspectRatio: '1:1',
+                                cornerRadius: '28px'
+                            }
+                        ],
+                        alignItems: 'center'
+                    }
+                ],
+                paddingAll: '20px',
+                backgroundColor: '#003d00',
+                paddingBottom: '24px'
+            },
+            body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [
+                    {
+                        type: 'text',
+                        text: `${userProfile.displayName} ชวนมาทดสอบความรู้กัน! 👋`,
+                        size: 'sm',
+                        weight: 'bold',
+                        color: '#111827',
+                        wrap: true
+                    },
+                    { type: 'separator', margin: 'md', color: '#e5e7eb' },
+                    {
+                        type: 'text',
+                        text: 'ครอบคลุมทุกโซลูชัน',
+                        size: 'xs',
+                        color: '#9CA3AF',
+                        weight: 'bold',
+                        margin: 'md'
+                    },
+                    {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [
+                            { type: 'text', text: '🟩  LINE OA              10 ข้อ', size: 'sm', color: '#166534' },
+                            { type: 'text', text: '🟥  LINE Ads             10 ข้อ', size: 'sm', color: '#991b1b', margin: 'sm' },
+                            { type: 'text', text: '🟨  LINE Shopping    10 ข้อ', size: 'sm', color: '#92400e', margin: 'sm' },
+                            { type: 'text', text: '🟦  MyCustomer CRM  10 ข้อ', size: 'sm', color: '#1e40af', margin: 'sm' },
+                            { type: 'text', text: '🟪  LINE Family Club  10 ข้อ', size: 'sm', color: '#6b21a8', margin: 'sm' }
+                        ],
+                        margin: 'sm'
+                    },
+                    { type: 'separator', margin: 'lg', color: '#e5e7eb' },
+                    {
+                        type: 'box',
+                        layout: 'horizontal',
+                        contents: [
+                            {
+                                type: 'box',
+                                layout: 'vertical',
+                                contents: [
+                                    { type: 'text', text: '50', size: 'xl', weight: 'bold', color: '#00B900', align: 'center' },
+                                    { type: 'text', text: 'ข้อสอบ', size: 'xs', color: '#9CA3AF', align: 'center' }
+                                ],
+                                flex: 1
+                            },
+                            {
+                                type: 'separator',
+                                direction: 'vertical',
+                                color: '#e5e7eb'
+                            },
+                            {
+                                type: 'box',
+                                layout: 'vertical',
+                                contents: [
+                                    { type: 'text', text: '5', size: 'xl', weight: 'bold', color: '#00B900', align: 'center' },
+                                    { type: 'text', text: 'หมวดหมู่', size: 'xs', color: '#9CA3AF', align: 'center' }
+                                ],
+                                flex: 1
+                            },
+                            {
+                                type: 'separator',
+                                direction: 'vertical',
+                                color: '#e5e7eb'
+                            },
+                            {
+                                type: 'box',
+                                layout: 'vertical',
+                                contents: [
+                                    { type: 'text', text: '∞', size: 'xl', weight: 'bold', color: '#00B900', align: 'center' },
+                                    { type: 'text', text: 'เวลา', size: 'xs', color: '#9CA3AF', align: 'center' }
+                                ],
+                                flex: 1
+                            }
+                        ],
+                        margin: 'lg'
+                    }
+                ],
+                paddingAll: '20px',
+                backgroundColor: '#ffffff'
+            },
+            footer: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [
+                    {
+                        type: 'button',
+                        action: {
+                            type: 'uri',
+                            label: '🚀 เริ่มทำข้อสอบเลย!',
+                            uri: LIFF_URL
+                        },
+                        style: 'primary',
+                        color: '#00B900',
+                        height: 'sm'
+                    }
+                ],
+                paddingAll: '20px',
+                backgroundColor: '#f3f4f6'
+            }
+        }
+    };
+
+    if (liff.isApiAvailable('shareTargetPicker')) {
+        try {
+            const result = await liff.shareTargetPicker([flexMessage]);
+            if (result) showToast('✅ แชร์ข้อสอบเรียบร้อยแล้ว!');
+        } catch (e) {
+            console.error(e);
+            showToast('❌ ไม่สามารถแชร์ได้ กรุณาลองใหม่');
+        }
+    } else {
+        try {
+            await navigator.clipboard.writeText(`🟢 LINE for Business Advance Mock Exam\nมาทดสอบความรู้กัน!\n\nhttps://liff.line.me/2006674119-kZ1RG7PE`);
+            showToast('📋 คัดลอกลิงก์แล้ว! นำไปแชร์ได้เลย');
+        } catch {
+            showToast('ℹ️ กรุณาเปิดใน LINE เพื่อใช้งานการแชร์');
+        }
+    }
 }
 
 /* ─────── SHARE ─────── */
