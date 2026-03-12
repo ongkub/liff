@@ -1264,7 +1264,7 @@ async function shareExam() {
                 contents: [
                     {
                         type: 'text',
-                        text: '🟢 LINE for Business',
+                        text: '🟢 Ong exam',
                         size: 'xs',
                         color: '#00B900',
                         weight: 'bold'
@@ -1333,64 +1333,60 @@ async function shareResult() {
 
     const flex = {
         type: 'flex',
-        altText: userProfile.displayName + ' ทำ LINE for Business Exam ได้ ' + score + '/50 (' + pct + '%) ' + rankEmoji,
+        altText: userProfile.displayName + ' ทำ LINE for Business Exam ได้ ' + score + '/50',
         contents: {
             type: 'bubble',
-            size: 'giga',
-            header: {
-                type: 'box',
-                layout: 'vertical',
-                backgroundColor: '#003d00',
-                paddingAll: '20px',
-                contents: [ buildHeaderBox('🟢 LINE for Business', 'Advance Mock Exam') ]
-            },
             body: {
                 type: 'box',
                 layout: 'vertical',
                 paddingAll: '20px',
                 spacing: 'md',
                 contents: [
-                    // Name
+                    {
+                        type: 'text',
+                        text: '🟢 Ong Exam',
+                        size: 'xs',
+                        color: '#00B900',
+                        weight: 'bold'
+                    },
                     {
                         type: 'box',
                         layout: 'horizontal',
-                        spacing: 'sm',
+                        spacing: 'md',
+                        alignItems: 'center',
                         contents: [
-                            { type: 'text', text: '👤', size: 'sm', flex: 0 },
-                            { type: 'text', text: userProfile.displayName, size: 'sm', weight: 'bold', color: '#111827', flex: 1, wrap: true }
+                            {
+                                type: 'image',
+                                url: getAvatarUrl(),
+                                size: '60px',
+                                aspectRatio: '1:1',
+                                aspectMode: 'cover',
+                                cornerRadius: '30px'
+                            },
+                            {
+                                type: 'box',
+                                layout: 'vertical',
+                                flex: 1,
+                                contents: [
+                                    {
+                                        type: 'text',
+                                        text: userProfile.displayName,
+                                        size: 'md',
+                                        weight: 'bold',
+                                        color: '#111827',
+                                        wrap: true
+                                    },
+                                    {
+                                        type: 'text',
+                                        text: 'ได้ ' + score + ' / 50 คะแนน (' + pct + '%)',
+                                        size: 'sm',
+                                        color: '#00B900',
+                                        weight: 'bold'
+                                    }
+                                ]
+                            }
                         ]
-                    },
-                    { type: 'separator', color: '#e5e7eb' },
-                    // Score number
-                    {
-                        type: 'box',
-                        layout: 'horizontal',
-                        alignItems: 'flex-end',
-                        justifyContent: 'center',
-                        contents: [
-                            { type: 'text', text: String(score), size: '5xl', weight: 'bold', color: '#00B900' },
-                            { type: 'text', text: '/50', size: 'xl', color: '#9CA3AF', margin: 'sm' }
-                        ]
-                    },
-                    // Percentage text (clean, no bar)
-                    { type: 'text', text: pct + '%', size: 'md', weight: 'bold', color: '#00B900', align: 'center' },
-                    // Rank badge
-                    {
-                        type: 'box',
-                        layout: 'horizontal',
-                        backgroundColor: '#00B900',
-                        cornerRadius: '20px',
-                        paddingAll: '8px',
-                        justifyContent: 'center',
-                        alignSelf: 'center',
-                        contents: [
-                            { type: 'text', text: rankEmoji + ' ' + rankLabel, size: 'sm', weight: 'bold', color: '#ffffff', align: 'center' }
-                        ]
-                    },
-                    { type: 'separator', color: '#e5e7eb' },
-                    // Category breakdown
-                    { type: 'text', text: 'ผลแยกตามหมวด', size: 'xs', weight: 'bold', color: '#9CA3AF' },
-                    ...catContents
+                    }
                 ]
             },
             footer: {
@@ -1398,21 +1394,12 @@ async function shareResult() {
                 layout: 'vertical',
                 paddingAll: '16px',
                 backgroundColor: '#f3f4f6',
-                spacing: 'sm',
                 contents: [
-                    {
-                        type: 'text',
-                        text: 'มาลองทำข้อสอบกันเลย!',
-                        size: 'sm',
-                        color: '#374151',
-                        align: 'center',
-                        wrap: true
-                    },
                     {
                         type: 'button',
                         style: 'primary',
                         color: '#00B900',
-                        action: { type: 'uri', label: 'เริ่มทำข้อสอบเลย!', uri: LIFF_URL }
+                        action: { type: 'uri', label: 'ลองทำข้อสอบเลย!', uri: LIFF_URL }
                     }
                 ]
             }
