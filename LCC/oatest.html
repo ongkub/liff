@@ -1193,473 +1193,276 @@ function showResult() {
     setScreen('result-screen');
 }
 
-/* ─────── SHARE EXAM (before quiz) ─────── */
-async function shareExam() {
-    const LIFF_URL = 'https://liff.line.me/2006674119-kZ1RG7PE';
+/* ─────── SHARED FLEX BUILDER HELPERS ─────── */
+function getAvatarUrl() {
+    // LINE Flex image requires a valid public HTTPS URL
+    return (userProfile.pictureUrl && userProfile.pictureUrl.startsWith('https://'))
+        ? userProfile.pictureUrl
+        : 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png';
+}
 
-    const flexMessage = {
-        type: 'flex',
-        altText: `${userProfile.displayName} ชวนมาทดสอบ LINE for Business! 🟢`,
-        contents: {
-            type: 'bubble',
-            size: 'giga',
-            header: {
+function buildHeaderBox(subtitleText, titleText) {
+    return {
+        type: 'box',
+        layout: 'horizontal',
+        contents: [
+            {
                 type: 'box',
                 layout: 'vertical',
+                flex: 1,
                 contents: [
-                    {
-                        type: 'box',
-                        layout: 'horizontal',
-                        contents: [
-                            {
-                                type: 'box',
-                                layout: 'vertical',
-                                contents: [
-                                    {
-                                        type: 'text',
-                                        text: '🟢 LINE for Business',
-                                        color: 'rgba(255,255,255,0.8)',
-                                        size: 'xs',
-                                        weight: 'bold'
-                                    },
-                                    {
-                                        type: 'text',
-                                        text: 'Advance Mock Exam',
-                                        color: '#ffffff',
-                                        size: 'xl',
-                                        weight: 'bold'
-                                    }
-                                ],
-                                flex: 1
-                            },
-                            {
-                                type: 'image',
-                                url: userProfile.pictureUrl || 'https://profile.line-scdn.net/0h00000000000000000000000000000000000000',
-                                size: '56px',
-                                aspectMode: 'cover',
-                                aspectRatio: '1:1',
-                                cornerRadius: '28px'
-                            }
-                        ],
-                        alignItems: 'center'
-                    }
-                ],
-                paddingAll: '20px',
-                backgroundColor: '#003d00',
-                paddingBottom: '24px'
+                    { type: 'text', text: subtitleText, color: '#aaffaa', size: 'xs', weight: 'bold' },
+                    { type: 'text', text: titleText, color: '#ffffff', size: 'lg', weight: 'bold', wrap: true }
+                ]
             },
-            body: {
-                type: 'box',
-                layout: 'vertical',
-                contents: [
-                    {
-                        type: 'text',
-                        text: `${userProfile.displayName} ชวนมาทดสอบความรู้กัน! 👋`,
-                        size: 'sm',
-                        weight: 'bold',
-                        color: '#111827',
-                        wrap: true
-                    },
-                    { type: 'separator', margin: 'md', color: '#e5e7eb' },
-                    {
-                        type: 'text',
-                        text: 'ครอบคลุมทุกโซลูชัน',
-                        size: 'xs',
-                        color: '#9CA3AF',
-                        weight: 'bold',
-                        margin: 'md'
-                    },
-                    {
-                        type: 'box',
-                        layout: 'vertical',
-                        contents: [
-                            { type: 'text', text: '🟩  LINE OA              10 ข้อ', size: 'sm', color: '#166534' },
-                            { type: 'text', text: '🟥  LINE Ads             10 ข้อ', size: 'sm', color: '#991b1b', margin: 'sm' },
-                            { type: 'text', text: '🟨  LINE Shopping    10 ข้อ', size: 'sm', color: '#92400e', margin: 'sm' },
-                            { type: 'text', text: '🟦  MyCustomer CRM  10 ข้อ', size: 'sm', color: '#1e40af', margin: 'sm' },
-                            { type: 'text', text: '🟪  LINE Family Club  10 ข้อ', size: 'sm', color: '#6b21a8', margin: 'sm' }
-                        ],
-                        margin: 'sm'
-                    },
-                    { type: 'separator', margin: 'lg', color: '#e5e7eb' },
-                    {
-                        type: 'box',
-                        layout: 'horizontal',
-                        contents: [
-                            {
-                                type: 'box',
-                                layout: 'vertical',
-                                contents: [
-                                    { type: 'text', text: '50', size: 'xl', weight: 'bold', color: '#00B900', align: 'center' },
-                                    { type: 'text', text: 'ข้อสอบ', size: 'xs', color: '#9CA3AF', align: 'center' }
-                                ],
-                                flex: 1
-                            },
-                            {
-                                type: 'separator',
-                                direction: 'vertical',
-                                color: '#e5e7eb'
-                            },
-                            {
-                                type: 'box',
-                                layout: 'vertical',
-                                contents: [
-                                    { type: 'text', text: '5', size: 'xl', weight: 'bold', color: '#00B900', align: 'center' },
-                                    { type: 'text', text: 'หมวดหมู่', size: 'xs', color: '#9CA3AF', align: 'center' }
-                                ],
-                                flex: 1
-                            },
-                            {
-                                type: 'separator',
-                                direction: 'vertical',
-                                color: '#e5e7eb'
-                            },
-                            {
-                                type: 'box',
-                                layout: 'vertical',
-                                contents: [
-                                    { type: 'text', text: '∞', size: 'xl', weight: 'bold', color: '#00B900', align: 'center' },
-                                    { type: 'text', text: 'เวลา', size: 'xs', color: '#9CA3AF', align: 'center' }
-                                ],
-                                flex: 1
-                            }
-                        ],
-                        margin: 'lg'
-                    }
-                ],
-                paddingAll: '20px',
-                backgroundColor: '#ffffff'
-            },
-            footer: {
-                type: 'box',
-                layout: 'vertical',
-                contents: [
-                    {
-                        type: 'button',
-                        action: {
-                            type: 'uri',
-                            label: '🚀 เริ่มทำข้อสอบเลย!',
-                            uri: LIFF_URL
-                        },
-                        style: 'primary',
-                        color: '#00B900',
-                        height: 'sm'
-                    }
-                ],
-                paddingAll: '20px',
-                backgroundColor: '#f3f4f6'
+            {
+                type: 'image',
+                url: getAvatarUrl(),
+                size: '52px',
+                aspectMode: 'cover',
+                aspectRatio: '1:1',
+                cornerRadius: '26px'
             }
-        }
+        ],
+        alignItems: 'center'
     };
+}
 
+async function doShare(flexMessage, fallbackText) {
     if (liff.isApiAvailable('shareTargetPicker')) {
         try {
             const result = await liff.shareTargetPicker([flexMessage]);
-            if (result) showToast('✅ แชร์ข้อสอบเรียบร้อยแล้ว!');
+            if (result) showToast('✅ แชร์เรียบร้อยแล้ว!');
         } catch (e) {
-            console.error(e);
-            showToast('❌ ไม่สามารถแชร์ได้ กรุณาลองใหม่');
+            console.error('shareTargetPicker error:', e);
+            showToast('❌ แชร์ไม่สำเร็จ: ' + (e.message || e));
         }
     } else {
         try {
-            await navigator.clipboard.writeText(`🟢 LINE for Business Advance Mock Exam\nมาทดสอบความรู้กัน!\n\nhttps://liff.line.me/2006674119-kZ1RG7PE`);
-            showToast('📋 คัดลอกลิงก์แล้ว! นำไปแชร์ได้เลย');
+            await navigator.clipboard.writeText(fallbackText);
+            showToast('📋 คัดลอกลิงก์แล้ว นำไปแชร์ได้เลย');
         } catch {
             showToast('ℹ️ กรุณาเปิดใน LINE เพื่อใช้งานการแชร์');
         }
     }
 }
 
-/* ─────── SHARE ─────── */
-async function shareResult() {
-    const pct = Math.round((score / 50) * 100);
+/* ─────── SHARE EXAM (before quiz) ─────── */
+async function shareExam() {
     const LIFF_URL = 'https://liff.line.me/2006674119-kZ1RG7PE';
 
-    let rankLabel = '';
-    let rankColor = '';
-    let rankEmoji = '';
-    let headerBgColor = '';
-
-    if (score >= 45) {
-        rankLabel = 'Master'; rankColor = '#b45309'; rankEmoji = '🏆'; headerBgColor = '#003d00';
-    } else if (score >= 35) {
-        rankLabel = 'Expert'; rankColor = '#1e40af'; rankEmoji = '🌟'; headerBgColor = '#003d00';
-    } else if (score >= 25) {
-        rankLabel = 'Learner'; rankColor = '#6b21a8'; rankEmoji = '📚'; headerBgColor = '#003d00';
-    } else {
-        rankLabel = 'Challenger'; rankColor = '#374151'; rankEmoji = '💪'; headerBgColor = '#003d00';
-    }
-
-    // Score bar blocks (10 blocks)
-    const filledBlocks = Math.round((score / 50) * 10);
-    const barFilled = '█'.repeat(filledBlocks);
-    const barEmpty = '░'.repeat(10 - filledBlocks);
-
-    const flexMessage = {
+    const flex = {
         type: 'flex',
-        altText: `${userProfile.displayName} ทำ LINE for Business Mock Exam ได้ ${score}/50 คะแนน (${pct}%) ${rankEmoji}`,
+        altText: userProfile.displayName + ' ชวนมาทดสอบ LINE for Business! 50 ข้อ 5 หมวด',
         contents: {
             type: 'bubble',
             size: 'giga',
             header: {
                 type: 'box',
                 layout: 'vertical',
-                contents: [
-                    {
-                        type: 'box',
-                        layout: 'horizontal',
-                        contents: [
-                            {
-                                type: 'box',
-                                layout: 'vertical',
-                                contents: [
-                                    {
-                                        type: 'text',
-                                        text: '🟢 LINE for Business',
-                                        color: '#ffffff',
-                                        size: 'xs',
-                                        weight: 'bold',
-                                        alpha: 0.8
-                                    },
-                                    {
-                                        type: 'text',
-                                        text: 'Advance Mock Exam',
-                                        color: '#ffffff',
-                                        size: 'lg',
-                                        weight: 'bold'
-                                    }
-                                ],
-                                flex: 1
-                            },
-                            {
-                                type: 'image',
-                                url: userProfile.pictureUrl || 'https://profile.line-scdn.net/0h00000000000000000000000000000000000000',
-                                size: '60px',
-                                aspectMode: 'cover',
-                                aspectRatio: '1:1',
-                                cornerRadius: '30px',
-                                border: true,
-                                borderColor: 'rgba(255,255,255,0.5)',
-                                borderWidth: '2px'
-                            }
-                        ],
-                        alignItems: 'center'
-                    }
-                ],
+                backgroundColor: '#003d00',
                 paddingAll: '20px',
-                backgroundColor: headerBgColor,
-                paddingBottom: '24px'
+                contents: [ buildHeaderBox('🟢 LINE for Business', 'Advance Mock Exam') ]
             },
             body: {
                 type: 'box',
                 layout: 'vertical',
+                paddingAll: '20px',
+                spacing: 'md',
                 contents: [
-                    // Name row
                     {
-                        type: 'box',
-                        layout: 'horizontal',
-                        contents: [
-                            {
-                                type: 'text',
-                                text: '👤',
-                                size: 'sm',
-                                flex: 0
-                            },
-                            {
-                                type: 'text',
-                                text: userProfile.displayName,
-                                size: 'sm',
-                                weight: 'bold',
-                                color: '#111827',
-                                margin: 'sm',
-                                flex: 1,
-                                wrap: true
-                            }
-                        ],
-                        alignItems: 'center',
-                        margin: 'none'
+                        type: 'text',
+                        text: userProfile.displayName + ' ชวนมาทดสอบความรู้กัน! 👋',
+                        size: 'sm',
+                        weight: 'bold',
+                        color: '#111827',
+                        wrap: true
                     },
-                    // Divider
-                    { type: 'separator', margin: 'md', color: '#e5e7eb' },
-                    // Score big
+                    { type: 'separator', color: '#e5e7eb' },
+                    { type: 'text', text: 'ครอบคลุมทุกโซลูชัน LINE for Business', size: 'xs', color: '#6b7280', wrap: true },
                     {
                         type: 'box',
                         layout: 'vertical',
+                        spacing: 'sm',
                         contents: [
-                            {
-                                type: 'box',
-                                layout: 'horizontal',
-                                contents: [
-                                    {
-                                        type: 'text',
-                                        text: String(score),
-                                        size: '5xl',
-                                        weight: 'bold',
-                                        color: '#00B900',
-                                        flex: 0
-                                    },
-                                    {
-                                        type: 'box',
-                                        layout: 'vertical',
-                                        contents: [
-                                            {
-                                                type: 'text',
-                                                text: '/ 50',
-                                                size: 'xl',
-                                                color: '#9CA3AF',
-                                                weight: 'regular',
-                                                margin: 'none'
-                                            },
-                                            {
-                                                type: 'text',
-                                                text: 'คะแนน',
-                                                size: 'xs',
-                                                color: '#9CA3AF',
-                                                margin: 'none'
-                                            }
-                                        ],
-                                        justifyContent: 'flex-end',
-                                        paddingBottom: '6px',
-                                        margin: 'sm'
-                                    }
-                                ],
-                                alignItems: 'flex-end',
-                                justifyContent: 'center'
-                            },
-                            // Progress bar text
-                            {
-                                type: 'text',
-                                text: barFilled + barEmpty + '  ' + pct + '%',
-                                color: '#00B900',
-                                size: 'sm',
-                                align: 'center',
-                                margin: 'sm',
-                                font: 'monospace'
-                            }
-                        ],
-                        margin: 'md',
-                        alignItems: 'center'
+                            { type: 'text', text: '🟩  LINE OA  —  10 ข้อ',           size: 'sm', color: '#166534' },
+                            { type: 'text', text: '🟥  LINE Ads  —  10 ข้อ',          size: 'sm', color: '#991b1b' },
+                            { type: 'text', text: '🟨  LINE Shopping  —  10 ข้อ',     size: 'sm', color: '#92400e' },
+                            { type: 'text', text: '🟦  MyCustomer CRM  —  10 ข้อ',   size: 'sm', color: '#1e40af' },
+                            { type: 'text', text: '🟪  LINE Family Club  —  10 ข้อ', size: 'sm', color: '#6b21a8' }
+                        ]
                     },
-                    // Rank badge
+                    { type: 'separator', color: '#e5e7eb' },
                     {
                         type: 'box',
                         layout: 'horizontal',
                         contents: [
                             {
-                                type: 'text',
-                                text: rankEmoji + ' ' + rankLabel,
-                                size: 'sm',
-                                weight: 'bold',
-                                color: '#ffffff',
-                                align: 'center'
+                                type: 'box', layout: 'vertical', flex: 1, alignItems: 'center',
+                                contents: [
+                                    { type: 'text', text: '50', size: 'xxl', weight: 'bold', color: '#00B900', align: 'center' },
+                                    { type: 'text', text: 'ข้อสอบ', size: 'xs', color: '#9CA3AF', align: 'center' }
+                                ]
+                            },
+                            {
+                                type: 'box', layout: 'vertical', flex: 1, alignItems: 'center',
+                                contents: [
+                                    { type: 'text', text: '5', size: 'xxl', weight: 'bold', color: '#00B900', align: 'center' },
+                                    { type: 'text', text: 'หมวดหมู่', size: 'xs', color: '#9CA3AF', align: 'center' }
+                                ]
+                            },
+                            {
+                                type: 'box', layout: 'vertical', flex: 1, alignItems: 'center',
+                                contents: [
+                                    { type: 'text', text: '∞', size: 'xxl', weight: 'bold', color: '#00B900', align: 'center' },
+                                    { type: 'text', text: 'เวลา', size: 'xs', color: '#9CA3AF', align: 'center' }
+                                ]
                             }
-                        ],
-                        backgroundColor: '#00B900',
-                        cornerRadius: '20px',
-                        paddingAll: '8px',
-                        paddingStart: '20px',
-                        paddingEnd: '20px',
-                        alignSelf: 'center',
-                        margin: 'md'
-                    },
-                    // Category breakdown
-                    { type: 'separator', margin: 'lg', color: '#e5e7eb' },
-                    {
-                        type: 'text',
-                        text: 'ผลแยกตามหมวด',
-                        size: 'xs',
-                        weight: 'bold',
-                        color: '#9CA3AF',
-                        margin: 'lg'
-                    },
-                    ...Object.entries(catScores)
-                        .filter(([, v]) => v.t > 0)
-                        .map(([name, { c, t }]) => ({
-                            type: 'box',
-                            layout: 'horizontal',
-                            contents: [
-                                {
-                                    type: 'text',
-                                    text: name,
-                                    size: 'xs',
-                                    color: '#374151',
-                                    flex: 3,
-                                    wrap: true
-                                },
-                                {
-                                    type: 'text',
-                                    text: `${c}/${t}`,
-                                    size: 'xs',
-                                    weight: 'bold',
-                                    color: c === t ? '#16a34a' : '#00B900',
-                                    flex: 1,
-                                    align: 'end'
-                                }
-                            ],
-                            margin: 'sm'
-                        }))
-                ],
-                paddingAll: '20px',
-                backgroundColor: '#ffffff'
+                        ]
+                    }
+                ]
             },
             footer: {
                 type: 'box',
                 layout: 'vertical',
+                paddingAll: '16px',
+                backgroundColor: '#f3f4f6',
                 contents: [
                     {
-                        type: 'text',
-                        text: 'มาทดสอบความรู้ LINE for Business กันเลย! 🚀',
-                        size: 'sm',
-                        color: '#374151',
-                        align: 'center',
-                        wrap: true,
-                        margin: 'none'
-                    },
-                    {
                         type: 'button',
-                        action: {
-                            type: 'uri',
-                            label: '🟢 ลองทำข้อสอบเลย!',
-                            uri: LIFF_URL
-                        },
                         style: 'primary',
                         color: '#00B900',
-                        margin: 'md',
-                        height: 'sm'
+                        action: { type: 'uri', label: 'เริ่มทำข้อสอบเลย!', uri: LIFF_URL }
                     }
-                ],
-                paddingAll: '20px',
-                backgroundColor: '#f3f4f6',
-                spacing: 'none'
-            },
-            styles: {
-                header: { backgroundColor: headerBgColor },
-                body: { backgroundColor: '#ffffff' },
-                footer: { backgroundColor: '#f3f4f6', separator: true, separatorColor: '#e5e7eb' }
+                ]
             }
         }
     };
 
-    if (liff.isApiAvailable('shareTargetPicker')) {
-        try {
-            const result = await liff.shareTargetPicker([flexMessage]);
-            if (result) {
-                showToast('✅ แชร์ผลลัพธ์เรียบร้อยแล้ว!');
+    await doShare(flex, 'LINE for Business Advance Mock Exam 50 ข้อ\nมาทดสอบความรู้กัน!\n' + LIFF_URL);
+}
+
+/* ─────── SHARE RESULT ─────── */
+async function shareResult() {
+    const LIFF_URL = 'https://liff.line.me/2006674119-kZ1RG7PE';
+    const pct = Math.round((score / 50) * 100);
+
+    let rankLabel, rankEmoji;
+    if      (score >= 45) { rankLabel = 'Master';      rankEmoji = '🏆'; }
+    else if (score >= 35) { rankLabel = 'Expert';      rankEmoji = '🌟'; }
+    else if (score >= 25) { rankLabel = 'Learner';     rankEmoji = '📚'; }
+    else                  { rankLabel = 'Challenger';  rankEmoji = '💪'; }
+
+    const filledBlocks = Math.round((score / 50) * 10);
+    const barText = '█'.repeat(filledBlocks) + '░'.repeat(10 - filledBlocks) + '  ' + pct + '%';
+
+    // Build category rows
+    const catContents = [];
+    Object.entries(catScores).forEach(([name, { c, t }]) => {
+        if (t === 0) return;
+        catContents.push({
+            type: 'box',
+            layout: 'horizontal',
+            contents: [
+                { type: 'text', text: name, size: 'xs', color: '#374151', flex: 3, wrap: true },
+                { type: 'text', text: c + '/' + t, size: 'xs', weight: 'bold', color: (c === t ? '#16a34a' : '#00B900'), flex: 1, align: 'end' }
+            ]
+        });
+    });
+
+    const flex = {
+        type: 'flex',
+        altText: userProfile.displayName + ' ทำ LINE for Business Exam ได้ ' + score + '/50 (' + pct + '%) ' + rankEmoji,
+        contents: {
+            type: 'bubble',
+            size: 'giga',
+            header: {
+                type: 'box',
+                layout: 'vertical',
+                backgroundColor: '#003d00',
+                paddingAll: '20px',
+                contents: [ buildHeaderBox('🟢 LINE for Business', 'Advance Mock Exam') ]
+            },
+            body: {
+                type: 'box',
+                layout: 'vertical',
+                paddingAll: '20px',
+                spacing: 'md',
+                contents: [
+                    // Name
+                    {
+                        type: 'box',
+                        layout: 'horizontal',
+                        spacing: 'sm',
+                        contents: [
+                            { type: 'text', text: '👤', size: 'sm', flex: 0 },
+                            { type: 'text', text: userProfile.displayName, size: 'sm', weight: 'bold', color: '#111827', flex: 1, wrap: true }
+                        ]
+                    },
+                    { type: 'separator', color: '#e5e7eb' },
+                    // Score number
+                    {
+                        type: 'box',
+                        layout: 'horizontal',
+                        alignItems: 'flex-end',
+                        justifyContent: 'center',
+                        contents: [
+                            { type: 'text', text: String(score), size: '5xl', weight: 'bold', color: '#00B900' },
+                            { type: 'text', text: '/50', size: 'xl', color: '#9CA3AF', margin: 'sm' }
+                        ]
+                    },
+                    // Bar
+                    { type: 'text', text: barText, size: 'sm', color: '#00B900', align: 'center' },
+                    // Rank badge
+                    {
+                        type: 'box',
+                        layout: 'horizontal',
+                        backgroundColor: '#00B900',
+                        cornerRadius: '20px',
+                        paddingAll: '8px',
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                        contents: [
+                            { type: 'text', text: rankEmoji + ' ' + rankLabel, size: 'sm', weight: 'bold', color: '#ffffff', align: 'center' }
+                        ]
+                    },
+                    { type: 'separator', color: '#e5e7eb' },
+                    // Category breakdown
+                    { type: 'text', text: 'ผลแยกตามหมวด', size: 'xs', weight: 'bold', color: '#9CA3AF' },
+                    ...catContents
+                ]
+            },
+            footer: {
+                type: 'box',
+                layout: 'vertical',
+                paddingAll: '16px',
+                backgroundColor: '#f3f4f6',
+                spacing: 'sm',
+                contents: [
+                    {
+                        type: 'text',
+                        text: 'มาลองทำข้อสอบกันเลย!',
+                        size: 'sm',
+                        color: '#374151',
+                        align: 'center',
+                        wrap: true
+                    },
+                    {
+                        type: 'button',
+                        style: 'primary',
+                        color: '#00B900',
+                        action: { type: 'uri', label: 'เริ่มทำข้อสอบเลย!', uri: LIFF_URL }
+                    }
+                ]
             }
-        } catch (e) {
-            console.error(e);
-            showToast('❌ ไม่สามารถแชร์ได้ กรุณาลองใหม่');
         }
-    } else {
-        // Fallback for desktop/external browser
-        try {
-            const fallbackText = `🟢 LINE for Business Advance Mock Exam\n\n👤 ${userProfile.displayName}\n⭐ ทำได้ ${score}/50 คะแนน (${pct}%)\n${rankEmoji} ${rankLabel}\n\n🚀 มาลองทำกัน: ${LIFF_URL}`;
-            await navigator.clipboard.writeText(fallbackText);
-            showToast('📋 คัดลอกข้อความแล้ว! นำไปแชร์ได้เลย');
-        } catch {
-            showToast('ℹ️ กรุณาเปิดใน LINE เพื่อใช้งานการแชร์');
-        }
-    }
+    };
+
+    const fallbackText = 'LINE for Business Advance Mock Exam\n' +
+        userProfile.displayName + ' ทำได้ ' + score + '/50 (' + pct + '%) ' + rankEmoji + '\n\n' +
+        'มาลองทำกัน: ' + LIFF_URL;
+
+    await doShare(flex, fallbackText);
 }
 
 function retryQuiz() {
