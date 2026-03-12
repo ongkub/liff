@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advance Mock Exam: LINE Ads (50 ข้อ)</title>
+    <style>
+        :root {
+            --primary: #00B900;
+            --dark: #111111;
+            --light: #F5F5F5;
+            --correct: #28a745;
+            --incorrect: #dc3545;
+        }
+        body {
+            font-family: 'Sarabun', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        #app {
+            background: white;
+            max-width: 900px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        h1, h2, h3 { color: var(--primary); }
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .btn:hover { background-color: #009900; }
+        .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: #fff;
+            border: 2px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            line-height: 1.5;
+        }
+        .option-btn:hover:not(:disabled) { border-color: var(--primary); background: #f0fdf0; }
+        .option-btn.selected { border-color: var(--primary); background: #e6ffe6; }
+        .option-btn.correct { border-color: var(--correct); background: #d4edda; color: #000; font-weight: bold;}
+        .option-btn.incorrect { border-color: var(--incorrect); background: #f8d7da; color: #000;}
+        #explanation {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+            border-left: 5px solid var(--primary);
+            line-height: 1.6;
+        }
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .badge { background: #333; color: white; padding: 5px 10px; border-radius: 20px; font-size: 14px; }
+        #progress-bar { width: 100%; background: #eee; height: 10px; border-radius: 5px; margin-bottom: 20px; }
+        #progress-fill { height: 100%; background: var(--primary); border-radius: 5px; width: 0%; transition: width 0.3s; }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div id="start-screen" style="text-align: center;">
+        <h1>🟢 Advance Mock Exam: LINE Ads</h1>
+        <h3>ข้อสอบจำลองระดับ Expert (50 ข้อ)</h3>
+        <p>ทดสอบการวิเคราะห์โครงสร้างแคมเปญ, Bidding, Custom Audience, กฎเกณฑ์โฆษณา และการเชื่อมต่อ Business Manager</p>
+        <button class="btn" onclick="startQuiz()">เริ่มทำข้อสอบ</button>
+    </div>
+
+    <div id="quiz-screen" style="display: none;">
+        <div id="progress-bar"><div id="progress-fill"></div></div>
+        <div class="header-flex">
+            <h2 id="q-number" style="margin: 0;">ข้อที่ 1/50</h2>
+            <span class="badge" id="q-category">LINE Ads</span>
+        </div>
+        <p id="q-text" style="font-size: 18px; line-height: 1.6; font-weight: bold;"></p>
+        <div id="options-container"></div>
+        <div id="explanation"></div>
+        <button class="btn" id="next-btn" style="display: none; width: 100%;" onclick="nextQuestion()">ข้อถัดไป</button>
+    </div>
+
+    <div id="result-screen" style="display: none; text-align: center;">
+        <h1>🎉 สิ้นสุดการทดสอบ!</h1>
+        <h2 id="final-score">คุณทำได้: 0 / 50 คะแนน</h2>
+        <p id="final-message"></p>
+        <button class="btn" onclick="location.reload()">ทำข้อสอบอีกครั้ง</button>
+    </div>
+</div>
+
+<script>
+const quizData = [
+    {
+        question: "แบรนด์ A เปิดแคมเปญใหม่โดยเปิดใช้งาน CBO (Campaign Budget Optimization) เพื่อทดสอบกลุ่มเป้าหมาย แอดมินต้องการให้ระบบเรียนรู้ผ่าน Learning Phase ได้เต็มประสิทธิภาพ แอดมินควรตั้งค่าตามข้อใดจึงจะถูกต้องตามกฎของระบบ?",
+        options: [
+            "ตั้งงบแคมเปญ 500 บาท/วัน และรอให้เกิด 40 คอนเวอร์ชันต่อแคมเปญ",
+            "ตั้งงบแคมเปญ 1,000 บาท/วัน และรอให้เกิด 40 คอนเวอร์ชันต่อกลุ่มโฆษณา (Ads Group)",
+            "ตั้งงบแคมเปญ 1,000 บาท/วัน และปรับกลยุทธ์การเสนอราคา (Bidding Strategy) ที่ระดับกลุ่มโฆษณาให้ต่างกัน",
+            "ตั้งงบแคมเปญ 1,000 บาท/วัน และรอให้เกิด 40 คอนเวอร์ชันต่อโฆษณา (Ad)"
+        ],
+        answer: 1,
+        explanation: "CBO บังคับงบประมาณขั้นต่ำที่ 1,000 บาท/วัน และเมื่อเปิด CBO จะไม่สามารถตั้งค่างบประมาณรายวันหรือกลยุทธ์การเสนอราคาในระดับ Ads Group ได้ นอกจากนี้ Learning Phase จะเสถียรเมื่อเกิด 40 Conversion ต่อ Ads Group"
+    },
+    {
+        question: "เอเจนซี่ต้องการนำฐานข้อมูลเบอร์โทรศัพท์ลูกค้า 5,000 รายชื่อ มาอัปโหลดแบบ Unhash เพื่อสร้าง Custom Audience ใน LINE Ads ข้อใดคือรูปแบบการจัดเตรียมไฟล์ที่ถูกต้อง?",
+        options: [
+            "ต้องใส่รหัสประเทศ +66 นำหน้าทุกเบอร์เสมอ",
+            "ห้ามใส่รหัสประเทศ แต่สามารถมีขีด (-) หรือเว้นวรรคได้ เช่น 080-123-4567",
+            "ต้องแปลงไฟล์เป็น SHA256 ด้วยตัวเองก่อนอัปโหลดเสมอ",
+            "ต้องใส่รหัสประเทศ +66 และห้ามมีเว้นวรรคเด็ดขาด"
+        ],
+        answer: 1,
+        explanation: "การอัปโหลดเบอร์โทรศัพท์แบบ Unhash (ให้ระบบ LINE จัดการเข้ารหัสให้) มีข้อกำหนดว่า 'ห้ามใส่รหัสประเทศ' แต่ระบบอนุญาตให้พิมพ์แบบมีขีด (080-123-4567), พิมพ์ติดกัน หรือเว้นวรรคได้"
+    },
+    {
+        question: "ร้านค้าออนไลน์ต้องการทำ Retargeting โดยสร้างกลุ่มเป้าหมายจากคนที่เคย 'คลิกรูปภาพโฆษณา' เมื่อ 4 เดือนที่แล้ว และคนที่ 'ดูวิดีโอโฆษณา' เมื่อ 2 เดือนที่แล้ว ข้อใดประเมินความเป็นไปได้ถูกต้องตามระบบ LINE Ads?",
+        options: [
+            "ทำได้ทั้ง 2 กลุ่ม เพราะระบบเก็บข้อมูลได้ 180 วัน",
+            "ทำไม่ได้ทั้ง 2 กลุ่ม เพราะข้อมูลหมดอายุแล้ว",
+            "ทำได้เฉพาะกลุ่มคนคลิกรูปภาพ เพราะระบบเก็บข้อมูลได้ 180 วัน แต่กลุ่มดูวิดีโอระบบเก็บย้อนหลังได้เพียง 30 วัน",
+            "ทำได้เฉพาะกลุ่มดูวิดีโอ เพราะรูปภาพเก็บข้อมูลได้เพียง 30 วัน"
+        ],
+        answer: 2,
+        explanation: "กลุ่มเป้าหมายการรับชมวิดีโอ (Video Views) เก็บข้อมูลย้อนหลังได้เพียง 30 วัน (ข้อมูล 2 เดือนก่อนจึงหมดอายุแล้ว) ส่วนจำนวนคนคลิกรูปภาพ (Image Click) เก็บย้อนหลังได้ถึง 180 วัน (และต้องมีคนคลิกเกิน 100 คน)"
+    },
+    {
+        question: "ลูกค้าต้องการให้โฆษณาชนะการประมูลเสมอ และใช้งบประมาณรายวันให้หมด โดยยอมรับราคาต่อคอนเวอร์ชัน (CPA) ที่สูงขึ้นได้ แอดมินควรเลือก Bidding Strategy รูปแบบใด?",
+        options: [
+            "Event Cost Cap",
+            "Target Cost",
+            "No Limit",
+            "Auto Bidding"
+        ],
+        answer: 2,
+        explanation: "กลยุทธ์แบบ No Limit คือการบอกระบบให้ใช้เงินให้เยอะที่สุด สู้ทุกราคา เพื่อให้ได้อิมเพรสชันและคอนเวอร์ชันสูงสุด โดยใช้งบรายวันให้หมด"
+    },
+    {
+        question: "แบรนด์อาหารเสริมต้องการยิงแอดใน LINE Ads แต่ถูกระงับบัญชีโฆษณา เพื่อให้บัญชีได้รับการอนุมัติอย่างถูกต้องตามนโยบาย แบรนด์ต้องทำอย่างไร?",
+        options: [
+            "อัปโหลดใบเสร็จภาษี ภ.พ.20",
+            "อัปโหลดเอกสารจดทะเบียนผลิตภัณฑ์ (อย.) และใบอนุญาตโฆษณา (ฆอ.)",
+            "อัปโหลดใบอนุญาตจากกรมการปกครอง",
+            "อาหารเสริมเป็นสินค้าต้องห้ามเด็ดขาด ไม่สามารถลงโฆษณาได้"
+        ],
+        answer: 1,
+        explanation: "อาหาร เครื่องดื่ม อาหารเสริม และยาสามัญประจำบ้าน ที่มีการกล่าวอ้างสรรพคุณ ต้องอัปโหลดเอกสารจดทะเบียนผลิตภัณฑ์ (อย.) และเอกสารอนุญาตการโฆษณา (ฆอ.) เพื่อประกอบการพิจารณา"
+    },
+    {
+        question: "บริษัทมี LINE OA 3 บัญชี และ LINE Ads 2 บัญชี ต้องการนำข้อมูลจาก LINE Tag ของเว็บไซต์ ไปใช้ยิงโฆษณาร่วมกันข้ามบัญชี ข้อใดคือวิธีแก้ปัญหาที่ถูกต้อง?",
+        options: [
+            "สร้างกลุ่มเป้าหมายแล้วส่ง Export File ข้ามบัญชี",
+            "สร้าง Business Manager เพื่อแชร์กลุ่มเป้าหมายและ LINE Tag ระหว่างบัญชี",
+            "ไม่สามารถทำได้ ข้อมูล LINE Tag ผูกติดได้แค่บัญชีโฆษณาเดียวเท่านั้น",
+            "เปิดใช้งาน MyShop Open API"
+        ],
+        answer: 1,
+        explanation: "Business Manager มีหน้าที่ในการเก็บและรวบรวมกลุ่มเป้าหมาย รวมถึง LINE Tag จาก LINE OA และ LINE Ad Account ที่มีการเชื่อมต่อกัน เพื่อแชร์ Data ข้ามบัญชีได้ (หลังจากสถานะเป็น Verified)"
+    },
+    {
+        question: "วัตถุประสงค์ 'เว็บไซต์คอนเวอร์ชัน (Website Conversion)' มีข้อจำกัดเรื่องรูปแบบการชำระเงินและ Bidding อย่างไร หากใช้ชิ้นงานรูปแบบวิดีโอ (Video)?",
+        options: [
+            "สามารถเลือกประมูลแบบ CPC และ CPM ได้",
+            "บังคับให้ต้องประมูลแบบ CPM Bidding Only เท่านั้น",
+            "บังคับให้ใช้กลยุทธ์ No Limit เท่านั้น",
+            "ไม่สามารถใช้วิดีโอในวัตถุประสงค์เว็บไซต์คอนเวอร์ชันได้"
+        ],
+        answer: 1,
+        explanation: "ตามตาราง Objective vs Format หากใช้วัตถุประสงค์ Website Conversion ร่วมกับชิ้นงาน Video หรือ Small Video จะรองรับเฉพาะการชำระเงินแบบ CPM Bidding Only เท่านั้น"
+    },
+    {
+        question: "ร้าน B ต้องการยิงโฆษณาแบนเนอร์เพื่อ 'เพิ่มเพื่อน (Gain Friends)' ให้ LINE OA ข้อใดคือราคาประมูล (Bidding) ขั้นต่ำของแคมเปญลักษณะนี้ใน LINE Ads?",
+        options: [
+            "0.1 บาท/เพื่อน",
+            "2 บาท/เพื่อน",
+            "5 บาท/เพื่อน",
+            "10 บาท/เพื่อน"
+        ],
+        answer: 3,
+        explanation: "ราคาประมูลขั้นต่ำสำหรับโฆษณาวัตถุประสงค์เพิ่มเพื่อน (Cost Per Friend) ใน LINE Ads Manager คือ 10 บาทขึ้นไป"
+    },
+    {
+        question: "นักการตลาดต้องการลงโฆษณาภาพเคลื่อนไหว (Animation Ad) ในตำแหน่ง Chat List ข้อใดคือสเปกไฟล์ที่ระบบอนุญาต?",
+        options: [
+            "ขนาด 1080x1080 (ไฟล์ GIF) ความยาว 5 วินาที",
+            "ขนาด 600x400 (ไฟล์ APNG) ความยาว 1-4 วินาที",
+            "ขนาด 1200x628 (ไฟล์ MP4) ความยาวไม่จำกัด",
+            "ขนาด 16:9 (ไฟล์ GIF) Loop อัตโนมัติ"
+        ],
+        answer: 1,
+        explanation: "รูปแบบ Animation Ad ใน LINE Ads บังคับใช้ขนาด 600 x 400, ประเภทไฟล์ APNG, ความยาว 1-4 วินาที และกำหนด Loop ได้ 1-4 ครั้ง"
+    },
+    {
+        question: "หากพบว่ารายงาน CTR (อัตราการคลิก) ของโฆษณาแสดงผลอยู่ระดับ 0 (ไม่แสดงผลลัพธ์) สาเหตุหลักคืออะไร และควรแก้ไขอย่างไร?",
+        options: [
+            "ชิ้นงานผิดกฎ ต้องอัปโหลดใหม่",
+            "การแข่งขันไม่เพียงพอ จึงไม่สามารถประเมินได้ ควรปรับปรุงกลุ่มเป้าหมายหรือปรับงบประมาณ/ราคาเสนอ",
+            "CTR ต่ำกว่า 1% ควรเปลี่ยนรูปภาพ",
+            "โฆษณาชนะการประมูลแต่ไม่มีคนคลิกเลย ควรปิดแคมเปญ"
+        ],
+        answer: 1,
+        explanation: "ระดับ CTR ที่เป็น 0 หมายถึง 'ไม่แสดงผลลัพธ์' สาเหตุเกิดจาก 'การแข่งขันไม่เพียงพอ จึงไม่สามารถประเมินได้' วิธีแก้ไขคือปรับปรุงกลุ่มเป้าหมาย โฆษณา หรืองบประมาณ/ราคาประมูลให้สู้คู่แข่งได้"
+    },
+    {
+        question: "แบรนด์ C เลือก Bidding Strategy แบบ 'Target Cost' ข้อใดอธิบายพฤติกรรมของระบบได้ถูกต้องที่สุด?",
+        options: [
+            "ระบบจะพยายามทำให้ราคาประมูลสู้ได้ตลอดเวลา โดยยอมให้ราคาเกินที่ตั้งไว้เล็กน้อย เพื่อใช้งบรายวันให้หมด (Default)",
+            "ระบบจะพยายามควบคุมราคา CPA ให้เป๊ะอยู่ในช่วง +-10% จากราคาที่กำหนด โดยอาจจะใช้เงินรายวันไม่หมดก็ได้",
+            "ระบบจะใช้เงินให้เยอะที่สุด สู้ทุกราคา",
+            "ระบบจะจ่ายเงินเฉพาะเมื่อมีคนคลิกโฆษณาเท่านั้น"
+        ],
+        answer: 1,
+        explanation: "Target Cost คือการตั้งค่าให้ระบบรักษาราคาคอนเวอร์ชันให้ตรงตามเป้า (เป๊ะ +-10%) ระบบจะให้ความสำคัญกับราคาต่อหัวมากกว่าการถลุงงบให้หมด (ส่วน Event Cost Cap คือยอมเกินเป้าเล็กน้อยเพื่อใช้งบให้หมด)"
+    },
+    {
+        question: "ข้อใดคือ Placement ที่โฆษณารูปแบบ 'Small Image (รูปขนาดเล็ก)' จะไม่ไปแสดงผลอย่างแน่นอน?",
+        options: [
+            "LINE TODAY",
+            "LINE VOOM",
+            "LINE OpenChat",
+            "LINE Album"
+        ],
+        answer: 1,
+        explanation: "ตามตาราง Objective vs Format ชิ้นงานประเภท Small Image จะแสดงใน Home Tab, Chat List, TODAY, OpenChat, Album, Note แต่จะไม่ไปแสดงใน LINE VOOM และ Wallet"
+    },
+    {
+        question: "การติดตั้ง 'Base Code' ของ LINE Tag ต้องติดตั้งที่ส่วนใดของเว็บไซต์?",
+        options: [
+            "ก่อนแท็ก </body>",
+            "ภายในแท็ก <head>",
+            "แทรกในปุ่ม Button (onClick)",
+            "สร้างหน้า Thank you page แยกต่างหาก"
+        ],
+        answer: 1,
+        explanation: "Base Code เป็นโค้ดหลักของ LINE Tag ที่ใช้ติดตามผู้เข้าชมเว็บไซต์ทั้งหมด โดยจะต้องติดตั้งไว้ที่ส่วนหัว (Head) ของทุกหน้าเว็บไซต์"
+    },
+    {
+        question: "แบรนด์ขายสินค้า D ต้องการซื้อโฆษณาตำแหน่ง 'Smart Channel Custom (Direct Deal)' แบรนด์สามารถกดซื้อเองบน LINE Ads Manager ได้เลยหรือไม่?",
+        options: [
+            "ได้ทันที หากมีงบประมาณเกิน 10,000 บาท",
+            "ได้ หากเป็นบัญชีรับรอง (Verified Account)",
+            "ไม่ได้ ต้องซื้อผ่าน LINE Agency Partner เท่านั้น",
+            "ไม่ได้ ตำแหน่งนี้สงวนไว้สำหรับบริการของ LINE เท่านั้น"
+        ],
+        answer: 2,
+        explanation: "วัตถุประสงค์ Smart Channel Custom (คิดเงินแบบ CPM) เป็น Direct Deal ที่ไม่สามารถประมูลเองได้ ต้องซื้อผ่านตัวแทน LINE Agency Partner เท่านั้น"
+    },
+    {
+        question: "การดึงรายงาน (Report) แบบกำหนดเองจากเมนูรายงานผลการดำเนินการ ข้อมูลรายงานสามารถดึงย้อนหลังได้นานที่สุดกี่วันหลังจากแคมเปญจบ?",
+        options: [
+            "1 สัปดาห์",
+            "14 วัน",
+            "30 วัน",
+            "ไม่มีวันหมดอายุ ตราบใดที่ยังไม่ลบแคมเปญ"
+        ],
+        answer: 0,
+        explanation: "การดึง Report จากเมนู 'รายงานผลการดำเนินการ' (Report & Figure) รายงานที่กดดาวน์โหลดไว้จะมีอายุ 1 สัปดาห์ (ข้อมูลในวงเล็บระบุว่า 'รายงานมีอายุ 1 สัปดาห์')"
+    },
+    {
+        question: "ธุรกิจขาย 'ช่อดอกกัญชา' ต้องการยิงโฆษณาใน LINE Ads ข้อใดคือข้อบังคับตามนโยบายโฆษณาผลิตภัณฑ์ควบคุม?",
+        options: [
+            "ยิงได้ปกติหากมีใบอนุญาต",
+            "ยิงได้เฉพาะแคมเปญเพิ่มเพื่อนเท่านั้น",
+            "ห้ามโฆษณาส่วนของช่อดอกกัญชาโดยเด็ดขาด",
+            "ยิงได้ หากเป็นผลิตภัณฑ์สำเร็จรูปที่มี อย."
+        ],
+        answer: 2,
+        explanation: "ผลิตภัณฑ์ต้องห้ามและควบคุม ระบุชัดเจนว่า 'โฆษณาส่วนของช่อดอกกัญชา' ถือเป็นสิ่งต้องห้าม (แม้ผลิตภัณฑ์สำเร็จรูป/เครื่องสำอาง/สารสกัด จะลงได้ แต่ 'สด/ช่อดอก' ลงไม่ได้)"
+    },
+    {
+        question: "เมื่อระบบเรียกเก็บเงินผ่านบัตรเครดิตใน LINE Ads แบบอัตโนมัติ (Threshold) ลำดับการเพิ่มเพดานการตัดเงินที่ถูกต้องคือข้อใด?",
+        options: [
+            "500 > 1,000 > 5,000",
+            "1,000 > 5,000 > 10,000 > 15,000",
+            "2,000 > 5,000 > 10,000 > 15,000",
+            "1,000 > 3,000 > 10,000 > 20,000"
+        ],
+        answer: 1,
+        explanation: "ลำดับ Threshold ของระบบคือ เมื่อใช้ถึง 1,000 ระบบจะตัดเงิน หากผ่านจะขยับลิมิตเป็น 5,000 > 10,000 > 15,000 และคงไว้อัตโนมัติที่ 15,000 บาทต่อไป (หรือตัดเมื่อครบ 20 วัน)"
+    },
+    {
+        question: "ข้อควรระวังในการสร้างบัญชีผู้ใช้โฆษณา (Ad Account) สำหรับ 'นิติบุคคล' คืออะไร?",
+        options: [
+            "ต้องใช้บัตรเครดิตที่เป็นชื่อนิติบุคคลเท่านั้น",
+            "เลขนิติบุคคล (Tax ID) เมื่อกรอกแล้วจะไม่สามารถแก้ไขได้",
+            "ต้องมี LINE OA ระดับ Premium ID เท่านั้น",
+            "ไม่สามารถเปลี่ยน Time zone ได้ แต่เปลี่ยนสกุลเงินได้"
+        ],
+        answer: 1,
+        explanation: "ในขั้นตอนการสร้างบัญชีโฆษณา มีข้อควรระวังคือ สำหรับนิติบุคคล: 'เลขนิติบุคคลกรอกแล้วไม่สามารถแก้ไขได้' และชื่อผู้ลงโฆษณา/หมวดสินค้า ก็ไม่สามารถแก้ไขได้เช่นกัน"
+    },
+    {
+        question: "การทำโฆษณาวิดีโอในสตรีม (In-stream Video) บน LINE VOOM หากโฆษณามีความยาวมากกว่า 6 วินาที ผู้ใช้งานจะสามารถกด 'ข้ามโฆษณา (Skip)' ได้ในวินาทีที่เท่าไร?",
+        options: [
+            "วินาทีที่ 3",
+            "วินาทีที่ 5",
+            "วินาทีที่ 6",
+            "ข้ามไม่ได้ ต้องดูจนจบเสมอ"
+        ],
+        answer: 2,
+        explanation: "โฆษณาวิดีโอในสตรีมบน VOOM ผู้ใช้งานสามารถกด 'ข้ามโฆษณา' ได้ในวินาทีที่ 6 ของโฆษณา (แต่หากโฆษณายาวน้อยกว่า 6 วินาที จะไม่สามารถกดข้ามได้)"
+    },
+    {
+        question: "ใน 1 แคมเปญ หากใช้ฟังก์ชันการทดสอบ A/B Testing จะสามารถสร้างกลุ่มทดสอบ (Test Groups) ได้สูงสุดกี่กลุ่ม?",
+        options: [
+            "2 กลุ่มทดสอบ",
+            "3 กลุ่มทดสอบ",
+            "5 กลุ่มทดสอบ",
+            "10 กลุ่มทดสอบ"
+        ],
+        answer: 2,
+        explanation: "การทำ A/B Testing ใน LINE Ads สามารถตั้งค่าจำนวนกลุ่มทดสอบได้สูงสุด 5 กลุ่มทดสอบ"
+    },
+    {
+        question: "เอเจนซี่ตั้งค่างบประมาณรายวัน (Daily Budget) ในระดับ Ad Group ให้น้อยที่สุดเท่าที่จะทำได้เพื่อหล่อเลี้ยงแคมเปญ ข้อใดคือจำนวนเงินขั้นต่ำที่สุดที่ระบบอนุญาต?",
+        options: [
+            "0.01 บาท/วัน",
+            "1 บาท/วัน",
+            "10 บาท/วัน",
+            "100 บาท/วัน"
+        ],
+        answer: 0,
+        explanation: "งบประมาณรายวัน (Daily Budget) ในระดับกลุ่มโฆษณา (Ad Group) บังคับให้ต้องมีค่า 'มากกว่า 0.01 บาท/วัน'"
+    },
+    {
+        question: "ในการกำหนดกลุ่มเป้าหมายแบบ 'Lookalike' เปอร์เซ็นต์ความแม่นยำสูงสุดที่ระบบสามารถขยายฐานได้คือเท่าไร?",
+        options: [
+            "1%",
+            "5%",
+            "10%",
+            "15%"
+        ],
+        answer: 3,
+        explanation: "การสร้าง Lookalike Audience ใน LINE Ads สามารถขยายฐานเปอร์เซ็นต์ได้สูงสุดถึง 15% และสร้างได้สูงสุด 10 กลุ่ม (โดย Audience ตั้งต้นต้องมีขนาดเกิน 100 คน)"
+    },
+    {
+        question: "โฆษณาภาพสไลด์ (Carousel Ad) ใน LINE Ads สามารถใส่รูปภาพได้สูงสุดกี่รูป?",
+        options: [
+            "5 รูป",
+            "8 รูป",
+            "10 รูป",
+            "15 รูป"
+        ],
+        answer: 2,
+        explanation: "รูปแบบโฆษณาภาพสไลด์ (Carousel) ใช้รูปขนาด 1080 x 1080px และสามารถใส่ได้สูงสุด 10 รูป"
+    },
+    {
+        question: "ข้อใดอธิบายคุณสมบัติของ LINE Creative Lab ได้อย่างถูกต้อง?",
+        options: [
+            "สามารถดาวน์โหลดชิ้นงานออกมาเก็บไว้ในคอมพิวเตอร์ได้",
+            "มีฟีเจอร์ AI Expand, Text to Image และ Remove BG",
+            "สร้างวิดีโอแบบ In-stream ความยาว 10 นาทีได้",
+            "ต้องมี Business Manager เท่านั้นจึงจะใช้งานได้"
+        ],
+        answer: 1,
+        explanation: "LINE Creative Lab มี AI ช่วยทำรูป เช่น AI Expand, Text to Image และ Remove BG (ข้อควรระวังคือ ส่งชิ้นงานตรงไปที่ Ads Account เท่านั้น 'โหลดมาใช้งานไม่ได้')"
+    },
+    {
+        question: "แบรนด์ E ทำโฆษณา 'วัตถุประสงค์การเข้าถึง (Reach)' ข้อจำกัดที่สำคัญที่สุดของวัตถุประสงค์นี้คืออะไร?",
+        options: [
+            "ไม่สามารถใช้วิดีโอได้",
+            "คิดเงินแบบ CPC เท่านั้น",
+            "ไม่มี Target Event Cost และใช้ A/B Testing ไม่ได้",
+            "ต้องประมูลขั้นต่ำ 10 บาทเสมอ"
+        ],
+        answer: 2,
+        explanation: "วัตถุประสงค์ Awareness - การเข้าถึง (Reach) คิดเงินแบบ CPM อย่างเดียว โดยมีข้อจำกัดคือ 'ไม่มี Target Event Cost' และ 'ใช้ A/B Testing ไม่ได้'"
+    },
+    {
+        question: "โครงสร้างโฆษณา LINE Ads บัญชีผู้ใช้โฆษณา (Ad Account) 1 บัญชี สามารถสร้างกลุ่มโฆษณา (Ad Group) ได้สูงสุดกี่กลุ่ม?",
+        options: [
+            "300 กลุ่ม",
+            "1,000 กลุ่ม",
+            "5,000 กลุ่ม",
+            "10,000 กลุ่ม"
+        ],
+        answer: 2,
+        explanation: "โครงสร้างกำหนดไว้ว่า 1 แคมเปญสร้างได้สูงสุด 300 existing Campaign, 1 Ads Account มี Ads Group ได้สูงสุด 5,000 existing Ads Group และมี Ads ได้สูงสุด 5,000 existing Ads"
+    },
+    {
+        question: "การกำหนดกลุ่มเป้าหมายหลัก (Core Audience) ในส่วนของพฤติกรรม (Behavior) ระบบสามารถเจาะจงพฤติกรรมใดได้บ้าง?",
+        options: [
+            "ผู้ติดตามบัญชีทางการ LINE, หัวข้อ OpenChat, ประเภทข่าว LINE TODAY",
+            "พฤติกรรมการดู YouTube",
+            "รายได้เฉลี่ยต่อเดือน (Salary)",
+            "ระดับการศึกษาและอาชีพ"
+        ],
+        answer: 0,
+        explanation: "พฤติกรรมที่เลือกระบุได้ ได้แก่ พฤติกรรมการซื้อสินค้า, ผู้ติดตามบัญชีทางการ LINE (OA Followers), หัวข้อ LINE OpenChat, ผู้ใช้งานบริการ LINE, ประเภทข่าว LINE TODAY และความตั้งใจในการซื้อ"
+    },
+    {
+        question: "ข้อควรระวังในการใส่ 'ป้าย (Badge)' บนชิ้นงานโฆษณา คืออะไร?",
+        options: [
+            "ใส่ได้สูงสุด 5 ป้าย ป้ายละไม่เกิน 10 ตัวอักษร",
+            "แสดงผลต่อเมื่อโฆษณาไปอยู่ในตำแหน่ง LINE VOOM เท่านั้น",
+            "บังคับให้ต้องใส่ป้ายทุกครั้งที่ยิงโฆษณาภาพสไลด์",
+            "ป้ายจะแสดงในตำแหน่ง Chat List เท่านั้น"
+        ],
+        answer: 1,
+        explanation: "ในการสร้าง Ads ระดับโฆษณา การใส่ 'ป้าย (Badge)' (ใส่ได้ 3 ป้าย ป้ายละ 20 ตัวอักษร) จะ 'แสดงผลต่อเมื่อไปอยู่ VOOM เท่านั้น'"
+    },
+    {
+        question: "ถ้าต้องการยิงโฆษณาเพื่อหาคน 'โหลดแอป (App Install)' ระบบรองรับการคิดเงินแบบใดบ้าง?",
+        options: [
+            "CPA อย่างเดียว",
+            "CPM อย่างเดียว",
+            "CPI, CPC หรือ CPM",
+            "CPC และ CPA"
+        ],
+        answer: 2,
+        explanation: "วัตถุประสงค์โหลดแอป (ติดตั้งแอป) รองรับการคิดเงินแบบ CPI (Cost Per Install) หรือ CPC (Cost Per Click) หรือ CPM"
+    },
+    {
+        question: "หากบริษัทมีงบประมาณน้อย แต่มี LINE OA หลายบัญชี (เช่น แตกแบรนด์ลูก) และต้องการให้สามารถ 'ชำระเงินและออกใบกำกับภาษีภายใต้บริษัทเดียว' ได้อย่างเป็นระบบ ควรใช้โครงสร้างแบบใด?",
+        options: [
+            "สร้าง Ads Account รวมกัน",
+            "สร้าง Group (กลุ่ม)",
+            "ใช้ CBO ข้ามบัญชี",
+            "สร้าง MyShop แยกต่างหาก"
+        ],
+        answer: 1,
+        explanation: "โครงสร้าง 'Group (กลุ่ม)' เหมาะสำหรับผู้ที่มีหลายบัญชีผู้ใช้โฆษณา และต้องการดูภาพรวม รวมถึงสามารถชำระเงินและออกใบกำกับภาษีภายใต้บริษัทเดียว หรือแยกบริษัทก็ได้ (1 บัญชีสร้างได้ 100 กลุ่ม)"
+    },
+    {
+        question: "นิติบุคคลต่างประเทศสามารถเปิดบัญชีโฆษณา LINE Ads ได้หรือไม่?",
+        options: [
+            "ได้ โดยเป็นหนึ่งใน 3 ประเภทบัญชีโฆษณาที่รองรับ",
+            "ไม่ได้ ต้องเป็นบริษัทที่จดทะเบียนในไทยเท่านั้น",
+            "ได้ แต่ต้องใช้เอเจนซี่ในไทยค้ำประกัน",
+            "ไม่ได้ ระบบอนุญาตเฉพาะนิติบุคคลไทยและธุรกิจส่วนตัว"
+        ],
+        answer: 0,
+        explanation: "บัญชีโฆษณามี 3 ประเภท ได้แก่ 1. นิติบุคคล 2. นิติบุคคลต่างประเทศ 3. ธุรกิจส่วนตัว"
+    },
+    {
+        question: "หากเลือกโหมด 'กำหนดเป้าหมายอัตโนมัติ (Auto Targeting)' ในระดับ Ad Group ข้อใดคือข้อจำกัดที่เกิดขึ้น?",
+        options: [
+            "ต้องตั้งค่า Bidding แบบ No Limit เท่านั้น",
+            "ไม่สามารถใช้ 'การกำหนดเป้าหมายอย่างละเอียด' ได้ และต้องเลือกกลุ่มเป้าหมายแบบ 'ไม่รวม (Exclude)' เท่านั้น",
+            "ระบบจะบังคับใช้ CBO อัตโนมัติ",
+            "ไม่สามารถตั้งค่างบประมาณรายวันได้"
+        ],
+        answer: 1,
+        explanation: "เมื่อเปิดโหมด 'กำหนดเป้าหมายอัตโนมัติ' จะ 'ไม่สามารถใช้ การกำหนดเป้าหมายอย่างละเอียด (Detailed Targeting)' ได้ และสามารถใช้ Custom Audience ได้เฉพาะในรูปแบบ 'ไม่รวม (Exclude)' เท่านั้น"
+    },
+    {
+        question: "เมื่อตั้งค่ากลยุทธ์ Bidding การเลือก 'Event Cost Cap' มีความหมายว่าอย่างไร?",
+        options: [
+            "ราคาเป๊ะ +-10% จ่ายเท่าที่บอก",
+            "ราคาสู้ได้ เกินราคาประมูลได้เล็กน้อย เพื่อใช้งบรายวันให้หมด",
+            "ใช้เงินให้เยอะที่สุด สู้ทุกราคา",
+            "ประมูลด้วยราคาต่ำสุดในตลาดเสมอ"
+        ],
+        answer: 1,
+        explanation: "Event Cost Cap (ค่าเริ่มต้น/Default) หมายถึง ราคาสู้ได้ เกินประมูลกว่าที่ตั้งไว้ได้เล็กน้อย โดยมุ่งเน้นให้งบรายวันใช้หมด"
+    },
+    {
+        question: "ในกรณีที่ผูกบัตรเครดิตเต็มจำนวน 5 ใบในบัญชีเดียว บัตรสถานะใดบ้างที่ระบบจะทำการ 'ตัดเงินอัตโนมัติ'?",
+        options: [
+            "บัตรหลักใบเดียวเท่านั้น",
+            "บัตรหลัก และ บัตรสำรอง",
+            "บัตรทุกใบในระบบเรียงตามลำดับ",
+            "บัตรหลัก และ บัตรไม่มีสถานะ"
+        ],
+        answer: 1,
+        explanation: "สามารถลงทะเบียนบัตรได้สูงสุด 5 ใบ โดยบัตรที่มีสถานะเป็น 'บัตรหลัก' และ 'บัตรสำรอง' เท่านั้นที่ระบบจะทำการตัดเงินอัตโนมัติ (บัตรไม่มีสถานะจะไม่ถูกตัดออโต้)"
+    },
+    {
+        question: "การใช้ Custom Audience รูปแบบ 'รหัสเครื่อง (IDFA/AAID)' เหมาะสำหรับทำการตลาดแบบใด?",
+        options: [
+            "Retargeting คนเข้าเว็บไซต์ผ่านเบราว์เซอร์",
+            "Retargeting คนที่เคยดูวิดีโอ 3 วินาที",
+            "Retargeting ลูกค้าที่ใช้งาน/เข้าถึงแอปพลิเคชันในมือถือ (App Audience)",
+            "เพิ่มจำนวนผู้ติดตาม LINE OA"
+        ],
+        answer: 2,
+        explanation: "IDFA (Apple) และ AAID (Android) เป็นรหัสประจำเครื่องมือถือ ซึ่งใช้สำหรับสร้างกลุ่มเป้าหมายจาก 'คนเข้าแอป' หรือใช้สำหรับ App Tracking"
+    },
+    {
+        question: "ข้อใดคือ Placement ที่มีจำนวนผู้ใช้งาน (Users) สูงที่สุดใน LINE Ecosystem?",
+        options: [
+            "HOME TAB",
+            "LINE VOOM",
+            "LINE TODAY",
+            "Chatlist"
+        ],
+        answer: 3,
+        explanation: "จากข้อมูล Placement: Chatlist มี 56M Users ซึ่งสูงที่สุด (รองลงมาคือ HOME TAB 45M, LINE TODAY 40M, LINE VOOM 35M)"
+    },
+    {
+        question: "การโฆษณาในวัตถุประสงค์ 'ดูวิดีโอ (Video View)' สามารถใช้ระบบ Optimization เพื่อเพิ่มประสิทธิภาพในแบบใดได้บ้าง?",
+        options: [
+            "OPT สำหรับดูวิดีโอ 3 วินาที หรือดูวิดีโอให้จบ 100% มากที่สุด",
+            "OPT สำหรับการเปิดเสียง (Sound-on) วิดีโอ",
+            "OPT สำหรับการแชร์วิดีโอลงใน OpenChat",
+            "OPT เพื่อหาคนที่กดซ่อนโฆษณา"
+        ],
+        answer: 0,
+        explanation: "วัตถุประสงค์ดูวิดีโอ มี Optimization (OPT) สำหรับเพิ่มจำนวนการดูวิดีโอ 3 วินาที หรือดูวิดีโอให้จบ 100% มากที่สุด"
+    },
+    {
+        question: "หากต้องการโปรโมต 'เว็บไซต์หาคู่ (Dating App/Web)' ใน LINE Ads กฎของระบบคืออะไร?",
+        options: [
+            "ลงโฆษณาได้ทันที ไม่มีเงื่อนไข",
+            "เป็นผลิตภัณฑ์ต้องห้าม / ควบคุม ที่อาจต้องระมัดระวังหรือใช้เอกสาร",
+            "ลงได้เฉพาะแคมเปญเพิ่มเพื่อน",
+            "ต้องลงผ่าน Agency เท่านั้น"
+        ],
+        answer: 1,
+        explanation: "เว็บไซต์หรือแอปพลิเคชันหาคู่ จัดอยู่ในหมวด 'ผลิตภัณฑ์ควบคุม' (Restricted) หรือสินค้าต้องพิจารณาพิเศษตามกฎหมายหรือนโยบายของ LINE (รวมถึงต้องมีเอกสารอ้างอิง)"
+    },
+    {
+        question: "โฆษณาแบบ 'ภาพนิ่ง (Image)' บน LINE Ads อนุญาตให้ใช้ไฟล์ขนาดสูงสุดไม่เกินเท่าไร?",
+        options: [
+            "2 MB",
+            "5 MB",
+            "10 MB",
+            "15 MB"
+        ],
+        answer: 2,
+        explanation: "ขนาดไฟล์รูปภาพ (Image) 1080x1080 และ 1200x628 กำหนดไว้ว่าขนาดไฟล์ต้องไม่เกิน 10MB"
+    },
+    {
+        question: "หากผู้ใช้งานต้องการใช้ 'LINE Pay' ในการชำระค่าโฆษณา มีเงื่อนไขการใช้งานอย่างไร?",
+        options: [
+            "ใช้ชำระได้เฉพาะบนคอมพิวเตอร์เท่านั้น",
+            "ลูกค้าต้องใช้มือถือ และเลือกบัตรเครดิตที่เชื่อมต่ออยู่กับ LINE Pay แล้วเท่านั้น",
+            "ต้องเติมเงินเข้า Rabbit LINE Pay E-Wallet อย่างเดียว ไม่สามารถตัดบัตรได้",
+            "สามารถใช้ LINE Pay เพื่อเปิด CBO แคมเปญไม่ได้"
+        ],
+        answer: 1,
+        explanation: "การจ่ายเงินผ่าน LINE Pay มีเงื่อนไขคือ 'ลูกค้าต้องใช้มือถือ และเลือกบัตรเครดิตที่เชื่อมต่ออยู่กับ LINE Pay แล้วเท่านั้น'"
+    },
+    {
+        question: "ในเมนู Report ตัวแปร 'Viewable impressions' จะนับ 1 อิมเพรสชันก็ต่อเมื่อใด?",
+        options: [
+            "เมื่อภาพแสดงขึ้นมา 1 พิกเซล",
+            "การแสดงโฆษณา 50% เป็นระยะเวลา 1 วินาทีสำหรับรูปภาพ และ 2 วินาทีขึ้นไปสำหรับวิดีโอ",
+            "ผู้ใช้หยุดดูหน้าจอนานกว่า 3 วินาที",
+            "เมื่อมีการกดขยายภาพ"
+        ],
+        answer: 1,
+        explanation: "ตามตาราง Report: Viewable impressions คือ การแสดงโฆษณา 50% เป็นระยะเวลา 1 วินาทีสำหรับรูปภาพ และ 2 วินาทีขึ้นไปสำหรับวิดีโอ"
+    },
+    {
+        question: "ข้อใดผิด เกี่ยวกับการเขียนคำโฆษณา (Ad Copy) ใน LINE Ads?",
+        options: [
+            "ใส่ชื่อ 20 ตัวอักษร คำอธิบาย 75 ตัวอักษร",
+            "ห้ามใช้คำว่า LINE หรือ LINE Character ในกรณีทำให้ผู้อ่านตีความผิดว่าเป็นบริษัท LINE",
+            "ห้ามพาคนไปลิงก์ LINE ส่วนบุคคล",
+            "คำว่า Friends สำหรับแคมเปญหาเพื่อน ไม่จำเป็นต้องมี S (Friend)"
+        ],
+        answer: 3,
+        explanation: "กฎคำโฆษณาระบุชัดเจนว่า 'Friends ต้องมี S' เสมอ (Gain Friends)"
+    },
+    {
+        question: "หากตั้งวัตถุประสงค์ 'เพิ่มเพื่อน (Gain Friend)' ข้อใดคือสิ่งที่ 'ไม่ต้องใส่' ในการตั้งค่าชิ้นงานโฆษณา?",
+        options: [
+            "ชื่อปุ่ม (Call to Action) และ URL",
+            "รูปภาพ",
+            "คำอธิบาย 75 ตัวอักษร",
+            "ชื่อ (Title)"
+        ],
+        answer: 0,
+        explanation: "ในการสร้าง Ads ระดับโฆษณา หากเลือก Gain Friend ระบบระบุว่า 'ชื่อปุ่ม (Gain Friend ไม่เลือก)' และ 'URL (Gain Friend ไม่ต้องใส่ URL)' เนื่องจากระบบมีปุ่มเพิ่มเพื่อนให้อัตโนมัติ"
+    },
+    {
+        question: "หากต้องการยิงแอดให้เฉพาะกลุ่มคนที่เดินทางผ่าน (อยู่ไม่นาน) หรือคนทำงานในพื้นที่ 'พัทยา' รัศมี 5 กิโลเมตร สามารถตั้งค่า Location Targeting ได้หรือไม่?",
+        options: [
+            "ไม่ได้ เลือกรัศมีได้แค่เขตจังหวัดเท่านั้น",
+            "ได้ โดยสามารถเลือกรัศมี 1-50 กม. และระบุเป็น 'อยู่ไม่นาน / คนทำงานในพื้นที่' ได้",
+            "ไม่ได้ ต้องส่งเป็น Broadcast OA แทน",
+            "ได้ แต่รัศมีต้องมากกว่า 10 กม. ขึ้นไป"
+        ],
+        answer: 1,
+        explanation: "Location Targeting ใน LINE Ads สามารถเลือก ที่ตั้ง 8 พื้นที่ / จังหวัด / เขต / รหัสไปรษณีย์ รัศมี 1-50 กม. และสามารถระบุเงื่อนไข (อยู่ในพื้นที่นี้ / อยู่ไม่นาน / คนทำงานในพื้นที่) ได้"
+    },
+    {
+        question: "ถ้าร้านค้าต้องการเชื่อมต่อ MyShop เข้ากับ LINE Ads (ผ่าน LINE Tag และ Conversion API) เพื่อส่งข้อมูลการสั่งซื้อกลับไปให้ Machine Learning เรียนรู้ ข้อมูลใดที่ร้านค้าต้องนำมาใส่ในระบบ MyShop?",
+        options: [
+            "URL ของ Landing Page",
+            "Tag ID (Base Code), Conversion API Access token, และ LINE OA Channel ID",
+            "รหัสพนักงาน OA",
+            "Tax ID ของบริษัท"
+        ],
+        answer: 1,
+        explanation: "การเชื่อมต่อ LINE Ads X MyShop ต้องการ 3 อย่างคือ 1. Connect Tag ID (Base code) 2. Add Conversion API Access token (จาก Business Manager) 3. Add LINE OA Channel ID"
+    },
+    {
+        question: "การทำ Audience 'ผู้ติดตามบัญชีทางการ LINE' ใน Core Audience มีข้อดีอย่างไร?",
+        options: [
+            "ส่งโฆษณาไปหาคนที่เป็นเพื่อนกับ OA อื่นที่เป็นคู่แข่งได้",
+            "จำกัดกรอบการส่งโฆษณาให้ผู้ที่ติดตามบัญชีทางการของเรา (หรืออิงตามหมวดหมู่ OA) เพื่อหาคนที่มีพฤติกรรมความสนใจที่คล้ายคลึงกัน",
+            "ดูประวัติการแชทของพวกเขาได้",
+            "ได้ Target Cost ต่ำกว่าปกติ 50%"
+        ],
+        answer: 1,
+        explanation: "การ Targeting กลุ่มผู้ติดตามบัญชีทางการ LINE (OA Followers) เป็นหนึ่งในหมวด Behavior เพื่อเจาะจงพฤติกรรมผู้ใช้ที่สนใจหรือติดตามบัญชีทางการในหมวดหมู่ที่เกี่ยวข้อง"
+    },
+    {
+        question: "หากคุณซื้อโฆษณาแบบ CPM (Cost Per Mille) โฆษณารูปแบบใดที่คุณสามารถเลือกใช้งานได้?",
+        options: [
+            "รูปภาพ และ ภาพสไลด์ เท่านั้น",
+            "รูปภาพ, วิดีโอ และ ภาพสไลด์",
+            "วิดีโอ อย่างเดียว",
+            "แอนิเมชัน เท่านั้น"
+        ],
+        answer: 1,
+        explanation: "กรณีชำระเงินแบบ CPM สามารถเลือกได้ระหว่างรูปภาพ, วิดีโอ และภาพสไลด์ (แต่ถ้าชำระแบบ CPC จะเลือกได้เฉพาะรูปภาพและภาพสไลด์เท่านั้น วิดีโอใช้ CPC ไม่ได้)"
+    },
+    {
+        question: "แคมเปญโฆษณามีระดับ CTR Level อยู่ที่ 4 หมายความว่าอย่างไร?",
+        options: [
+            "ต่ำกว่ามาตรฐาน ต้องปรับรูปภาพใหม่",
+            "สูงกว่ามาตรฐาน (อยู่ใน 20% แรก) ดีเยี่ยม",
+            "สูงกว่ามาตรฐาน (อยู่ใน 50% แรก) ไม่มีปัญหาในการตั้งค่ากลุ่มเป้าหมาย",
+            "คู่แข่งน้อย ไม่แสดงผลลัพธ์"
+        ],
+        answer: 2,
+        explanation: "ระดับ CTR แบ่งเป็น: 5 = สูงกว่ามาตรฐาน (20% แรก), 4 = สูงกว่ามาตรฐาน (50% แรก), 3 = ต่ำกว่ามาตรฐาน (50% ท้าย), 2 = 30% ท้าย, 1 = 10% ท้าย, 0 = ไม่แสดงผลลัพธ์"
+    },
+    {
+        question: "เครื่องมือใดที่สามารถใช้ทำชิ้นงานโฆษณา (ภาพ/วิดีโอ) บน LINE Ads ได้ฟรี และมีระบบ AI ช่วย Generate?",
+        options: [
+            "Business Manager",
+            "LINE Official Account Manager",
+            "LINE Creative Lab",
+            "MyShop Dashboard"
+        ],
+        answer: 2,
+        explanation: "LINE Creative Lab เป็นเครื่องมือสำหรับทำชิ้นงานฟรี สามารถใช้งานร่วมกับ Adobe Express มีฟีเจอร์ AI อย่าง AI Expand, Text to Image และ Remove BG"
+    },
+    {
+        question: "การโฆษณาด้วยรูปแบบ 'ภาพนิ่ง (Image)' บนตำแหน่ง 'LINE Album' รองรับวัตถุประสงค์ใดบ้าง?",
+        options: [
+            "เพิ่มเพื่อน และ เข้าชมเว็บไซต์",
+            "ติดตั้งแอป และ การเข้าถึง",
+            "ใช้งานได้ในทุกวัตถุประสงค์หลัก (เช่น เพิ่มเพื่อน, เข้าชมเว็บ, คอนเวอร์ชัน, Reach, App Install)",
+            "ไม่สามารถแสดงผลใน LINE Album ได้"
+        ],
+        answer: 2,
+        explanation: "ตามตาราง Objective vs Format: ตำแหน่ง 'Album' รองรับรูปแบบโฆษณา Image และ Small Image สำหรับเกือบทุกวัตถุประสงค์หลัก (ยกเว้น Video View, Dynamic Product Sales)"
+    }
+];
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+function startQuiz() {
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('quiz-screen').style.display = 'block';
+    loadQuestion();
+}
+
+function loadQuestion() {
+    const q = quizData[currentQuestionIndex];
+    document.getElementById('q-number').innerText = `ข้อที่ ${currentQuestionIndex + 1}/50`;
+    document.getElementById('q-text').innerText = q.question;
+    
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+    document.getElementById('explanation').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+
+    q.options.forEach((opt, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = `${String.fromCharCode(161 + index)}. ${opt}`;
+        btn.onclick = () => checkAnswer(index, btn);
+        optionsContainer.appendChild(btn);
+    });
+
+    const progress = ((currentQuestionIndex) / 50) * 100;
+    document.getElementById('progress-fill').style.width = progress + '%';
+}
+
+function checkAnswer(selectedIndex, btnElement) {
+    const q = quizData[currentQuestionIndex];
+    const options = document.getElementsByClassName('option-btn');
+    
+    for(let i=0; i<options.length; i++) {
+        options[i].disabled = true;
+        if(i === q.answer) {
+            options[i].classList.add('correct');
+        } else if (i === selectedIndex) {
+            options[i].classList.add('incorrect');
+        }
+    }
+
+    if (selectedIndex === q.answer) score++;
+
+    const expDiv = document.getElementById('explanation');
+    expDiv.style.display = 'block';
+    expDiv.innerHTML = `<strong>${selectedIndex === q.answer ? '✅ ถูกต้อง!' : '❌ ยังไม่ถูก!'}</strong><br><br><b>💡 คำอธิบาย:</b> ${q.explanation}`;
+    
+    document.getElementById('next-btn').style.display = 'block';
+}
+
+function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quizData.length) {
+        loadQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'block';
+    document.getElementById('final-score').innerText = `คุณทำได้: ${score} / 50 คะแนน`;
+    
+    let msg = "";
+    if(score >= 45) msg = "สุดยอดมาก! คุณเชี่ยวชาญระดับ Expert 🏆 ยิงแอด LINE ได้แม่นยำทุกมิติ";
+    else if(score >= 35) msg = "ยอดเยี่ยม! ความรู้ของคุณแน่นมาก เตรียมสอบ Certificate ได้สบาย 🌟";
+    else if(score >= 25) msg = "ทำได้ดีครับ แต่ยังมีทริคการ Bidding และ Placement ที่ต้องทบทวนอีกนิด 📚";
+    else msg = "ไม่เป็นไรครับ LINE Ads มีรายละเอียดเชิงลึกเยอะมาก ลองทบทวนคู่มือแล้วลุยใหม่นะครับ 💪";
+    
+    document.getElementById('final-message').innerText = msg;
+    document.getElementById('progress-fill').style.width = '100%';
+}
+</script>
+</body>
+</html>
