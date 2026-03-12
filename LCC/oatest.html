@@ -1253,17 +1253,9 @@ async function shareExam() {
 
     const flex = {
         type: 'flex',
-        altText: userProfile.displayName + ' ชวนมาทดสอบ LINE for Business! 50 ข้อ 5 หมวด',
+        altText: userProfile.displayName + ' ชวนมาทดสอบ LINE for Business!',
         contents: {
             type: 'bubble',
-            size: 'giga',
-            header: {
-                type: 'box',
-                layout: 'vertical',
-                backgroundColor: '#003d00',
-                paddingAll: '20px',
-                contents: [ buildHeaderBox('🟢 LINE for Business', 'Advance Mock Exam') ]
-            },
             body: {
                 type: 'box',
                 layout: 'vertical',
@@ -1272,53 +1264,25 @@ async function shareExam() {
                 contents: [
                     {
                         type: 'text',
-                        text: userProfile.displayName + ' ชวนมาทดสอบความรู้กัน! 👋',
-                        size: 'sm',
+                        text: '🟢 LINE for Business',
+                        size: 'xs',
+                        color: '#00B900',
+                        weight: 'bold'
+                    },
+                    {
+                        type: 'text',
+                        text: userProfile.displayName + ' ชวนคุณมาทดสอบความรู้กัน!',
+                        size: 'md',
                         weight: 'bold',
                         color: '#111827',
                         wrap: true
                     },
-                    { type: 'separator', color: '#e5e7eb' },
-                    { type: 'text', text: 'ครอบคลุมทุกโซลูชัน LINE for Business', size: 'xs', color: '#6b7280', wrap: true },
                     {
-                        type: 'box',
-                        layout: 'vertical',
-                        spacing: 'sm',
-                        contents: [
-                            { type: 'text', text: '🟩  LINE OA  —  10 ข้อ',           size: 'sm', color: '#166534' },
-                            { type: 'text', text: '🟥  LINE Ads  —  10 ข้อ',          size: 'sm', color: '#991b1b' },
-                            { type: 'text', text: '🟨  LINE Shopping  —  10 ข้อ',     size: 'sm', color: '#92400e' },
-                            { type: 'text', text: '🟦  MyCustomer CRM  —  10 ข้อ',   size: 'sm', color: '#1e40af' },
-                            { type: 'text', text: '🟪  LINE Family Club  —  10 ข้อ', size: 'sm', color: '#6b21a8' }
-                        ]
-                    },
-                    { type: 'separator', color: '#e5e7eb' },
-                    {
-                        type: 'box',
-                        layout: 'horizontal',
-                        contents: [
-                            {
-                                type: 'box', layout: 'vertical', flex: 1, alignItems: 'center',
-                                contents: [
-                                    { type: 'text', text: '50', size: 'xxl', weight: 'bold', color: '#00B900', align: 'center' },
-                                    { type: 'text', text: 'ข้อสอบ', size: 'xs', color: '#9CA3AF', align: 'center' }
-                                ]
-                            },
-                            {
-                                type: 'box', layout: 'vertical', flex: 1, alignItems: 'center',
-                                contents: [
-                                    { type: 'text', text: '5', size: 'xxl', weight: 'bold', color: '#00B900', align: 'center' },
-                                    { type: 'text', text: 'หมวดหมู่', size: 'xs', color: '#9CA3AF', align: 'center' }
-                                ]
-                            },
-                            {
-                                type: 'box', layout: 'vertical', flex: 1, alignItems: 'center',
-                                contents: [
-                                    { type: 'text', text: '∞', size: 'xxl', weight: 'bold', color: '#00B900', align: 'center' },
-                                    { type: 'text', text: 'เวลา', size: 'xs', color: '#9CA3AF', align: 'center' }
-                                ]
-                            }
-                        ]
+                        type: 'text',
+                        text: 'Advance Mock Exam 50 ข้อ ครอบคลุม LINE OA, Ads, Shopping, CRM และ Family Club',
+                        size: 'sm',
+                        color: '#6b7280',
+                        wrap: true
                     }
                 ]
             },
@@ -1339,7 +1303,7 @@ async function shareExam() {
         }
     };
 
-    await doShare(flex, 'LINE for Business Advance Mock Exam 50 ข้อ\nมาทดสอบความรู้กัน!\n' + LIFF_URL);
+    await doShare(flex, userProfile.displayName + ' ชวนมาทดสอบ LINE for Business!\n' + LIFF_URL);
 }
 
 /* ─────── SHARE RESULT ─────── */
@@ -1352,9 +1316,6 @@ async function shareResult() {
     else if (score >= 35) { rankLabel = 'Expert';      rankEmoji = '🌟'; }
     else if (score >= 25) { rankLabel = 'Learner';     rankEmoji = '📚'; }
     else                  { rankLabel = 'Challenger';  rankEmoji = '💪'; }
-
-    const filledBlocks = Math.round((score / 50) * 10);
-    const barText = '█'.repeat(filledBlocks) + '░'.repeat(10 - filledBlocks) + '  ' + pct + '%';
 
     // Build category rows
     const catContents = [];
@@ -1411,8 +1372,8 @@ async function shareResult() {
                             { type: 'text', text: '/50', size: 'xl', color: '#9CA3AF', margin: 'sm' }
                         ]
                     },
-                    // Bar
-                    { type: 'text', text: barText, size: 'sm', color: '#00B900', align: 'center' },
+                    // Percentage text (clean, no bar)
+                    { type: 'text', text: pct + '%', size: 'md', weight: 'bold', color: '#00B900', align: 'center' },
                     // Rank badge
                     {
                         type: 'box',
