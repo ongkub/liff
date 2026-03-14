@@ -7,17 +7,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      /* Luxury Palette for Print */
-      --bg-color: #FCFBF9; /* Subtle Ivory Cream - พิมพ์ออกมาจะดูเป็นกระดาษพรีเมียม */
-      --text-main: #1A1A1A; /* Deep Charcoal */
+      --bg-color: #FCFBF9;
+      --text-main: #1A1A1A;
       --text-muted: #555555;
-      --accent: #9A8B71; /* Champagne / Bronze */
+      --accent: #9A8B71;
       --line-color: #E2DDD5;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* สร้างพื้นหลังสีเทาบน Web เพื่อให้เห็นขอบกระดาษ A4 ชัดเจน */
     body {
       background-color: #E5E5E5; 
       color: var(--text-main);
@@ -30,21 +28,20 @@
       padding: 20px 0;
     }
 
-    /* ── A4 PAPER CONTAINER ── */
     .container {
       width: 210mm;
-      height: 297mm; /* ล็อกขนาด A4 มาตรฐาน */
+      height: 297mm;
       background-color: var(--bg-color);
-      padding: 18mm 22mm; /* ระยะขอบกระดาษ */
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* เงาจำลองกระดาษบนเว็บ */
-      overflow: hidden; /* ป้องกันเนื้อหาล้น */
+      padding: 14mm 22mm;        /* ลด top/bottom padding: 18mm → 14mm */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      overflow: hidden;
       position: relative;
     }
 
     /* ── HEADER ── */
     .header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 16px;       /* 24px → 16px */
     }
 
     .header-name {
@@ -54,7 +51,7 @@
       letter-spacing: 0.06em;
       color: var(--text-main);
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 7px;
     }
 
     .header-contact {
@@ -76,17 +73,17 @@
       text-decoration: none;
     }
 
-    /* ── SUMMARY / HERO ── */
+    /* ── SUMMARY ── */
     .summary {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 17px;
+      font-size: 16px;           /* 17px → 16px */
       font-style: italic;
       font-weight: 400;
       text-align: center;
       line-height: 1.4;
       color: var(--text-main);
       max-width: 90%;
-      margin: 0 auto 26px auto;
+      margin: 0 auto 18px auto;  /* 26px → 18px */
     }
 
     .summary::after {
@@ -95,11 +92,11 @@
       width: 30px;
       height: 1px;
       background: var(--accent);
-      margin: 18px auto 0;
+      margin: 14px auto 0;       /* 18px → 14px */
     }
 
     /* ── SECTIONS ── */
-    .section { margin-bottom: 24px; }
+    .section { margin-bottom: 16px; }  /* 24px → 16px */
 
     .section-title {
       font-size: 9.5px;
@@ -108,8 +105,8 @@
       color: var(--text-main);
       font-weight: 500;
       border-bottom: 1px solid var(--line-color);
-      padding-bottom: 8px;
-      margin-bottom: 18px;
+      padding-bottom: 6px;       /* 8px → 6px */
+      margin-bottom: 14px;       /* 18px → 14px */
     }
 
     /* ── EDITORIAL GRID ── */
@@ -117,7 +114,7 @@
       display: grid;
       grid-template-columns: 140px 1fr;
       gap: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;       /* 20px → 16px */
     }
 
     .row:last-child { margin-bottom: 0; }
@@ -145,7 +142,7 @@
       font-size: 18px;
       font-weight: 500;
       color: var(--text-main);
-      margin-bottom: 2px;
+      margin-bottom: 1px;
       line-height: 1.2;
     }
 
@@ -153,7 +150,7 @@
       font-size: 11px;
       font-style: italic;
       color: var(--text-muted);
-      margin-bottom: 10px;
+      margin-bottom: 8px;        /* 10px → 8px */
       font-family: 'Cormorant Garamond', serif;
     }
 
@@ -162,12 +159,12 @@
       padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;                  /* 6px → 4px */
     }
 
     .job-bullets li {
-      font-size: 11.5px; /* ขนาดฟอนต์มาตรฐานสำหรับ Print */
-      line-height: 1.5;
+      font-size: 11px;           /* 11.5px → 11px */
+      line-height: 1.45;         /* 1.5 → 1.45 */
       color: #333333;
       padding-left: 12px;
       position: relative;
@@ -186,8 +183,8 @@
     /* ── AWARD BADGE ── */
     .award-text {
       display: inline-block;
-      margin-top: 10px;
-      padding: 5px 12px;
+      margin-top: 8px;           /* 10px → 8px */
+      padding: 4px 12px;         /* 5px → 4px */
       border: 1px solid var(--line-color);
       font-size: 9.5px;
       letter-spacing: 0.08em;
@@ -207,7 +204,7 @@
 
     .skill-group {
       border-top: 1px solid var(--line-color);
-      padding-top: 10px;
+      padding-top: 8px;          /* 10px → 8px */
     }
 
     .skill-heading {
@@ -216,16 +213,15 @@
       text-transform: uppercase;
       color: var(--text-main);
       font-weight: 500;
-      margin-bottom: 8px;
+      margin-bottom: 6px;        /* 8px → 6px */
     }
 
     .skill-list {
-      font-size: 11.5px;
+      font-size: 11px;           /* 11.5px → 11px */
       color: var(--text-muted);
       line-height: 1.6;
     }
 
-    /* ── CSS PRINT RULES (หัวใจสำคัญในการ Export PDF) ── */
     @media print {
       body {
         background-color: transparent;
@@ -235,16 +231,15 @@
       .container {
         width: 210mm;
         height: 297mm;
-        padding: 18mm 22mm;
+        padding: 14mm 22mm;
         margin: 0;
         box-shadow: none;
-        /* บังคับให้เบราว์เซอร์พิมพ์สีพื้นหลัง */
         -webkit-print-color-adjust: exact !important; 
         print-color-adjust: exact !important;
       }
       @page {
-        size: A4; /* บังคับกระดาษ A4 */
-        margin: 0; /* ลบระยะขอบของเบราว์เซอร์ออกให้หมด */
+        size: A4;
+        margin: 0;
       }
     }
   </style>
