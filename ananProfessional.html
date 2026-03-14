@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pattaraporn Teerakhantamat - Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Luxury Palette for Print */
+      --bg-color: #FCFBF9; 
+      --text-main: #1A1A1A; 
+      --text-muted: #555555;
+      --accent: #9A8B71; 
+      --line-color: #E2DDD5;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #E5E5E5; 
+      color: var(--text-main);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.4; /* ปรับลดจาก 1.5 ให้กระชับขึ้น */
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      justify-content: center;
+      padding: 20px 0;
+    }
+
+    /* ── A4 PAPER CONTAINER ── */
+    .container {
+      width: 210mm;
+      height: 297mm; 
+      background-color: var(--bg-color);
+      padding: 12mm 22mm; /* ลดขอบบน-ล่างลงจาก 18mm เหลือ 12mm เพื่อเพิ่มพื้นที่เนื้อหา */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+      overflow: hidden; 
+      position: relative;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      text-align: center;
+      margin-bottom: 18px; /* ลดช่องไฟ */
+    }
+
+    .header-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 32px; /* ลดขนาดฟอนต์ชื่อลงนิดนึง */
+      letter-spacing: 0.06em;
+      color: var(--text-main);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .header-contact {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .header-contact span { display: flex; align-items: center; gap: 8px; }
+    .header-contact .dot { width: 3px; height: 3px; background-color: var(--accent); border-radius: 50%; }
+    
+    .header-contact a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    /* ── SUMMARY / HERO ── */
+    .summary {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16.5px;
+      font-style: italic;
+      font-weight: 400;
+      text-align: center;
+      line-height: 1.35;
+      color: var(--text-main);
+      max-width: 95%;
+      margin: 0 auto 18px auto; /* ลดช่องไฟ */
+    }
+
+    .summary::after {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background: var(--accent);
+      margin: 14px auto 0;
+    }
+
+    /* ── SECTIONS ── */
+    .section { margin-bottom: 18px; } /* ลดช่องไฟระหว่าง Section */
+
+    .section-title {
+      font-size: 9.5px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      font-weight: 500;
+      border-bottom: 1px solid var(--line-color);
+      padding-bottom: 6px;
+      margin-bottom: 14px; /* ลดช่องไฟ */
+    }
+
+    /* ── EDITORIAL GRID ── */
+    .row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 20px;
+      margin-bottom: 14px; /* ลดช่องไฟระหว่างงาน */
+    }
+
+    .row:last-child { margin-bottom: 0; }
+
+    .meta-col { padding-top: 2px; }
+
+    .meta-date {
+      font-size: 9.5px;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 2px;
+      font-weight: 500;
+    }
+
+    .meta-company {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .content-col .job-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17.5px;
+      font-weight: 500;
+      color: var(--text-main);
+      margin-bottom: 2px;
+      line-height: 1.2;
+    }
+
+    .content-col .job-category {
+      font-size: 11px;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .job-bullets {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px; /* ลดช่องไฟระหว่าง Bullet */
+    }
+
+    .job-bullets li {
+      font-size: 11.5px; 
+      line-height: 1.35; /* ปรับให้อ่านง่ายแต่ไม่กินที่ */
+      color: #333333;
+      padding-left: 12px;
+      position: relative;
+      text-align: justify;
+    }
+
+    .job-bullets li::before {
+      content: '■';
+      position: absolute;
+      left: 0;
+      top: 4px;
+      font-size: 5px;
+      color: var(--accent);
+    }
+
+    /* ── AWARD BADGE ── */
+    .award-text {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 10px;
+      border: 1px solid var(--line-color);
+      font-size: 9.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      background: transparent;
+    }
+
+    .award-text i { color: var(--accent); font-style: normal; margin-right: 4px; }
+
+    /* ── SKILLS GRID ── */
+    .skills-wrapper {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .skill-group {
+      border-top: 1px solid var(--line-color);
+      padding-top: 8px;
+    }
+
+    .skill-heading {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .skill-list {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── CSS PRINT RULES ── */
+    @media print {
+      body {
+        background-color: transparent;
+        padding: 0;
+        display: block;
+      }
+      .container {
+        width: 210mm;
+        height: 297mm;
+        padding: 12mm 22mm;
+        margin: 0;
+        box-shadow: none;
+        -webkit-print-color-adjust: exact !important; 
+        print-color-adjust: exact !important;
+      }
+      @page {
+        size: A4; 
+        margin: 0; 
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <header class="header">
+    <h1 class="header-name">Pattaraporn Teerakhantamat</h1>
+    <div class="header-contact">
+      <span>Bangkok, Thailand</span><span class="dot"></span>
+      <span>081-996-9746</span><span class="dot"></span>
+      <span>Pattaraporn.trk@gmail.com</span><span class="dot"></span>
+      <a href="https://www.linkedin.com/in/pattaraporn-teerakhantamat/" target="_blank">LinkedIn</a>
+    </div>
+  </header>
+
+  <div class="summary">
+    "Dynamic retail professional excelling in HQ merchandising strategy and frontline store management, proactively aligning product assortments with market demands to optimize sell-through rates and elevate the client experience."
+  </div>
+
+  <section class="section">
+    <h2 class="section-title">Professional Experience</h2>
+
+    <div class="row">
+      <div class="meta-col">
+        <div class="meta-date">2021 — PRESENT</div>
+        <div class="meta-company">Uniqlo Thailand</div>
+      </div>
+      <div class="content-col">
+        <h3 class="job-title">Merchandising Planner</h3>
+        <div class="job-category">Outerwear & Kids Categories</div>
+        <ul class="job-bullets">
+          <li>Developed comprehensive annual purchasing plans (Open-to-Buy) and managed continuous inventory optimization through strategic reordering cycles to maximize corporate profitability.</li>
+          <li>Spearheaded seasonal, monthly, and weekly sales reforecasting; translated analytical insights into actionable strategies aligned with Visual Merchandising layouts and targeted marketing initiatives.</li>
+          <li>Leveraged creative market insights to curate high-performing product assortments; formulated and pitched New Product Proposals to Global HQ to capture emerging local consumer trends.</li>
+          <li>Acted as a key member of the New Store Opening (NSO) task force, defining store-specific assortments and developing localized promotional activities to drive launch success.</li>
+          <li>Fostered a highly collaborative cross-functional environment, ensuring seamless knowledge transfer to enhance workflow efficiency and team performance.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="meta-col">
+        <div class="meta-date">2018 — 2021</div>
+        <div class="meta-company">Uniqlo Thailand</div>
+      </div>
+      <div class="content-col">
+        <h3 class="job-title">Assistant Store Manager</h3>
+        <div class="job-category">Retail Operations</div>
+        <ul class="job-bullets">
+          <li>Demonstrated highly agile leadership in directing daily operations across diverse store formats (revenue scale: 19-30M THB), tailoring coaching programs for teams up to 70 personnel to elevate service standards.</li>
+          <li>Maintained strong profitability and KPIs during the pandemic through proactive planning and early operational adjustments.</li>
+          <li>Played a pivotal role in a Road-Side format New Store Opening; executed demographic analysis, layout creation, inventory setup, and comprehensive staff training.</li>
+          <li>Oversaw comprehensive store KPIs including P&L, inventory control, labor management, and floor operations while actively upskilling the team.</li>
+        </ul>
+        <div class="award-text">
+          <i>✦</i> Best KPI Store — Ranked No. 1 in Thailand, No. 19 Globally
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Education</h2>
+    <div class="row">
+      <div class="meta-col">
+        <div class="meta-date">2012 — 2016</div>
+      </div>
+      <div class="content-col">
+        <h3 class="job-title">Thammasat University</h3>
+        <div class="job-category">Bachelor's Degree, Faculty of Economics</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Expertise & Languages</h2>
+    <div class="skills-wrapper">
+      <div class="skill-group">
+        <div class="skill-heading">Core Competencies</div>
+        <div class="skill-list">
+          Sales Data Analysis<br>
+          Assortment Planning<br>
+          Inventory Management<br>
+          Sell-Through Optimization<br>
+          Strategic Thinking
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-heading">Retail & Leadership</div>
+        <div class="skill-list">
+          P&L Management<br>
+          Talent Development<br>
+          Agile Leadership<br>
+          Visual Merchandising<br>
+          Cross-Functional Collaboration
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-heading">Languages</div>
+        <div class="skill-list">
+          <strong style="color: #1a1a1a; font-weight: 500;">Thai</strong> — Native<br>
+          <strong style="color: #1a1a1a; font-weight: 500;">English</strong> — Business Level
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
